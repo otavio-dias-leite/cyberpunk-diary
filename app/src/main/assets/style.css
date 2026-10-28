@@ -87,7 +87,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 :root[data-theme="matrix"]{--bg:#050b08;--panel:#0b1510;--panel2:#112219;--stroke:#214831;--txt:#e1fae7;--muted:#8ca993;--red:#68ee8a;--redwash:#68ee8a1e;--green:#68ee8a}
 :root[data-theme="carbon"]{--bg:#08090a;--panel:#151719;--panel2:#1e2224;--stroke:#363c40;--txt:#e6e7e8;--muted:#9a9fa2;--red:#c0bec1;--redwash:#c0bec120;--green:#c0bec1}
 :root[data-theme="midnight"]{--bg:#070b16;--panel:#101a2c;--panel2:#17233b;--stroke:#2b466c;--txt:#eff6ff;--muted:#9baec8;--red:#65a9ff;--redwash:#65a9ff20;--green:#65a9ff}
-:root[data-theme="soulkiller"]{--bg:#0c0710;--panel:#1b1021;--panel2:#29142f;--stroke:#50305b;--txt:#fff0ff;--muted:#b5a0bc;--red:#e27af4;--redwash:#e27af420;--green:#e27af4}
+:root[data-theme="soulkiller"]{--bg:#070b13;--panel:#0d1420;--panel2:#142033;--stroke:#24415b;--txt:#edf7ff;--muted:#9db4c8;--red:#ff3555;--redwash:#ff355522;--blue:#00c8ff;--green:#00c8ff}
 :root[data-theme="mono"]{--bg:#080808;--panel:#151515;--panel2:#242424;--stroke:#454545;--txt:#f3f3f3;--muted:#a5a5a5;--red:#f2f2f2;--redwash:#f2f2f21c;--green:#d4d4d4}
 :root[data-theme]:not([data-theme="red"]) .sidebar,:root[data-theme]:not([data-theme="red"]) .bottom-nav{background:var(--bg)}
 :root[data-theme]:not([data-theme="red"]) .hero,:root[data-theme]:not([data-theme="red"]) .dashboard-hero{background:radial-gradient(circle at 92% 18%,var(--redwash),transparent 52%),linear-gradient(115deg,var(--panel2),var(--bg));border-color:var(--stroke);border-left-color:var(--red)}
@@ -115,7 +115,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .theme-option strong{font:700 12px var(--display,Orbitron,sans-serif);letter-spacing:.03em}.theme-option small{color:var(--muted);font-size:11px}.theme-check{margin-top:auto;color:var(--red);font-size:10px;font-weight:800;letter-spacing:.06em}
 .theme-swatch{height:40px;background:linear-gradient(130deg,#090b0e,#202329);border:1px solid #5558;display:flex;align-items:center;gap:8px;padding:8px;overflow:hidden;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%)}
 .theme-swatch i{width:16px;height:16px;background:var(--swatch);display:block;transform:skew(-18deg)}.theme-swatch b{width:45%;height:3px;background:var(--swatch);display:block;opacity:.65}.theme-swatch em{width:20px;height:16px;border:1px solid var(--swatch);display:block}
-.theme-matrix{--swatch:#68ee8a}.theme-carbon{--swatch:#c0bec1}.theme-midnight{--swatch:#65a9ff}.theme-soulkiller{--swatch:#e27af4}.theme-mono{--swatch:#f2f2f2}
+.theme-matrix{--swatch:#68ee8a}.theme-carbon{--swatch:#c0bec1}.theme-midnight{--swatch:#65a9ff}.theme-soulkiller{--swatch:#ff3555}.theme-mono{--swatch:#f2f2f2}
 @media(max-width:760px){.themes-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.theme-option{min-height:150px}.theme-option strong{font-size:11px}}
 
 /* v0.8 — brilho acompanha o tema e o logo usa currentColor */
@@ -240,3 +240,16 @@ body{background:var(--bg);color:var(--txt)}
 .account-pane{width:min(100%,420px);background:var(--panel);border:1px solid var(--red);padding:24px;clip-path:polygon(0 0,calc(100% - 26px) 0,100% 26px,100% 100%,26px 100%,0 calc(100% - 26px));box-shadow:0 0 35px var(--redwash)}
 .account-symbol{font-size:50px;color:var(--red);line-height:1}.account-pane h1{font:900 32px var(--display,system-ui);color:var(--red);margin:10px 0}.account-pane p,.account-pane small{color:var(--muted)}.account-list{display:grid;gap:8px;margin:22px 0}.account-option{display:flex;align-items:center;gap:12px;text-align:left;min-height:54px;padding:12px;background:var(--panel2);border:1px solid var(--stroke);color:var(--txt);width:100%}.account-option span{font-size:24px;color:var(--red)}.account-option strong{flex:1}.account-option small{font-size:9px;color:var(--red)}.account-option.selected{border-color:var(--red)}.account-create{display:grid;gap:10px;margin:15px 0}.account-create label{font:700 11px var(--display,system-ui)}.account-create input{min-height:48px;padding:12px;background:var(--bg);color:var(--txt);border:1px solid var(--stroke);font-size:16px}.account-empty{color:var(--muted)}
 @media(max-width:760px){.profile-button{font-size:9px;padding:10px 7px;max-width:110px}.live-date{display:none}.topbar{gap:10px}}
+
+
+/* Soulkiller — dual neon palette inspired by Cyberpunk 2077: red + electric blue. */
+:root[data-theme="soulkiller"] .hero,
+:root[data-theme="soulkiller"] .dashboard-hero{background:radial-gradient(circle at 88% 15%,#00c8ff26,transparent 43%),radial-gradient(circle at 12% 90%,#ff35551e,transparent 46%),linear-gradient(120deg,#142033,#0d1420);}
+:root[data-theme="soulkiller"] .brand-icon{box-shadow:inset 0 0 12px #ff355533,0 0 12px #00c8ff38;border-color:#ff3555;}
+:root[data-theme="soulkiller"] .tag.blue{background:#00c8ff20;color:#00c8ff;border-color:#00c8ff55;}
+:root[data-theme="soulkiller"] .history-date,
+:root[data-theme="soulkiller"] .markdown code{color:#00c8ff;}
+:root[data-theme="soulkiller"] .week-task{border-left-color:#00c8ff;background:linear-gradient(90deg,#00c8ff18,#ff35550d);}
+:root[data-theme="soulkiller"] .theme-swatch{background:linear-gradient(110deg,#ff3555 0 48%,#00c8ff 52% 100%);}
+:root[data-theme="soulkiller"] .theme-swatch i{background:#ff3555;box-shadow:0 0 9px #ff3555;}
+:root[data-theme="soulkiller"] .theme-swatch b{background:#00c8ff;box-shadow:0 0 8px #00c8ff;}
