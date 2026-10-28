@@ -16,7 +16,8 @@ import android.net.Uri;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.io.FileInputStream;
+import java.io.ByteArrayOutputStream;
 
 public final class MainActivity extends Activity {
  private WebView web;
@@ -28,7 +29,7 @@ public final class MainActivity extends Activity {
    try {
     File file=new File(getFilesDir(),"cyberpunk-diario-state.json");
     if(!file.isFile() || file.length()>5000000)return "";
-    return new String(Files.readAllBytes(file.toPath()),StandardCharsets.UTF_8);
+    try(FileInputStream input=new FileInputStream(file); ByteArrayOutputStream output=new ByteArrayOutputStream()) { byte[] buffer=new byte[8192]; int count; while((count=input.read(buffer))!=-1)output.write(buffer,0,count); return output.toString("UTF-8"); }
    } catch(Exception e) { return ""; }
   }
   @JavascriptInterface public synchronized void saveSnapshot(String json) {
