@@ -35,7 +35,6 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      # No Gradle Wrapper is committed yet; install the compatible fixed version.
       - name: Set up Gradle 8.9
         uses: gradle/actions/setup-gradle@v6
         with:
@@ -53,35 +52,28 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Cyberpunk-Diario-debug-APK
+          name: Cyberpunk-Diario-android-v1.1
           path: |
             app/build/outputs/apk/debug/*.apk
             app/build/outputs/apk/debug/SHA256SUMS.txt
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 30
 
       - name: Publish GitHub Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.1
+          name: Cyberpunk Diário 1.1
+          body: |
+            Cyberpunk Diário para Android — versão 1.1.
+
+            Inclui o tema Soulkiller com paleta neon vermelha e azul.
+            Baixe o APK e instale no Android.
+          files: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/debug/SHA256SUMS.txt
+          fail_on_unmatched_files: true
+          make_latest: true
         env:
-          GH_TOKEN: ${{ github.token }}
-        shell: bash
-        run: |
-          VERSION=$(sed -n "s/^[[:space:]]*versionName[[:space:]]*=[[:space:]]*['\"]\([^'\"]*\)['\"].*/\1/p" app/build.gradle | head -n 1)
-          if [ -z "$VERSION" ]; then
-            echo "Could not determine app version from app/build.gradle"
-            exit 1
-          fi
-          TAG="v$VERSION"
-          gh release create "$TAG" \
-            app/build/outputs/apk/debug/app-debug.apk \
-            app/build/outputs/apk/debug/SHA256SUMS.txt \
-            --repo "$GITHUB_REPOSITORY" \
-            --title "Cyberpunk Diário $VERSION" \
-            --notes "Android debug APK for Cyberpunk Diário $VERSION. Download app-debug.apk and install it on your Android device." \
-            || {
-              echo "Release $TAG may already exist; uploading the current APK assets."
-              gh release upload "$TAG" \
-                app/build/outputs/apk/debug/app-debug.apk \
-                app/build/outputs/apk/debug/SHA256SUMS.txt \
-                --repo "$GITHUB_REPOSITORY" --clobber
-            }
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
