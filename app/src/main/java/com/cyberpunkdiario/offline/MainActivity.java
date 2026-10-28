@@ -5,17 +5,18 @@ import android.os.Bundle;
 import android.webkit.WebChromeClient;
 import android.webkit.ValueCallback;
 import android.webkit.JavascriptInterface;
-import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebChromeClient.FileChooserParams;
-import android.util.Base64;
-import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.webkit.WebSettings;
 import android.view.View;
 import android.graphics.Color;
 import android.content.Intent;
 import android.net.Uri;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 
 public final class MainActivity extends Activity {
  private WebView web;
@@ -23,6 +24,30 @@ public final class MainActivity extends Activity {
  private String backupPayload;
  private static final int PICK_JSON=501, SAVE_JSON=502;
  private final class BackupBridge {
+  @JavascriptInterface public synchronized String loadSnapshot() {
+   try {
+    File file=new File(getFilesDir(),"cyberpunk-diario-state.json");
+    if(!file.isFile() || file.length()>5000000)return "";
+    return new String(Files.readAllBytes(file.toPath()),StandardCharsets.UTF_8);
+   } catch(Exception e) { return ""; }
+  }
+  @JavascriptInterface public synchronized void saveSnapshot(String json) {
+   if(json==null || json.length()>5000000)return;
+   File target=new File(getFilesDir(),"cyberpunk-diario-state.json");
+   File temp=new File(getFilesDir(),"cyberpunk-diario-state.tmp");
+   try(FileOutputStream output=new FileOutputStream(temp)) {
+    output.write(json.getBytes(StandardCharsets.UTF_8));
+    output.getFD().sync();
+    if(target.exists()&&!target.delete())return;
+    if(!temp.renameTo(target)) {
+     try(FileOutputStream fallback=new FileOutputStream(target)) {
+      fallback.write(json.getBytes(StandardCharsets.UTF_8));
+      fallback.getFD().sync();
+     }
+     temp.delete();
+    }
+   } catch(Exception ignored) { temp.delete(); }
+  }
   @JavascriptInterface public void save(String json) {
    if(json==null || json.length()>3000000)return;
    runOnUiThread(()->{ backupPayload=json; Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -61,7 +86,7 @@ public final class MainActivity extends Activity {
   if(request==PICK_JSON){if(chooser!=null){chooser.onReceiveValue(result==RESULT_OK&&data!=null?new Uri[]{data.getData()}:null);chooser=null;}return;}
   if(request==SAVE_JSON){if(result==RESULT_OK&&data!=null&&backupPayload!=null){
    try(java.io.OutputStream output=getContentResolver().openOutputStream(data.getData())){
-    if(output!=null)output.write(backupPayload.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+    if(output!=null)output.write(backupPayload.getBytes(StandardCharsets.UTF_8));
    }catch(Exception e){android.widget.Toast.makeText(this,"Não foi possível salvar backup",android.widget.Toast.LENGTH_LONG).show();}
   }backupPayload=null;}
  }
