@@ -68,7 +68,7 @@ jobs:
           body: |
             Cyberpunk Diário para Android — versão 1.2.
 
-            Inclui o tema backup automático Android e restauração de dados após reinstalação, quando o backup do dispositivo estiver habilitado.
+            Inclui backup automático dos dados no armazenamento do Android e suporte à restauração após reinstalação, quando o backup do dispositivo estiver habilitado.
             Baixe o APK e instale no Android.
           files: |
             app/build/outputs/apk/debug/app-debug.apk
