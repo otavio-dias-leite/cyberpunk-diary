@@ -68,7 +68,7 @@ jobs:
           body: |
             Cyberpunk Diário para Android — versão 1.3.0.
 
-Novidades: aba Rotina com hábitos diários e conclusão por dia, painel Agora para hábitos já vencidos, lista de atividades de Tempo Livre e sugestão aleatória. Backups JSON incluem hábitos, conclusões e ideias; backups antigos continuam compatíveis.
+            Novidades: aba Rotina com hábitos diários e conclusão por dia, painel Agora para hábitos já vencidos, lista de atividades de Tempo Livre e sugestão aleatória. Backups JSON incluem hábitos, conclusões e ideias; backups antigos continuam compatíveis.
 
             Inclui backup automático dos dados no armazenamento do Android e suporte à restauração após reinstalação, quando o backup do dispositivo estiver habilitado.
             Baixe o APK e instale no Android.
