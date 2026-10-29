@@ -63,7 +63,7 @@ jobs:
         with:
           gradle-version: '8.9'
       - name: Compile desktop server and embedded app
-        run: gradle --no-daemon -p desktop jar
+        run: gradle --no-daemon :desktop:jar
       - name: Package Windows executable with bundled Java runtime
         shell: pwsh
         run: |
