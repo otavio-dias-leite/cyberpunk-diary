@@ -318,3 +318,93 @@ body{background:var(--bg);color:var(--txt)}
   .weekday{font-size:10px;padding:10px 2px}
 }
 @media(min-width:761px){.month-grid .day-cell{min-height:145px}}
+
+
+/* Soulkiller stability patch — isolate palette tokens and UI states. */
+:root[data-theme="soulkiller"]{
+  color-scheme:dark;
+  --bg:#070b13;
+  --panel:#0d1420;
+  --panel2:#142033;
+  --stroke:#24415b;
+  --txt:#edf7ff;
+  --muted:#9db4c8;
+  --red:#ff3555;
+  --redwash:#ff355522;
+  --blue:#00c8ff;
+  --green:#00c8ff;
+  --focus:#00c8ff;
+  --theme-glow:#ff355566;
+  --theme-halo:#ff355522;
+}
+:root[data-theme="soulkiller"] body{
+  background-color:var(--bg);
+  color:var(--txt);
+}
+:root[data-theme="soulkiller"] .brand-icon,
+:root[data-theme="soulkiller"] .theme-logo{color:var(--red);border-color:var(--red)}
+:root[data-theme="soulkiller"] .nav-item.active,
+:root[data-theme="soulkiller"] .primary,
+:root[data-theme="soulkiller"] .weekday-toggle.active{
+  border-color:var(--red);
+}
+:root[data-theme="soulkiller"] .primary{
+  background:var(--red);
+  color:#080b12;
+  box-shadow:0 0 12px #ff355533;
+}
+:root[data-theme="soulkiller"] .secondary,
+:root[data-theme="soulkiller"] .tiny-btn,
+:root[data-theme="soulkiller"] .history-toggle{
+  border-color:#00c8ff66;
+}
+:root[data-theme="soulkiller"] .secondary:hover,
+:root[data-theme="soulkiller"] .tiny-btn:hover,
+:root[data-theme="soulkiller"] .history-toggle:hover{
+  color:#00c8ff;
+  border-color:#00c8ff;
+}
+:root[data-theme="soulkiller"] .tag.blue,
+:root[data-theme="soulkiller"] .history-date,
+:root[data-theme="soulkiller"] .markdown code,
+:root[data-theme="soulkiller"] .weekday,
+:root[data-theme="soulkiller"] .week-head{
+  color:#00c8ff;
+}
+:root[data-theme="soulkiller"] .progress-fill{
+  background:linear-gradient(90deg,#ff3555,#00c8ff);
+  box-shadow:0 0 10px #00c8ff44;
+}
+:root[data-theme="soulkiller"] .mission-status{border-left-color:#00c8ff}
+:root[data-theme="soulkiller"] .day-cell.today,
+:root[data-theme="soulkiller"] .week-column.today{
+  border-color:#00c8ff;
+  box-shadow:inset 0 0 10px #00c8ff20;
+}
+:root[data-theme="soulkiller"] .day-task:not(.completed),
+:root[data-theme="soulkiller"] .week-task:not(.completed){
+  background:linear-gradient(100deg,#00c8ff18,#ff355510);
+  border-left-color:#00c8ff;
+  color:var(--txt);
+}
+:root[data-theme="soulkiller"] .field input:focus,
+:root[data-theme="soulkiller"] .field textarea:focus,
+:root[data-theme="soulkiller"] .field select:focus,
+:root[data-theme="soulkiller"] button:focus-visible{
+  outline-color:#00c8ff;
+  border-color:#00c8ff;
+  box-shadow:0 0 0 2px #00c8ff22;
+}
+/* Completed items remain muted and never inherit Soulkiller neon. */
+:root[data-theme="soulkiller"] .task-card.done,
+:root[data-theme="soulkiller"] .day-task.completed,
+:root[data-theme="soulkiller"] .week-task.completed{
+  background:#19191b;
+  color:#aaa5aa;
+  border-color:#555158;
+  box-shadow:none;
+  filter:grayscale(.85);
+}
+@media(max-width:760px){
+  :root[data-theme="soulkiller"] .bottom-nav{border-top-color:#00c8ff66}
+}
