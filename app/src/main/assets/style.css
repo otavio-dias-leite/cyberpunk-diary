@@ -256,3 +256,38 @@ body{background:var(--bg);color:var(--txt)}
 
 /* Rotina e tempo livre — versão 1.3.0 */
 .routine-panel{margin:26px 0;padding:clamp(17px,3vw,28px);border:1px solid var(--stroke);border-radius:var(--radius);background:var(--panel)}.routine-form{margin:0 0 20px}.routine-form>.primary{margin-top:14px}.habit-list,.idea-list{display:grid;gap:9px}.habit-card,.idea-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border:1px solid var(--stroke);border-radius:11px;background:var(--panel2)}.habit-copy,.habit-card>div:first-child{display:grid;gap:5px;min-width:0}.habit-card strong,.idea-row span{overflow-wrap:anywhere}.habit-card small{color:var(--muted);font-size:11px}.habit-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}.habit-card.done{opacity:.65}.habit-card.done strong{text-decoration:line-through}.routine-now{margin:20px 0;padding:17px;border:1px solid #ff35554a;border-radius:var(--radius);background:var(--redwash)}.routine-now .section-heading{margin:0 0 12px}.idea-form{display:flex;gap:9px;margin:14px 0}.idea-form input{flex:1;min-width:0;padding:12px;border:1px solid var(--stroke);border-radius:9px;background:var(--panel2);color:var(--txt)}.idea-feature{display:grid;gap:8px;padding:17px;margin:14px 0;border:1px dashed var(--red);border-radius:11px;min-height:65px}.idea-feature strong{font-size:17px}.idea-row{padding:10px 14px}.danger{color:var(--red)}.free-time-panel .section-heading{align-items:center}@media(max-width:600px){.habit-card{align-items:flex-start;flex-direction:column}.habit-actions{justify-content:flex-start}.idea-form{flex-direction:column}.idea-form button{width:100%}}
+
+/* v1.4 — expandable calendars, editable daily routine and LAN sync */
+.day-cell{min-height:158px;height:auto;overflow:visible;display:flex;flex-direction:column;gap:5px}
+.day-cell.other{opacity:.58}
+.day-task{display:block;white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;word-break:break-word;line-height:1.35;min-height:0;padding:6px 5px}
+.day-task span{display:block;font-size:.9em;opacity:.75}
+.month-grid{align-items:stretch;grid-auto-rows:minmax(158px,auto)}
+.week-grid{width:100%;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px;align-items:stretch}
+.week-column{min-width:0;width:100%;min-height:420px;height:100%;padding:10px 8px;display:flex;flex-direction:column;gap:8px}
+.week-task{white-space:normal;overflow-wrap:anywhere;word-break:break-word;line-height:1.4;min-height:58px;padding:9px 8px}
+.week-task strong{display:block;font-weight:700}
+.week-task small{font-size:10px;line-height:1.4}
+.task-link{display:inline-flex;align-items:center;gap:6px;color:var(--accent);font-size:12px;font-weight:700;text-decoration:none;overflow-wrap:anywhere;margin:3px 0 8px}
+.task-link:hover{text-decoration:underline}
+.routine-form textarea{min-height:130px}
+.routine-subtasks{grid-column:1/-1;width:100%;border-top:1px solid var(--stroke);padding-top:10px;display:grid;gap:7px}
+.subtask-row{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;background:var(--bg);border:1px solid var(--stroke);color:var(--txt);font-size:13px;overflow-wrap:anywhere}
+.subtask-row input{accent-color:var(--accent);width:18px;height:18px;flex:none;margin:0}
+.subtask-row:has(input:checked) span{text-decoration:line-through;color:var(--muted)}
+.habit-card{flex-wrap:wrap}
+.sync-form{display:grid;gap:12px}
+.sync-form label{display:grid;gap:7px;color:var(--accent-ink);font:700 10px var(--display)}
+.sync-form input{width:100%;min-height:46px;padding:12px;background:var(--bg);color:var(--txt);border:1px solid var(--accent-line);border-radius:0}
+.sync-form .actions-row{flex-wrap:wrap}
+@media(max-width:760px){
+ .month-grid{grid-auto-rows:minmax(112px,auto);gap:3px}
+ .day-cell{min-height:112px;padding:6px 4px}
+ .day-task{font-size:9px;padding:5px 3px;line-height:1.25}
+ .week-grid{grid-auto-flow:column;grid-auto-columns:minmax(230px,78vw);grid-template-columns:none;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}
+ .week-column{scroll-snap-align:start;min-height:calc(100dvh - 190px);padding:14px}
+ .week-task{font-size:14px;min-height:70px;padding:11px}
+ .week-head{font-size:14px}
+ .week-head span{font-size:28px}
+ .routine-subtasks{gap:8px}
+}
