@@ -7,12 +7,9 @@ application {
     mainClass = 'com.cyberpunkdiario.desktop.DesktopServer'
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDir '../app/src/main/assets'
-            into 'web'
-        }
+tasks.named('processResources') {
+    from('../app/src/main/assets') {
+        into 'web'
     }
 }
 
