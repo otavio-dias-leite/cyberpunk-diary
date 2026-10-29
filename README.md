@@ -41,6 +41,11 @@ app/build/outputs/apk/debug/app-debug.apk
 
 ## Recursos
 
+- Aba **Rotina** com cadastro de hábitos, horário, data inicial, observações e conclusão diária.
+- Hábitos pendentes aparecem em **Agora** a partir do horário configurado.
+- Aba Rotina inclui **Tempo Livre**, lista de atividades e sugestão aleatória.
+- Backups JSON incluem hábitos, conclusões diárias e ideias de tempo livre; backups antigos continuam aceitos.
+
 - Interface web empacotada nos assets do aplicativo.
 - Funcionamento offline, sem dependência de hospedagem.
 - Navegação adaptada para Android.
