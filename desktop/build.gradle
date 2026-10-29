@@ -1,0 +1,24 @@
+plugins { id 'application' }
+
+group = 'com.cyberpunkdiario'
+version = '1.4.0'
+
+application {
+    mainClass = 'com.cyberpunkdiario.desktop.DesktopServer'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDir '../app/src/main/assets'
+            into 'web'
+        }
+    }
+}
+
+tasks.named('jar') {
+    archiveBaseName = 'CyberpunkDiarioDesktop'
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+}
