@@ -1,71 +1,58 @@
-# Cyberpunk Diário — Android
+# Cyberpunk Diário — Android + Windows Desktop
 
-Aplicativo Android offline que empacota a interface do Cyberpunk Diário em uma WebView nativa. Os dados são armazenados localmente no aparelho; não há conta online nem servidor obrigatório.
+O Cyberpunk Diário funciona offline no Android e no Windows. O aplicativo Android mantém os dados locais e pode sincronizar com o aplicativo desktop pela rede local, sem depender de nuvem ou de um serviço externo.
 
-## Gerar o APK pelo GitHub Actions
+## Downloads
 
-O repositório está preparado para compilar o APK automaticamente:
+A versão mais recente é publicada em [Releases](https://github.com/otavio-dias-leite/cyberpunk-diary/releases).
 
-1. Abra a aba **Actions** deste repositório.
-2. Selecione **Build Android APK**.
-3. Clique em **Run workflow** e confirme.
-4. Aguarde o job **Compile debug APK** terminar com sucesso.
-5. Abra a execução concluída e baixe **Cyberpunk-Diario-debug-APK** na seção **Artifacts**.
-6. Extraia o ZIP e instale `app-debug.apk` no Android. Se necessário, autorize a instalação de aplicativos pela fonte usada para abrir o arquivo.
+- **Android:** instale `app-debug.apk`. A versão 1.4.0 mantém o mesmo `applicationId` e incrementa o `versionCode`, permitindo atualizar a instalação 1.3.0 sem desinstalar.
+- **Windows:** baixe e extraia `Cyberpunk-Diario-Desktop-Windows.zip`; execute `CyberpunkDiario.exe` dentro da pasta extraída. O pacote inclui runtime Java.
 
-Também há compilação automática em push para `main` quando arquivos do aplicativo, configuração Gradle ou workflows são alterados, e em pull requests direcionados a `main`.
+## Sincronização entre Android e Windows
 
-### O que o workflow faz
+1. Conecte computador e celular à mesma rede Wi-Fi.
+2. Execute `CyberpunkDiario.exe` no Windows.
+3. A janela do desktop mostra o endereço local do servidor e um código de pareamento.
+4. No Android, abra **Ajustes → Sincronização LAN**.
+5. Informe o endereço IP do computador (por exemplo, `http://192.168.1.20:8765`) e cole o código de pareamento.
+6. Salve. A sincronização bidirecional acontece automaticamente enquanto os dois dispositivos estiverem conectados à mesma rede.
 
-- Usa Ubuntu hospedado pelo GitHub.
-- Instala Java 17 e Gradle 8.9, compatível com Android Gradle Plugin 8.7.3.
-- Executa `gradle :app:assembleDebug`.
-- Gera um arquivo SHA-256 para verificação da integridade.
-- Publica o APK como artefato por 14 dias.
+O desktop é o servidor local; Android e navegador desktop são clientes. O estado sincronizado fica salvo em `%APPDATA%/CyberpunkDiario/state.json` no Windows. O código de pareamento fica em `%APPDATA%/CyberpunkDiario/pairing.token`.
 
-O projeto ainda não contém Gradle Wrapper (`gradlew` e `gradle/wrapper`), então o workflow instala uma versão fixa do Gradle no runner. Não é necessário instalar Android Studio ou SDK no seu computador.
+**Segurança:** o servidor usa token aleatório e aceita alterações somente com autenticação. A comunicação LAN usa HTTP; utilize apenas em redes privadas confiáveis, não compartilhe o código e não encaminhe a porta 8765 para a internet. A sincronização não substitui backups.
 
-## Compilar localmente
+## Recursos 1.4.0
 
-Com Java 17, Android SDK e Gradle 8.9 instalados:
+- Rotinas editáveis com nome, horário, observação e link.
+- Subtarefas por rotina, com checklists diários que reiniciam automaticamente na data seguinte. Os registros de dias anteriores permanecem salvos.
+- Links HTTP/HTTPS associados a tarefas e rotinas.
+- Calendário mensal com células maiores, altura adaptável e títulos completos em múltiplas linhas.
+- Semana com sete colunas expandidas no desktop e cartões largos no celular.
+- Sincronização bidirecional entre Android e Windows pela rede local.
+- Perfis locais, temas, tarefas recorrentes, histórico e exportação/importação JSON.
+- Funcionamento offline quando não houver servidor conectado.
 
-```bash
-gradle --no-daemon :app:assembleDebug
-```
+## Compilar Android pelo GitHub Actions
 
-O APK será gerado em:
+O workflow **Build Cyberpunk Diário Android and Desktop** compila o APK no Ubuntu e o aplicativo Windows no runner Windows.
 
-```
-app/build/outputs/apk/debug/app-debug.apk
-```
+Para iniciar manualmente:
+1. Abra a aba **Actions**.
+2. Selecione **Build Cyberpunk Diário Android and Desktop**.
+3. Clique em **Run workflow**.
+4. Baixe os artefatos Android e Windows quando os dois jobs terminarem.
 
-## Recursos
-
-- Aba **Rotina** com cadastro de hábitos, horário, data inicial, observações e conclusão diária.
-- Hábitos pendentes aparecem em **Agora** a partir do horário configurado.
-- Aba Rotina inclui **Tempo Livre**, lista de atividades e sugestão aleatória.
-- Backups JSON incluem hábitos, conclusões diárias e ideias de tempo livre; backups antigos continuam aceitos.
-
-- Interface web empacotada nos assets do aplicativo.
-- Funcionamento offline, sem dependência de hospedagem.
-- Navegação adaptada para Android.
-- Perfis locais e armazenamento separado por perfil.
-- Exportação e importação de backup JSON pelo seletor de arquivos nativo.
-- Tarefas únicas e recorrentes, agenda semanal e mensal, histórico e temas.
-
-## Dados e privacidade
-
-Os perfis são apenas separações locais de dados, não são autenticação nem isolamento criptográfico. Qualquer pessoa com acesso ao aplicativo pode alternar entre eles. Os dados ficam no armazenamento interno do aplicativo e são apagados ao limpar os dados ou desinstalar. Exporte backups regularmente.
-
-Os dados do site publicado no GitHub Pages não são migrados automaticamente para o APK, pois são origens de armazenamento diferentes. Exporte um backup JSON no site e importe-o no aplicativo.
+Em push para `main`, os dois pacotes são publicados na Release `v1.4.0`.
 
 ## Estrutura
 
-- `app/src/main/assets/` — interface, estilos e lógica JavaScript.
-- `app/src/main/java/` — Activity Android e integração com a WebView.
-- `app/src/main/AndroidManifest.xml` — configuração do aplicativo.
-- `.github/workflows/android-apk.yml` — compilação automática do APK.
+- `app/src/main/assets/` — interface, CSS, lógica do diário e cliente de sincronização.
+- `app/src/main/java/` — integração Android/WebView e backup nativo.
+- `desktop/src/main/java/` — servidor HTTP local e janela de pareamento Windows.
+- `desktop/build.gradle` — empacotamento da aplicação desktop com runtime Java.
+- `.github/workflows/android-apk.yml` — builds Android/Windows e publicação.
 
-## Assinatura e distribuição
+## Dados
 
-O artefato gerado é um APK **debug**, assinado automaticamente com a chave de depuração do Android. É adequado para instalação e testes pessoais. Para publicar em lojas ou distribuir atualizações oficiais, será necessário configurar uma chave de assinatura release protegida em GitHub Secrets e gerar um build release assinado.
+O Android mantém um snapshot no armazenamento interno do aplicativo. Exportar backups JSON continua disponível em Ajustes. A sincronização mantém uma cópia no computador; faça backups regulares antes de reinstalar, apagar dados ou trocar de aparelho.
