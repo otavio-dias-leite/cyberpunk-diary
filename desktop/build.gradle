@@ -15,6 +15,7 @@ tasks.named('processResources') {
 
 tasks.named('jar') {
     archiveBaseName = 'CyberpunkDiarioDesktop'
+    archiveVersion = ''
     manifest {
         attributes 'Main-Class': application.mainClass.get()
     }
