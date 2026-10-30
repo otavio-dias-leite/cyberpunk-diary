@@ -88,8 +88,9 @@ public final class DesktopServer {
         openBrowser("http://127.0.0.1:" + PORT);
     }
 
-    private static List<String> lanUrls() {\n        List<String> tailnet = new ArrayList<>();
-        List<String> result = new ArrayList<>();
+    private static List<String> lanUrls() {
+        List<String> tailnet = new ArrayList<>();
+        List<String> local = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             while (interfaces.hasMoreElements()) {
@@ -98,16 +99,34 @@ public final class DesktopServer {
                 Enumeration<InetAddress> addresses = ni.getInetAddresses();
                 while (addresses.hasMoreElements()) {
                     InetAddress address = addresses.nextElement();
-                    if (address instanceof Inet4Address && address.isSiteLocalAddress())
-                        result.add("http://" + address.getHostAddress() + ":" + PORT);
+                    if (!(address instanceof Inet4Address)) continue;
+                    String url = "http://" + address.getHostAddress() + ":" + PORT;
+                    if (isTailscaleAddress(address)) tailnet.add(url + "  [TAILSCALE]");
+                    else if (address.isSiteLocalAddress()) local.add(url + "  [LAN]");
                 }
             }
         } catch (Exception ignored) {}
-        if (result.isEmpty()) result.add("http://IP-DO-COMPUTADOR:" + PORT);
+        List<String> result = new ArrayList<>();
+        result.add("=== ACESSO ENTRE REDES DIFERENTES ===");
+        if (tailnet.isEmpty()) result.add("Tailscale não detectado. Instale e conecte este PC ao tailnet.");
+        else result.addAll(tailnet);
+        result.add("");
+        result.add("=== ACESSO NA MESMA REDE WI-FI ===");
+        if (local.isEmpty()) result.add("Nenhum endereço LAN detectado.");
+        else result.addAll(local);
         return result;
     }
 
-    private static boolean isTailscaleAddress(InetAddress address) {\n        byte[] b = address.getAddress();\n        if (b.length == 4) { int first = b[0] & 255, second = b[1] & 255; return first == 100 && second >= 64 && second <= 127; }\n        return b.length == 16 && (b[0] & 255) == 0xfd && (b[1] & 255) == 0x7a;\n    }\n\n    private static void openBrowser(String address) {
+    private static boolean isTailscaleAddress(InetAddress address) {
+        byte[] b = address.getAddress();
+        if (b.length == 4) {
+            int first = b[0] & 255, second = b[1] & 255;
+            return first == 100 && second >= 64 && second <= 127;
+        }
+        return b.length == 16 && (b[0] & 255) == 0xfd && (b[1] & 255) == 0x7a;
+    }
+
+    private static void openBrowser(String address) {
         try { if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(URI.create(address)); } catch (Exception ignored) {}
     }
 
