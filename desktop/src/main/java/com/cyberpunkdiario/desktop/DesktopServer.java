@@ -46,9 +46,9 @@ public final class DesktopServer {
     }
 
     private static void showWindow() {
-        JFrame frame = new JFrame("Cyberpunk Diário — servidor local");
+        JFrame frame = new JFrame("Cyberpunk Diário — servidor Tailscale");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(680, 440);
+        frame.setSize(760, 560);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().setBackground(new Color(12, 12, 17));
         JPanel panel = new JPanel();
@@ -58,7 +58,7 @@ public final class DesktopServer {
         JLabel title = new JLabel("CYBERPUNK DIÁRIO // DESKTOP");
         title.setForeground(new Color(255, 53, 85));
         title.setFont(new Font("SansSerif", Font.BOLD, 21));
-        JLabel info = new JLabel("<html>Servidor ativo na porta <b>" + PORT + "</b>. Conecte o Android à mesma rede Wi-Fi.</html>");
+        JLabel info = new JLabel("<html>Servidor ativo na porta <b>" + PORT + "</b>. Para acessar de outra rede, conecte PC e celular à mesma rede Tailscale. O tráfego comum da internet não passa pelo PC.</html>");
         info.setForeground(Color.LIGHT_GRAY);
         info.setBorder(BorderFactory.createEmptyBorder(14, 0, 8, 0));
         JTextArea addresses = new JTextArea(String.join("\n", lanUrls()));
@@ -79,7 +79,7 @@ public final class DesktopServer {
         JLabel warning = new JLabel("<html><br>Segurança: o código permite acesso aos dados do diário. Compartilhe apenas com seus próprios dispositivos.<br>Não exponha a porta 8765 à internet. O servidor salva os dados em " + STATE_FILE + ".</html>");
         warning.setForeground(new Color(180, 160, 170));
         panel.add(title); panel.add(info); panel.add(addresses);
-        panel.add(new JLabel("Código de pareamento (cole em Ajustes → Sincronização LAN no Android):"));
+        panel.add(new JLabel("Código de pareamento (cole em Ajustes → Sincronização Tailscale no Android):"));
         panel.add(pairing); panel.add(copy); panel.add(Box.createVerticalStrut(8)); panel.add(open); panel.add(warning);
         for (Component c : panel.getComponents()) if (c instanceof JLabel l) l.setForeground(new Color(210, 205, 215));
         title.setForeground(new Color(255, 53, 85)); info.setForeground(Color.LIGHT_GRAY); warning.setForeground(new Color(180, 160, 170));
@@ -88,7 +88,7 @@ public final class DesktopServer {
         openBrowser("http://127.0.0.1:" + PORT);
     }
 
-    private static List<String> lanUrls() {
+    private static List<String> lanUrls() {\n        List<String> tailnet = new ArrayList<>();
         List<String> result = new ArrayList<>();
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
@@ -107,7 +107,7 @@ public final class DesktopServer {
         return result;
     }
 
-    private static void openBrowser(String address) {
+    private static boolean isTailscaleAddress(InetAddress address) {\n        byte[] b = address.getAddress();\n        if (b.length == 4) { int first = b[0] & 255, second = b[1] & 255; return first == 100 && second >= 64 && second <= 127; }\n        return b.length == 16 && (b[0] & 255) == 0xfd && (b[1] & 255) == 0x7a;\n    }\n\n    private static void openBrowser(String address) {
         try { if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(URI.create(address)); } catch (Exception ignored) {}
     }
 
