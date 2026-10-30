@@ -15,6 +15,9 @@ import android.content.Intent;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -39,6 +42,15 @@ public final class MainActivity extends Activity {
     pm.setComponentEnabledSetting(component,i==selected?PackageManager.COMPONENT_ENABLED_STATE_ENABLED:PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
    }
    prefs.edit().putString("theme",themes[selected]).apply();
+  }
+  @JavascriptInterface public boolean isTailscaleConnected() {
+   try {
+    getPackageManager().getPackageInfo("com.tailscale.ipn",0);
+    ConnectivityManager cm=(ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
+    Network active=cm.getActiveNetwork();
+    NetworkCapabilities caps=active==null?null:cm.getNetworkCapabilities(active);
+    return caps!=null&&caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN);
+   } catch(Exception ignored) { return false; }
   }
   @JavascriptInterface public synchronized String loadSnapshot() {
    try {
