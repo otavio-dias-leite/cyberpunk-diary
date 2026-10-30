@@ -24,7 +24,7 @@ internal static class Program
     private static LanDiscovery? _discovery;
 
     [STAThread]
-    private static async Task Main(string[] args)
+    private static void Main(string[] args)
     {
         ApplicationConfiguration.Initialize();
         Directory.CreateDirectory(DataDirectory);
@@ -110,14 +110,14 @@ internal static class Program
         app.MapFallbackToFile("index.html");
         try
         {
-            await app.StartAsync();
+            app.StartAsync().GetAwaiter().GetResult();
             Application.Run(new MainForm(_token, _discovery));
         }
         finally
         {
             _discovery.Dispose();
-            await app.StopAsync();
-            await app.DisposeAsync();
+            app.StopAsync().GetAwaiter().GetResult();
+            app.DisposeAsync().AsTask().GetAwaiter().GetResult();
         }
     }
 
