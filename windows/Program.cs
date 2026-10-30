@@ -263,8 +263,12 @@ internal sealed class MainForm : Form
             }
         };
         var timer = new System.Windows.Forms.Timer { Interval = 3000 };
-        timer.Tick += (_, _) => var peers = _discovery.GetDevices(); _status.Text = "LAN ATIVA · " + peers.Length + " celular(is) detectado(s) · porta 8765";
+        timer.Tick += (_, _) =>
+        {
+            var peers = _discovery.GetDevices();
+            _status.Text = "LAN ATIVA · " + peers.Length + " celular(is) detectado(s) · porta 8765";
             _devices.Text = string.Join("   |   ", peers.Select(p => p.GetType().GetProperty("name")?.GetValue(p)?.ToString()).Where(n => !string.IsNullOrWhiteSpace(n)));
+        };
         timer.Start();
         FormClosed += (_, _) => timer.Stop();
     }
