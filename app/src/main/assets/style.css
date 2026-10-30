@@ -566,12 +566,6 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 :root[data-theme="soulkiller"] .day-note-item{background:#ff355518;border-left-color:#ff3555;color:#ffdce2}
 :root[data-theme="soulkiller"] .week-task:not(.completed){border-left-color:#00c8ff;background:linear-gradient(90deg,#00c8ff18,#ff35550d)}
 :root[data-theme="soulkiller"] .theme-option.selected{border-color:#ff3555}
-:root[data-theme="soulkiller"] .theme-option.theme-red .theme-swatch,
-:root[data-theme="soulkiller"] .theme-option.theme-matrix .theme-swatch,
-:root[data-theme="soulkiller"] .theme-option.theme-carbon .theme-swatch,
-:root[data-theme="soulkiller"] .theme-option.theme-midnight .theme-swatch,
-:root[data-theme="soulkiller"] .theme-option.theme-cyberpunk .theme-swatch,
-:root[data-theme="soulkiller"] .theme-option.theme-mono .theme-swatch{background:inherit}
 
 /* Cyberpunk — high-contrast Night City yellow and deep black, without Soulkiller accents. */
 :root[data-theme="cyberpunk"]{
