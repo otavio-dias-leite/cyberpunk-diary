@@ -29,6 +29,8 @@ public final class MainActivity extends Activity {
  private final class BackupBridge {
   @JavascriptInterface public void setThemeIcon(String theme) {
    String[] themes={"red","matrix","carbon","midnight","soulkiller","mono"};
+   android.content.SharedPreferences prefs=getSharedPreferences("launcher_theme",MODE_PRIVATE);
+   if(theme!=null && theme.equalsIgnoreCase(prefs.getString("theme","")))return;
    String[] aliases={"IconRed","IconMatrix","IconCarbon","IconMidnight","IconSoulkiller","IconMono"};
    int selected=0; for(int i=0;i<themes.length;i++)if(themes[i].equalsIgnoreCase(theme)){selected=i;break;}
    PackageManager pm=getPackageManager();
@@ -36,6 +38,7 @@ public final class MainActivity extends Activity {
     ComponentName component=new ComponentName(getPackageName(),getPackageName()+"."+aliases[i]);
     pm.setComponentEnabledSetting(component,i==selected?PackageManager.COMPONENT_ENABLED_STATE_ENABLED:PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
    }
+   prefs.edit().putString("theme",themes[selected]).apply();
   }
   @JavascriptInterface public synchronized String loadSnapshot() {
    try {
