@@ -1,4 +1,4 @@
-/* LAN discovery and automatic reconnection. No Tailscale and no manual IP entry. */
+/* LAN discovery and automatic reconnection; no manual IP entry. */
 (()=>{'use strict';const native=!!window.AndroidBackup;let scanning=false,devices=[];
  const $=id=>document.getElementById(id),setStatus=t=>{const n=$('lanScanState');if(n)n.textContent=t};
  function render(list){devices=list||[];const box=$('lanDevices');if(!box)return;if(!devices.length){box.innerHTML='<p class="helper">Nenhum dispositivo encontrado. Confira se os aparelhos estão na mesma rede Wi-Fi/LAN.</p>';return}box.innerHTML=devices.map((d,i)=>'<button type="button" class="lan-device" data-device-index="'+i+'"><span class="lan-device-icon">▣</span><span><strong>'+String(d.name||'Cyberpunk Diário').replace(/[&<>"]/g,'')+'</strong><small>'+String(d.host||'Rede local').replace(/[&<>"]/g,'')+' · '+String(d.platform||'DISPOSITIVO COMPATÍVEL')+'</small></span><b>SELECIONAR →</b></button>').join('')}
