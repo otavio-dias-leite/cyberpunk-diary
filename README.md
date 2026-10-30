@@ -9,18 +9,18 @@ A versão mais recente é publicada em [Releases](https://github.com/otavio-dias
 - **Android:** instale `app-debug.apk`. A versão 1.4.0 mantém o mesmo `applicationId` e incrementa o `versionCode`, permitindo atualizar a instalação 1.3.0 sem desinstalar.
 - **Windows:** baixe e extraia `Cyberpunk-Diario-Desktop-Windows.zip`; execute `CyberpunkDiario.exe` dentro da pasta extraída. O pacote inclui runtime Java.
 
-## Sincronização entre Android e Windows
+## Sincronização entre Android e Windows com Tailscale
 
-1. Conecte computador e celular à mesma rede Wi-Fi.
-2. Execute `CyberpunkDiario.exe` no Windows.
-3. A janela do desktop mostra o endereço local do servidor e um código de pareamento.
-4. No Android, abra **Ajustes → Sincronização LAN**.
-5. Informe o endereço IP do computador (por exemplo, `http://192.168.1.20:8765`) e cole o código de pareamento.
-6. Salve. A sincronização bidirecional acontece automaticamente enquanto os dois dispositivos estiverem conectados à mesma rede.
+1. Instale o [Tailscale para Windows](https://tailscale.com/download/windows) no PC e o [Tailscale para Android](https://play.google.com/store/apps/details?id=com.tailscale.ipn) no celular.
+2. Entre na mesma conta Tailscale nos dois dispositivos e conecte-os à rede privada.
+3. Execute `CyberpunkDiario.exe` no Windows. A janela mostra os endereços de rede; use o endereço marcado **TAILSCALE** (normalmente `100.x.x.x:8765`).
+4. No Android, abra **Ajustes → Sincronização Tailscale**, informe `http://100.x.x.x:8765` e cole o código de pareamento exibido no PC.
+5. Salve. A sincronização bidirecional funciona também quando PC e celular estão em redes diferentes, desde que ambos estejam conectados ao Tailscale.
 
-O desktop é o servidor local; Android e navegador desktop são clientes. O estado sincronizado fica salvo em `%APPDATA%/CyberpunkDiario/state.json` no Windows. O código de pareamento fica em `%APPDATA%/CyberpunkDiario/pairing.token`.
+O desktop continua sendo o servidor e o Android é o cliente. O Tailscale fornece a conectividade privada; o token aleatório do Cyberpunk Diário continua autenticando as alterações. Não é necessário configurar um Exit Node: somente o tráfego destinado aos dispositivos do tailnet passa pela rede Tailscale, e a navegação comum continua usando a internet normal. O servidor também mantém os endereços LAN para uso na mesma Wi-Fi.
 
-**Segurança:** o servidor usa token aleatório e aceita alterações somente com autenticação. A comunicação LAN usa HTTP; utilize apenas em redes privadas confiáveis, não compartilhe o código e não encaminhe a porta 8765 para a internet. A sincronização não substitui backups.
+**Limites e segurança:** instale e mantenha o Tailscale conectado nos dois dispositivos. Não encaminhe a porta 8765 ao público. A sincronização atual envia o estado JSON do diário; ela ainda não é uma sincronização genérica de pastas/arquivos. O PC é o servidor nesta implementação; o Android funciona como cliente. Faça backups regulares.
+
 
 ## Recursos 1.4.0
 
