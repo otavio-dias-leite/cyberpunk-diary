@@ -67,7 +67,7 @@ jobs:
       - name: Package Windows executable with bundled Java runtime
         shell: pwsh
         run: |
-          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.5.1 --vendor "Otavio Dias Leite"
+          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.6.0 --vendor "Otavio Dias Leite"
           Compress-Archive -Path desktop/build/installer/CyberpunkDiario -DestinationPath desktop/build/Cyberpunk-Diario-Desktop-Windows.zip -Force
       - uses: actions/upload-artifact@v4
         with:
@@ -93,11 +93,17 @@ jobs:
       - name: Publish Android and Windows downloads
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.5.1
-          name: Cyberpunk Diário 1.5.1
+          tag_name: v1.6.0
+          name: Cyberpunk Diário 1.6.0
           body: |
-            Cyberpunk Diário 1.5.1 — Android + Windows Desktop.
+            Cyberpunk Diário 1.6.0 — Android + Windows Desktop.
 
+            - Tema Soulkiller otimizado para reduzir efeitos gráficos pesados; fonte Orbitron em toda a interface.
+            - Ícones do aplicativo Android acompanham o tema selecionado.
+            - Tarefas recorrentes diárias e semanais.
+            - Notas em Markdown vinculadas a datas, com data padrão de criação.
+            - Calendário mensal com cartões maiores e abertura da visão detalhada do dia.
+            - Rotação de tela preserva a sessão WebView.
             - Rotinas editáveis com subtarefas e checklists diários que reiniciam sem apagar o histórico.
             - Links associados a tarefas e rotinas.
             - Calendário mensal expandido, com texto em várias linhas.
