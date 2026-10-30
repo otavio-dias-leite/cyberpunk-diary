@@ -10,6 +10,7 @@
   const controls=document.createElement('span');controls.className='calendar-zoom-controls';
   controls.innerHTML='<span>ZOOM</span><button type="button" data-calzoom="-1" aria-label="Diminuir zoom">−</button><button type="button" data-calzoom="0" aria-label="Restaurar zoom">'+Math.round(scale*100)+'%</button><button type="button" data-calzoom="1" aria-label="Aumentar zoom">+</button>';
   nav.appendChild(controls);
+  nav.addEventListener('click',e=>{const b=e.target.closest('[data-calzoom]');if(!b)return;const v=Number(b.dataset.calzoom);scale=v===0?1:clamp(scale+v*.15);localStorage.setItem(KEY,String(scale));wrap.style.setProperty('--calendar-scale',scale);const reset=nav.querySelector('[data-calzoom="0"]');if(reset)reset.textContent=Math.round(scale*100)+'%';e.preventDefault()});
   const handle=document.createElement('button');handle.type='button';handle.className='calendar-resize-handle';handle.setAttribute('aria-label','Arraste para redimensionar o calendário');handle.title='Arraste para redimensionar';handle.innerHTML='<span></span>';wrap.appendChild(handle);
   wrap.addEventListener('click',e=>{
    if(Date.now()<ignoreClickUntil){e.preventDefault();e.stopImmediatePropagation();return}
