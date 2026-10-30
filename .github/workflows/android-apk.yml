@@ -34,38 +34,54 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
         with:
           gradle-version: '8.9'
-      - name: Require persistent Android signing key
+      - name: Configure persistent Android signing key when available
+        id: signing
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          test -n "$KEYSTORE_B64" || (echo "Missing ANDROID_KEYSTORE_BASE64 repository secret" && exit 1)
-          test -n "$KEYSTORE_PASSWORD" || (echo "Missing ANDROID_KEYSTORE_PASSWORD repository secret" && exit 1)
-          test -n "$KEY_ALIAS" || (echo "Missing ANDROID_KEY_ALIAS repository secret" && exit 1)
-          test -n "$KEY_PASSWORD" || (echo "Missing ANDROID_KEY_PASSWORD repository secret" && exit 1)
-          echo "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/cyberpunk-release.jks"
+          if [ -n "$KEYSTORE_B64" ] && [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
+            echo "$KEYSTORE_B64" | base64 --decode > "$RUNNER_TEMP/cyberpunk-release.jks"
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Android signing secrets are unavailable; building a debug APK for fresh installation."
+          fi
       - name: Compile signed release APK
+        if: steps.signing.outputs.available == 'true'
         env:
           ANDROID_KEYSTORE_PATH: ${{ runner.temp }}/cyberpunk-release.jks
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: gradle --no-daemon --stacktrace :app:assembleRelease
-      - name: Verify APK signature and generate checksum
+      - name: Compile debug APK when persistent signing is unavailable
+        if: steps.signing.outputs.available != 'true'
+        run: gradle --no-daemon --stacktrace :app:assembleDebug
+      - name: Stage APK and generate checksum
         run: |
-          APK=app/build/outputs/apk/release/app-release.apk
+          mkdir -p app/build/distribution
+          if [ "${{ steps.signing.outputs.available }}" = "true" ]; then
+            APK=app/build/outputs/apk/release/app-release.apk
+            "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner" verify --verbose "$APK"
+          else
+            APK=app/build/outputs/apk/debug/app-debug.apk
+          fi
           test -s "$APK"
-          "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner" verify --verbose "$APK"
-          cd app/build/outputs/apk/release
-          sha256sum app-release.apk > SHA256SUMS.txt
+          cp "$APK" app/build/distribution/Cyberpunk-Diario-Android.apk
+          if [ "${{ steps.signing.outputs.available }}" = "true" ]; then
+            echo "APK_TYPE=release-signed" > app/build/distribution/BUILD-INFO.txt
+          else
+            echo "APK_TYPE=debug-signed; fresh installation only; not guaranteed to update an existing installation" > app/build/distribution/BUILD-INFO.txt
+          fi
+          cd app/build/distribution
+          sha256sum Cyberpunk-Diario-Android.apk > SHA256SUMS.txt
       - uses: actions/upload-artifact@v4
         with:
           name: Cyberpunk-Diario-Android
-          path: |
-            app/build/outputs/apk/release/app-release.apk
-            app/build/outputs/apk/release/SHA256SUMS.txt
+          path: app/build/distribution/*
           if-no-files-found: error
           retention-days: 30
 
@@ -123,7 +139,7 @@ jobs:
           retention-days: 30
 
   publish:
-    name: Publish release assets
+    name: Publish Android, Windows and Linux release assets
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [android, desktop, linux]
     runs-on: ubuntu-latest
@@ -148,25 +164,16 @@ jobs:
           body: |
             Cyberpunk Diário 1.8.0 — Android, Windows e Linux.
 
-            - Nova distribuição desktop para Linux, além de Windows e Android.
-            - Tema Soulkiller otimizado para reduzir efeitos gráficos pesados; fonte Orbitron em toda a interface.
-            - Troca de tema sem reinicialização do aplicativo; tema Soulkiller inspirado nas cores de Night City.
-            - Tarefas recorrentes diárias e semanais.
-            - Criação unificada de tarefas, notas e rotinas no menu Criar.
-            - Calendário mensal com dia em foco, navegação diária, lista de tarefas/notas e quadrados redimensionáveis.
-            - Rotação de tela preserva a sessão WebView.
-            - Rotinas editáveis com subtarefas e checklists diários que reiniciam sem apagar o histórico.
-            - Links associados a tarefas e rotinas.
-            - Calendário mensal expandido, com texto em várias linhas.
-            - Semana com colunas ampliadas e melhor aproveitamento da tela.
-            - Aplicativo Windows com servidor Tailscale; sincronização bidirecional entre redes diferentes sem encaminhar o tráfego geral da internet.
-            - Android mantém o mesmo applicationId e incrementa versionCode para atualização direta.
+            Os pacotes Android, Windows e Linux são gerados automaticamente pelo GitHub Actions.
+            Se a chave Android persistente estiver configurada, o APK será assinado para atualização direta.
+            Se não estiver, será publicado um APK de depuração para instalação nova; nesse caso, ele não substitui uma instalação assinada anteriormente.
 
-            Para sincronizar: execute CyberpunkDiario.exe no Windows, instale Tailscale no PC e no Android, entre na mesma conta, copie o endereço marcado TAILSCALE e o código de pareamento exibidos no desktop e informe-os em Ajustes → Sincronização Tailscale no Android.
+            Para sincronizar Android e desktop: execute CyberpunkDiario.exe no Windows ou o executável CyberpunkDiario no Linux, instale Tailscale nos dispositivos, entre na mesma conta, copie o endereço marcado TAILSCALE e o código de pareamento exibidos no desktop e informe-os em Ajustes → Sincronização Tailscale no Android.
 
             O servidor usa HTTP autenticado por token dentro da rede privada criptografada pelo Tailscale. Não encaminhe a porta 8765 para a internet. Não é necessário ativar Exit Node.
           files: |
-            release/android/app-release.apk
+            release/android/Cyberpunk-Diario-Android.apk
+            release/android/BUILD-INFO.txt
             release/android/SHA256SUMS.txt
             release/windows/Cyberpunk-Diario-Desktop-Windows.zip
             release/linux/Cyberpunk-Diario-Desktop-Linux.tar.gz
