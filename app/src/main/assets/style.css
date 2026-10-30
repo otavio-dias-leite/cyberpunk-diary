@@ -589,3 +589,15 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 :root[data-theme="cyberpunk"] .week-task:not(.completed){background:#fcee0a12;border-left-color:#fcee0a}
 :root[data-theme="cyberpunk"] .tiny-btn:hover,:root[data-theme="cyberpunk"] .secondary:hover{color:#fcee0a;border-color:#fcee0a}
 :root[data-theme="cyberpunk"] .theme-option.selected{border-color:#fcee0a}
+
+/* Monthly calendar: consistent scalable cells, drag navigation and corner resizing. */
+.month-grid-wrap{position:relative;padding-bottom:34px;touch-action:pan-y;overscroll-behavior:contain}
+.month-grid{min-width:calc(640px * var(--calendar-scale,1))!important;grid-auto-rows:minmax(calc(88px * var(--calendar-scale,1)),auto)!important}
+.day-cell{min-height:calc(88px * var(--calendar-scale,1))!important}
+.calendar-zoom-controls{display:inline-flex;align-items:center;gap:5px;margin-left:8px}
+.calendar-zoom-controls>span{font:700 8px var(--display);letter-spacing:.8px;color:var(--muted)}
+.calendar-zoom-controls button{min-width:38px;min-height:38px;padding:6px 9px;background:var(--panel);border:1px solid var(--stroke);color:var(--txt);font:700 11px var(--display)}
+.calendar-resize-handle{position:absolute;right:1px;bottom:1px;width:32px;height:30px;display:grid;place-items:center;background:var(--panel2);border:1px solid var(--accent-line,var(--stroke));cursor:nwse-resize;touch-action:none;z-index:3}
+.calendar-resize-handle span{width:13px;height:13px;border-right:3px solid var(--accent,var(--red));border-bottom:3px solid var(--accent,var(--red));transform:translate(-2px,-2px)}
+.calendar-hint{line-height:1.7}
+@media(max-width:760px){.calendar-zoom-controls{gap:3px;margin-left:2px}.calendar-zoom-controls>span{display:none}.calendar-zoom-controls button{min-width:36px;min-height:40px;padding:5px}.calendar-nav{flex-wrap:wrap}.month-grid-wrap{touch-action:pan-y}}
