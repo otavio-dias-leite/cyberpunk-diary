@@ -27,6 +27,13 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+      - name: Validate JavaScript syntax
+        run: |
+          node --check app/src/main/assets/accounts.js
+          node --check app/src/main/assets/bridge.js
+          node --check app/src/main/assets/app.js
+          node --check app/src/main/assets/calendar-ux.js
+          node --check app/src/main/assets/sync-ux.js
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -134,15 +141,14 @@ jobs:
           tag_name: ${{ steps.app-version.outputs.tag }}
           name: Cyberpunk Diário ${{ steps.app-version.outputs.version }}
           body: |
-            Cyberpunk Diário ${{ steps.app-version.outputs.version }} — Android e Windows.
+            Cyberpunk Diário ${{ steps.app-version.outputs.version }} — grande atualização visual e funcional.
 
-            O Windows é um aplicativo próprio com interface incorporada, sem abrir navegador externo.
-            Android e Windows descobrem dispositivos compatíveis automaticamente na mesma rede Wi-Fi/LAN.
-            A sincronização é local, autenticada por código de pareamento e não utiliza Tailscale, nuvem ou IP digitado manualmente.
-            O firewall do Windows precisa permitir o aplicativo em redes privadas. Não exponha as portas 8765 e 8766 à internet.
+            Android: navegação voltar integrada, interface adaptada a telas pequenas, botões com áreas de toque maiores, descoberta LAN fora da thread de interface e tema Soulkiller refinado.
+            Agenda: correções de recorrência diária/semanal/mensal, criação de rotinas, prevenção de cartões duplicados, compartilhamento de tarefas e manutenção de backup local.
+            Windows: aplicativo nativo com sincronização direta pela rede local.
 
-            O APK mantém o mesmo applicationId e incrementa o versionCode.
-            Atualizações Android sem conflito exigem preservar a mesma chave de assinatura usada na instalação anterior.
+            A sincronização LAN usa autenticação por código de pareamento. O firewall do Windows deve permitir o aplicativo em redes privadas. Não exponha as portas 8765 e 8766 à internet.
+            O APK mantém o applicationId e incrementa o versionCode. Atualizações Android exigem a mesma chave de assinatura; sem o keystore anterior, faça backup e reinstale.
           files: |
             release/android/Cyberpunk-Diario-Android.apk
             release/android/BUILD-INFO.txt
