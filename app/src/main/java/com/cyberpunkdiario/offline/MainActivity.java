@@ -12,6 +12,8 @@ import android.webkit.WebSettings;
 import android.view.View;
 import android.graphics.Color;
 import android.content.Intent;
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,6 +27,16 @@ public final class MainActivity extends Activity {
  private String backupPayload;
  private static final int PICK_JSON=501, SAVE_JSON=502;
  private final class BackupBridge {
+  @JavascriptInterface public void setThemeIcon(String theme) {
+   String[] themes={"red","matrix","carbon","midnight","soulkiller","mono"};
+   String[] aliases={"IconRed","IconMatrix","IconCarbon","IconMidnight","IconSoulkiller","IconMono"};
+   int selected=0; for(int i=0;i<themes.length;i++)if(themes[i].equalsIgnoreCase(theme)){selected=i;break;}
+   PackageManager pm=getPackageManager();
+   for(int i=0;i<aliases.length;i++){
+    ComponentName component=new ComponentName(getPackageName(),getPackageName()+"."+aliases[i]);
+    pm.setComponentEnabledSetting(component,i==selected?PackageManager.COMPONENT_ENABLED_STATE_ENABLED:PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
+   }
+  }
   @JavascriptInterface public synchronized String loadSnapshot() {
    try {
     File file=new File(getFilesDir(),"cyberpunk-diario-state.json");
