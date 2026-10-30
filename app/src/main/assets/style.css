@@ -652,3 +652,24 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .filter-indicator{width:7px;height:7px;border:1px solid currentColor;border-radius:2px;background:transparent}
 .agenda-filter.active .filter-indicator{border-color:var(--blue);background:var(--blue);box-shadow:0 0 7px var(--blue)}
 @media(max-width:520px){.agenda-filters{gap:6px;padding:10px}.agenda-filter-label{flex-basis:100%;margin-bottom:2px}.agenda-filter{flex:1;justify-content:center;padding:7px 8px;font-size:8px}}
+
+
+/* v1.10.4 — month calendar: stable grid, touch-safe scrolling and adjustable zoom. */
+.month-zoom-controls{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:-7px 0 12px}
+.month-zoom-controls .tiny-btn{min-width:38px;min-height:36px;padding:6px 10px}
+.month-zoom-controls span{min-width:48px;text-align:center;font:700 10px var(--display);color:var(--blue)}
+.month-grid-wrap{width:100%;overflow-x:auto;overflow-y:visible;padding:2px 1px 12px;overscroll-behavior-x:contain;touch-action:pan-y pan-x;-webkit-overflow-scrolling:touch}
+.month-grid{grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-rows:minmax(92px,auto);align-items:stretch;min-width:0;gap:6px;touch-action:pan-y}
+.day-cell{box-sizing:border-box;min-width:0;min-height:92px;height:auto;max-height:none;overflow:hidden!important;resize:none!important;align-self:stretch;display:flex;flex-direction:column;gap:4px;padding:7px;border-radius:8px;touch-action:pan-y;overscroll-behavior:contain;cursor:pointer}
+.day-cell-head{min-width:0;display:flex;justify-content:space-between;align-items:center;gap:3px;margin-bottom:2px}
+.day-number{font:700 11px var(--display);flex:none}.day-total{font:700 7px var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-task{display:flex;align-items:center;gap:3px;min-width:0;max-width:100%;margin:0;padding:3px 4px;border-left:2px solid var(--red);background:var(--redwash);font-size:9px;line-height:1.25;white-space:normal;overflow:hidden}
+.day-task-title{display:block;flex:1;min-width:0;padding:0;border:0;background:transparent;color:var(--txt);font:600 9px var(--body);line-height:1.25;text-align:left;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
+.day-task-check{flex:none;width:19px;height:19px;padding:0;border:1px solid var(--stroke);background:var(--panel2);color:var(--blue);font-size:11px;line-height:1}
+.day-task.completed{opacity:.55}.day-task.completed .day-task-title{text-decoration:line-through}
+.day-note-item{min-width:0;max-height:22px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:3px 4px;font-size:8px;line-height:1.2;border-left:2px solid var(--blue);background:#00c8ff12}
+.day-more{font:700 8px var(--display);color:var(--blue);padding:1px 3px}.day-empty{font-size:10px;opacity:.35}
+.month-grid-wrap[data-zoom="0.8"] .day-cell{min-height:76px;padding:5px}.month-grid-wrap[data-zoom="0.8"] .day-task-title{font-size:8px}
+.month-grid-wrap[data-zoom="1.15"] .day-cell{min-height:112px;padding:9px}.month-grid-wrap[data-zoom="1.15"] .day-task-title{font-size:10px}
+.month-grid-wrap[data-zoom="1.3"] .day-cell{min-height:132px;padding:10px}.month-grid-wrap[data-zoom="1.4"] .day-cell{min-height:148px;padding:11px}.month-grid-wrap[data-zoom="1.3"] .day-task-title,.month-grid-wrap[data-zoom="1.4"] .day-task-title{font-size:11px}
+@media(max-width:760px){.month-grid{min-width:0;gap:3px;grid-auto-rows:minmax(76px,auto)}.day-cell{min-height:76px;padding:4px;border-radius:5px;gap:3px}.day-number{font-size:9px}.day-total{font-size:6px}.day-task{gap:1px;padding:2px}.day-task-title{font-size:7px;-webkit-line-clamp:2}.day-task-check{width:14px;height:14px;font-size:9px}.day-note-item{font-size:7px;padding:2px}.day-more{font-size:6px}.month-zoom-controls{margin:0 0 10px}.month-zoom-controls .tiny-btn{min-width:34px;min-height:34px;padding:5px 8px}}
