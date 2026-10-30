@@ -166,7 +166,7 @@ jobs:
 
             O servidor usa HTTP autenticado por token dentro da rede privada criptografada pelo Tailscale. Não encaminhe a porta 8765 para a internet. Não é necessário ativar Exit Node.
           files: |
-            release/android/app-debug.apk
+            release/android/app-release.apk
             release/android/SHA256SUMS.txt
             release/windows/Cyberpunk-Diario-Desktop-Windows.zip
             release/linux/Cyberpunk-Diario-Desktop-Linux.tar.gz
