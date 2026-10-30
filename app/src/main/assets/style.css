@@ -620,15 +620,15 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 
 
 /* v1.10.2 — compact agenda items; details open only on task selection. */
-.agenda-task{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;padding:12px 14px}
+.agenda-task{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;padding:12px 14px;cursor:pointer;transition:border-color .16s,background .16s}.agenda-task:hover{border-color:var(--red);background:var(--panel2)}.agenda-task-copy{display:flex;flex:1;flex-direction:column;align-items:flex-start;gap:3px;min-width:0}.agenda-task-time{font-size:10px;color:var(--blue);letter-spacing:.4px}.agenda-task-preview{font-size:11px;line-height:1.45;color:var(--muted);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .agenda-task-title,.day-task-title,.week-task-title{appearance:none;border:0;background:transparent;color:var(--txt);font:700 12px var(--display);text-align:left;line-height:1.5;cursor:pointer;min-width:0;overflow-wrap:anywhere;padding:5px 2px}
 .agenda-task-title{flex:1;font-size:13px}
 .agenda-task-title:hover,.day-task-title:hover,.week-task-title:hover{color:var(--red);text-decoration:underline;text-underline-offset:4px}
 .agenda-task .complete-btn{flex:0 0 auto;white-space:nowrap}
 .day-task{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0}
-.day-task-title{flex:1;font-size:9px;padding:2px 0}
+.day-task-title{flex:1;font-size:9px;padding:2px 0}.day-task-title small{display:block;color:var(--blue);font-size:8px;font-weight:600}
 .day-task .complete-btn{font-size:8px;padding:4px 6px;min-height:26px}
-.week-task{display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:9px;min-width:0;height:auto}
+.week-task{display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:9px;min-width:0;height:auto;cursor:pointer}.week-task:hover{border-color:var(--red)}.week-task small{color:var(--blue);font-size:9px}
 .week-task-title{font-size:10px;padding:2px 0}
 .week-task .complete-btn{align-self:flex-start;font-size:8px;min-height:27px;padding:4px 7px}
 .schedule-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}
