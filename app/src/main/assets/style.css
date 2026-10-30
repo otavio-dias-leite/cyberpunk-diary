@@ -408,3 +408,57 @@ body{background:var(--bg);color:var(--txt)}
 @media(max-width:760px){
   :root[data-theme="soulkiller"] .bottom-nav{border-top-color:#00c8ff66}
 }
+
+/* 1.6.0 — consistent Orbitron typography and expanded day cards */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+:root{font-family:'Orbitron',ui-sans-serif,system-ui,sans-serif}
+body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,.week-task,.day-task,.nav-item,.stat,.caption,.meta,.tag,.note-card{font-family:'Orbitron',ui-sans-serif,system-ui,sans-serif}
+.month-grid{grid-auto-rows: minmax(150px,1fr);align-items:stretch}
+.month-grid .day-cell{aspect-ratio:1/1;min-height:150px;height:auto;overflow:auto;overscroll-behavior:contain;padding:12px;gap:8px;cursor:pointer;scrollbar-width:thin}
+.month-grid .day-cell:focus-visible{outline:2px solid var(--accent,var(--red));outline-offset:2px}
+.month-grid .day-number{font-size:16px;font-weight:800}
+.month-grid .day-task{max-height:none;overflow-wrap:anywhere;white-space:normal;line-height:1.35;padding:7px}
+.day-note-count{display:block;color:var(--blue);font-size:9px;font-weight:800;letter-spacing:.04em;padding:3px 5px;border:1px solid var(--stroke);background:var(--panel2)}
+@media(max-width:760px){
+ .month-grid{width:100%;grid-template-columns:repeat(7,152px);grid-auto-rows:152px;gap:7px;overflow-x:auto;overflow-y:hidden;padding:3px 3px 14px}
+ .month-grid .day-cell{width:152px;height:152px;min-height:152px;aspect-ratio:auto;padding:11px 9px;gap:7px}
+ .month-grid .day-number{font-size:16px}
+ .month-grid .day-task{font-size:11px;line-height:1.3;padding:6px;max-height:none}
+ .day-note-count{font-size:9px}
+}
+.week-grid{align-items:start}
+.week-column{min-height:0;height:auto;align-self:start;overflow:visible}
+.week-task{height:auto;min-height:68px;white-space:normal;overflow:visible;overflow-wrap:anywhere}
+.week-task strong{white-space:normal;overflow-wrap:anywhere}
+.create-actions{display:flex;justify-content:flex-end;margin:0 0 14px}
+.day-detail-head,.day-notes{margin:18px 0 26px}
+.day-detail-head h1{font-size:clamp(22px,4vw,34px);margin:14px 0}
+.day-notes{padding:clamp(14px,3vw,24px);border:1px solid var(--stroke);background:var(--panel);border-radius:var(--radius)}
+.note-form{margin-bottom:20px}
+.note-form textarea{min-height:190px}
+.note-list{display:grid;gap:14px}
+.note-card{min-width:0;padding:17px;border:1px solid var(--stroke);background:var(--panel2);border-radius:12px;overflow-wrap:anywhere}
+.note-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.note-card-head strong{font-size:15px}
+.note-card-head span{color:var(--muted);font-size:10px}
+.note-card .markdown{line-height:1.75}
+.note-card .actions-row{margin-top:14px}
+:root[data-theme="soulkiller"] .hero,
+:root[data-theme="soulkiller"] .dashboard-hero,
+:root[data-theme="soulkiller"] .routine-panel,
+:root[data-theme="soulkiller"] .task-card,
+:root[data-theme="soulkiller"] .mission-status,
+:root[data-theme="soulkiller"] .week-task,
+:root[data-theme="soulkiller"] .day-cell,
+:root[data-theme="soulkiller"] .settings-card{
+ background-image:none!important;
+ box-shadow:none!important;
+ filter:none!important;
+ backdrop-filter:none!important;
+}
+:root[data-theme="soulkiller"] .hero,
+:root[data-theme="soulkiller"] .dashboard-hero{background-color:#0d1420!important}
+:root[data-theme="soulkiller"] .routine-panel,
+:root[data-theme="soulkiller"] .task-card,
+:root[data-theme="soulkiller"] .settings-card{background-color:#0d1420}
+:root[data-theme="soulkiller"] .week-task:not(.completed){background-color:#142033}
