@@ -217,6 +217,7 @@ internal sealed class MainForm : Form
     private readonly Microsoft.Web.WebView2.WinForms.WebView2 _web = new();
     private readonly Label _status = new();
     private readonly Label _pairing = new();
+    private readonly Label _devices = new();
 
     public MainForm(string token, LanDiscovery discovery)
     {
@@ -234,11 +235,12 @@ internal sealed class MainForm : Form
         _status.AutoSize = true; _status.ForeColor = Color.LightGray; _status.Location = new Point(20, 37);
         _pairing.Text = "CÓDIGO DE PAREAMENTO: " + token;
         _pairing.AutoSize = true; _pairing.ForeColor = Color.DeepSkyBlue; _pairing.Font = new Font("Consolas", 9, FontStyle.Bold);
+        _devices.AutoSize = true; _devices.ForeColor = Color.LightGray; _devices.Location = new Point(20, 52); _devices.Font = new Font("Segoe UI", 8);
         _pairing.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         var copy = new Button { Text = "COPIAR CÓDIGO", AutoSize = true, FlatStyle = FlatStyle.Flat, ForeColor = Color.White, BackColor = Color.FromArgb(35, 35, 45), Anchor = AnchorStyles.Top | AnchorStyles.Right };
         copy.FlatAppearance.BorderColor = Color.FromArgb(255, 53, 85);
         copy.Click += (_, _) => { Clipboard.SetText(_token); _status.Text = "Código copiado · " + _discovery.GetDevices().Length + " dispositivo(s) LAN detectado(s)"; };
-        header.Controls.Add(title); header.Controls.Add(_status); header.Controls.Add(_pairing); header.Controls.Add(copy);
+        header.Controls.Add(title); header.Controls.Add(_status); header.Controls.Add(_pairing); header.Controls.Add(_devices); header.Controls.Add(copy);
         header.Resize += (_, _) => { copy.Location = new Point(header.Width - copy.Width - 18, 17); _pairing.Location = new Point(Math.Max(390, header.Width - copy.Width - _pairing.Width - 40), 22); };
         Controls.Add(_web); Controls.Add(header);
 
@@ -259,7 +261,8 @@ internal sealed class MainForm : Form
             }
         };
         var timer = new System.Windows.Forms.Timer { Interval = 3000 };
-        timer.Tick += (_, _) => _status.Text = "LAN ATIVA · " + _discovery.GetDevices().Length + " celular(is) detectado(s) · porta 8765";
+        timer.Tick += (_, _) => var peers = _discovery.GetDevices(); _status.Text = "LAN ATIVA · " + peers.Length + " celular(is) detectado(s) · porta 8765";
+            _devices.Text = string.Join("   |   ", peers.Select(p => p.GetType().GetProperty("name")?.GetValue(p)?.ToString()).Where(n => !string.IsNullOrWhiteSpace(n)));
         timer.Start();
         FormClosed += (_, _) => timer.Stop();
     }
