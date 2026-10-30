@@ -128,7 +128,8 @@ jobs:
           body: |
             Cyberpunk Diário 1.7.0 — Android, Windows e Linux.
 
-            - Nova distribuição desktop para Linux, além de Windows e Android.\n            - Tema Soulkiller otimizado para reduzir efeitos gráficos pesados; fonte Orbitron em toda a interface.
+            - Nova distribuição desktop para Linux, além de Windows e Android.
+            - Tema Soulkiller otimizado para reduzir efeitos gráficos pesados; fonte Orbitron em toda a interface.
             - Ícones do aplicativo Android acompanham o tema selecionado.
             - Tarefas recorrentes diárias e semanais.
             - Notas em Markdown vinculadas a datas, com data padrão de criação.
@@ -147,7 +148,8 @@ jobs:
           files: |
             release/android/app-debug.apk
             release/android/SHA256SUMS.txt
-            release/windows/Cyberpunk-Diario-Desktop-Windows.zip\n            release/linux/Cyberpunk-Diario-Desktop-Linux.tar.gz
+            release/windows/Cyberpunk-Diario-Desktop-Windows.zip
+            release/linux/Cyberpunk-Diario-Desktop-Linux.tar.gz
           fail_on_unmatched_files: true
           make_latest: true
         env:
