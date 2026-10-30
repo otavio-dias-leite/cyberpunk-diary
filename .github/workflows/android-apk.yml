@@ -67,7 +67,7 @@ jobs:
       - name: Package Windows executable with bundled Java runtime
         shell: pwsh
         run: |
-          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.6.0 --vendor "Otavio Dias Leite"
+          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.6.1 --vendor "Otavio Dias Leite"
           Compress-Archive -Path desktop/build/installer/CyberpunkDiario -DestinationPath desktop/build/Cyberpunk-Diario-Desktop-Windows.zip -Force
       - uses: actions/upload-artifact@v4
         with:
@@ -93,10 +93,10 @@ jobs:
       - name: Publish Android and Windows downloads
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.6.0
-          name: Cyberpunk Diário 1.6.0
+          tag_name: v1.6.1
+          name: Cyberpunk Diário 1.6.1
           body: |
-            Cyberpunk Diário 1.6.0 — Android + Windows Desktop.
+            Cyberpunk Diário 1.6.1 — Android + Windows Desktop.
 
             - Tema Soulkiller otimizado para reduzir efeitos gráficos pesados; fonte Orbitron em toda a interface.
             - Ícones do aplicativo Android acompanham o tema selecionado.
@@ -111,7 +111,7 @@ jobs:
             - Aplicativo Windows com servidor local e sincronização bidirecional pela rede Wi-Fi.
             - Android mantém o mesmo applicationId e incrementa versionCode para atualização direta.
 
-            Para sincronizar: execute CyberpunkDiario.exe no Windows, mantenha computador e celular na mesma rede Wi-Fi, copie o endereço IP e o código de pareamento exibidos no desktop e informe-os em Ajustes → Sincronização LAN no Android.
+            Para sincronizar: execute CyberpunkDiario.exe no Windows, instale Tailscale no PC e no Android, entre na mesma conta, copie o endereço marcado TAILSCALE e o código de pareamento exibidos no desktop e informe-os em Ajustes → Sincronização Tailscale no Android.
 
             O servidor usa HTTP local autenticado por token. Utilize somente em rede privada confiável e não encaminhe a porta 8765 para a internet.
           files: |
