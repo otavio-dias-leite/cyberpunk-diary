@@ -108,12 +108,12 @@ jobs:
             - Links associados a tarefas e rotinas.
             - Calendário mensal expandido, com texto em várias linhas.
             - Semana com colunas ampliadas e melhor aproveitamento da tela.
-            - Aplicativo Windows com servidor local e sincronização bidirecional pela rede Wi-Fi.
+            - Aplicativo Windows com servidor Tailscale; sincronização bidirecional entre redes diferentes sem encaminhar o tráfego geral da internet.
             - Android mantém o mesmo applicationId e incrementa versionCode para atualização direta.
 
             Para sincronizar: execute CyberpunkDiario.exe no Windows, instale Tailscale no PC e no Android, entre na mesma conta, copie o endereço marcado TAILSCALE e o código de pareamento exibidos no desktop e informe-os em Ajustes → Sincronização Tailscale no Android.
 
-            O servidor usa HTTP local autenticado por token. Utilize somente em rede privada confiável e não encaminhe a porta 8765 para a internet.
+            O servidor usa HTTP autenticado por token dentro da rede privada criptografada pelo Tailscale. Não encaminhe a porta 8765 para a internet. Não é necessário ativar Exit Node.
           files: |
             release/android/app-debug.apk
             release/android/SHA256SUMS.txt
