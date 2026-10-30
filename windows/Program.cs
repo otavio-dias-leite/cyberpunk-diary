@@ -123,7 +123,7 @@ internal static class Program
 
     private static bool Authorized(HttpContext context)
     {
-        var header = context.Request.Headers.Authorization.ToString();
+        var header = context.Request.Headers["Authorization"].ToString();
         return CryptographicOperations.FixedTimeEquals(
             Encoding.UTF8.GetBytes(header), Encoding.UTF8.GetBytes("Bearer " + _token));
     }
