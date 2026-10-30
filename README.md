@@ -1,4 +1,4 @@
-# Cyberpunk Diário 1.10.5 — Android e Windows
+# Cyberpunk Diário 2.0 — Android e Windows
 
 O Cyberpunk Diário funciona offline nos dois sistemas. Os dados permanecem locais e podem ser sincronizados diretamente entre Android e Windows quando os dispositivos estão conectados à mesma rede Wi-Fi/LAN.
 
