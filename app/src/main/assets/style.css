@@ -592,7 +592,7 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 
 /* Monthly calendar: consistent scalable cells, drag navigation and corner resizing. */
 .month-grid-wrap{position:relative;padding-bottom:34px;touch-action:pan-y;overscroll-behavior:contain}
-.month-grid{min-width:calc(640px * var(--calendar-scale,1))!important;grid-auto-rows:minmax(calc(88px * var(--calendar-scale,1)),auto)!important}
+.month-grid{min-width:calc(640px * var(--calendar-scale,1))!important;grid-template-rows:auto repeat(6,minmax(calc(88px * var(--calendar-scale,1)),auto))!important;grid-auto-rows:auto!important}
 .day-cell{min-height:calc(88px * var(--calendar-scale,1))!important}
 .calendar-zoom-controls{display:inline-flex;align-items:center;gap:5px;margin-left:8px}
 .calendar-zoom-controls>span{font:700 8px var(--display);letter-spacing:.8px;color:var(--muted)}
