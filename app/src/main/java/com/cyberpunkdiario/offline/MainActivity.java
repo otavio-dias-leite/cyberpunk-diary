@@ -76,7 +76,7 @@ public final class MainActivity extends Activity {
          byte[] buffer=new byte[1024];DatagramPacket packet=new DatagramPacket(buffer,buffer.length);socket.receive(packet);
          String response=new String(packet.getData(),0,packet.getLength(),StandardCharsets.UTF_8);
          if(!response.startsWith("CYBERPUNK_DEVICE_V1|"))continue;
-         String[] parts=response.split("\\\\|",4);if(parts.length<4)continue;
+         String[] parts=response.split("\\|",4);if(parts.length<4)continue;
          String host=packet.getAddress().getHostAddress(),name=parts[1];boolean duplicate=false;
          for(int i=0;i<found.length();i++)if(host.equals(found.getJSONObject(i).optString("host")))duplicate=true;
          if(!duplicate){JSONObject device=new JSONObject();device.put("name",name);device.put("host",host);device.put("url","http://"+host+":"+parts[2]);device.put("platform","WINDOWS");device.put("id",parts[3]);found.put(device);}
