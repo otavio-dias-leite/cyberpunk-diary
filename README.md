@@ -6,7 +6,7 @@ O Cyberpunk Diário funciona offline no Android, Windows e Linux. O aplicativo A
 
 A versão mais recente é publicada em [Releases](https://github.com/otavio-dias-leite/cyberpunk-diary/releases).
 
-- **Android:** instale `app-debug.apk`. A versão 1.7.1 mantém o mesmo `applicationId` e incrementa o `versionCode` para permitir atualização direta.
+- **Android:** instale `app-release.apk`. A versão 1.7.1 mantém o mesmo `applicationId` e incrementa o `versionCode` para permitir atualização direta.
 - **Windows:** extraia `Cyberpunk-Diario-Desktop-Windows.zip` e execute `CyberpunkDiario.exe`. O pacote inclui runtime Java.
 - **Linux:** extraia `Cyberpunk-Diario-Desktop-Linux.tar.gz` e execute `CyberpunkDiario/bin/CyberpunkDiario`. O pacote inclui runtime Java.
 
@@ -38,7 +38,7 @@ O desktop (Windows ou Linux) funciona como servidor e o Android como cliente. O 
 
 ## Compilar Android pelo GitHub Actions
 
-O workflow **Build Cyberpunk Diário Android and Desktop** compila o APK no Ubuntu e o aplicativo Windows no runner Windows.
+O workflow **Build Cyberpunk Diário Android and Desktop** compila o APK Release assinado no Ubuntu e o aplicativo Windows no runner Windows.
 
 Para iniciar manualmente:
 1. Abra a aba **Actions**.
