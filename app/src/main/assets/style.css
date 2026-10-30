@@ -641,3 +641,14 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .schedule-remove:hover{border-color:var(--red);background:var(--redwash)}
 .create-typebar{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:650px){.agenda-task{align-items:flex-start;padding:10px;gap:7px}.agenda-task-title{font-size:11px}.agenda-task .complete-btn{font-size:8px;padding:6px}.schedule-heading{flex-direction:column}.schedule-heading .secondary{width:100%}.schedule-row{grid-template-columns:1fr 1fr;gap:8px}.schedule-row label:first-child{grid-column:1/-1}.schedule-remove{width:100%;grid-column:1/-1;height:34px}.day-task{align-items:flex-start;flex-wrap:wrap}.day-task-title{flex:1 1 100%;font-size:9px}.week-task{padding:6px}.week-task-title{font-size:9px}}
+
+
+/* Agenda category filters — persistent, theme-aware controls. */
+.agenda-filters{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:12px 14px;background:var(--panel);border:1px solid var(--stroke);border-radius:8px}
+.agenda-filter-label{margin-right:5px;color:var(--muted);font:700 9px var(--display);letter-spacing:1.4px}
+.agenda-filter{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:7px 12px;border:1px solid var(--stroke);border-radius:5px;background:var(--bg);color:var(--muted);font:700 9px var(--display);letter-spacing:.8px;cursor:pointer;transition:background .18s,border-color .18s,color .18s,box-shadow .18s}
+.agenda-filter:hover{border-color:var(--blue);color:var(--txt)}
+.agenda-filter.active{border-color:var(--red);background:var(--redwash);color:var(--txt);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--red) 30%,transparent),0 0 12px color-mix(in srgb,var(--red) 14%,transparent)}
+.filter-indicator{width:7px;height:7px;border:1px solid currentColor;border-radius:2px;background:transparent}
+.agenda-filter.active .filter-indicator{border-color:var(--blue);background:var(--blue);box-shadow:0 0 7px var(--blue)}
+@media(max-width:520px){.agenda-filters{gap:6px;padding:10px}.agenda-filter-label{flex-basis:100%;margin-bottom:2px}.agenda-filter{flex:1;justify-content:center;padding:7px 8px;font-size:8px}}
