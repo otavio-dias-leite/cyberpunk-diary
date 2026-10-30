@@ -617,3 +617,27 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .day-note-description{border-top-color:#00c8ff33}
 .day-cell-head{flex:0 0 auto}
 @media(max-width:760px){.day-task-description,.day-note-description{font-size:10px;line-height:1.5}.day-cell{overflow:visible!important}}
+
+
+/* v1.10.2 — compact agenda items; details open only on task selection. */
+.agenda-task{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;padding:12px 14px}
+.agenda-task-title,.day-task-title,.week-task-title{appearance:none;border:0;background:transparent;color:var(--txt);font:700 12px var(--display);text-align:left;line-height:1.5;cursor:pointer;min-width:0;overflow-wrap:anywhere;padding:5px 2px}
+.agenda-task-title{flex:1;font-size:13px}
+.agenda-task-title:hover,.day-task-title:hover,.week-task-title:hover{color:var(--red);text-decoration:underline;text-underline-offset:4px}
+.agenda-task .complete-btn{flex:0 0 auto;white-space:nowrap}
+.day-task{display:flex;align-items:center;justify-content:space-between;gap:5px;min-width:0}
+.day-task-title{flex:1;font-size:9px;padding:2px 0}
+.day-task .complete-btn{font-size:8px;padding:4px 6px;min-height:26px}
+.week-task{display:flex;flex-direction:column;align-items:stretch;gap:5px;padding:9px;min-width:0;height:auto}
+.week-task-title{font-size:10px;padding:2px 0}
+.week-task .complete-btn{align-self:flex-start;font-size:8px;min-height:27px;padding:4px 7px}
+.schedule-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px}
+.schedule-heading .helper{margin:6px 0 0;line-height:1.6}
+.schedule-row{display:grid;grid-template-columns:minmax(100px,1.1fr) minmax(90px,1fr) minmax(90px,1fr) 38px;align-items:end;gap:10px;padding:12px;margin:8px 0;background:var(--panel2);border:1px solid var(--stroke);border-left:2px solid var(--blue)}
+.schedule-row label{display:grid;gap:7px;color:var(--muted);font:700 9px var(--display);letter-spacing:.4px}
+.schedule-row input,.schedule-row select{width:100%;min-width:0;min-height:42px;background:var(--bg);color:var(--txt);border:1px solid var(--stroke);border-radius:5px;padding:8px;font:600 11px var(--display);color-scheme:dark}
+.schedule-row input:focus,.schedule-row select:focus{outline:2px solid var(--blue);border-color:var(--blue)}
+.schedule-remove{height:42px;width:38px;border:1px solid var(--stroke);background:var(--panel);color:var(--red);font:700 22px var(--display);cursor:pointer}
+.schedule-remove:hover{border-color:var(--red);background:var(--redwash)}
+.create-typebar{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:650px){.agenda-task{align-items:flex-start;padding:10px;gap:7px}.agenda-task-title{font-size:11px}.agenda-task .complete-btn{font-size:8px;padding:6px}.schedule-heading{flex-direction:column}.schedule-heading .secondary{width:100%}.schedule-row{grid-template-columns:1fr 1fr;gap:8px}.schedule-row label:first-child{grid-column:1/-1}.schedule-remove{width:100%;grid-column:1/-1;height:34px}.day-task{align-items:flex-start;flex-wrap:wrap}.day-task-title{flex:1 1 100%;font-size:9px}.week-task{padding:6px}.week-task-title{font-size:9px}}
