@@ -15,9 +15,12 @@ import android.content.Intent;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.net.ConnectivityManager;
-import android.net.Network;
-import android.net.NetworkCapabilities;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.charset.StandardCharsets;
@@ -43,14 +46,29 @@ public final class MainActivity extends Activity {
    }
    prefs.edit().putString("theme",themes[selected]).apply();
   }
-  @JavascriptInterface public boolean isTailscaleConnected() {
-   try {
-    getPackageManager().getPackageInfo("com.tailscale.ipn",0);
-    ConnectivityManager cm=(ConnectivityManager)getSystemService(CONNECTIVITY_SERVICE);
-    Network active=cm.getActiveNetwork();
-    NetworkCapabilities caps=active==null?null:cm.getNetworkCapabilities(active);
-    return caps!=null&&caps.hasTransport(NetworkCapabilities.TRANSPORT_VPN);
-   } catch(Exception ignored) { return false; }
+  @JavascriptInterface public String discoverDevices() {
+   JSONArray found=new JSONArray();
+   try(DatagramSocket socket=new DatagramSocket()) {
+    socket.setBroadcast(true);socket.setSoTimeout(300);
+    String model=android.os.Build.MODEL==null?"Android":android.os.Build.MODEL.replace("|"," ").replace("\\n"," ");
+    byte[] query=("CYBERPUNK_DISCOVER_V1|"+model).getBytes(StandardCharsets.UTF_8);
+    for(int attempt=0;attempt<2;attempt++) {
+     socket.send(new DatagramPacket(query,query.length,InetAddress.getByName("255.255.255.255"),8766));
+     long until=System.currentTimeMillis()+750;
+     while(System.currentTimeMillis()<until) {
+      try {
+       byte[] buffer=new byte[1024];DatagramPacket packet=new DatagramPacket(buffer,buffer.length);socket.receive(packet);
+       String response=new String(packet.getData(),0,packet.getLength(),StandardCharsets.UTF_8);
+       if(!response.startsWith("CYBERPUNK_DEVICE_V1|"))continue;
+       String[] parts=response.split("\\\\|",4);if(parts.length<4)continue;
+       String host=packet.getAddress().getHostAddress(),name=parts[1];boolean duplicate=false;
+       for(int i=0;i<found.length();i++)if(host.equals(found.getJSONObject(i).optString("host")))duplicate=true;
+       if(!duplicate){JSONObject device=new JSONObject();device.put("name",name);device.put("host",host);device.put("url","http://"+host+":"+parts[2]);device.put("platform","WINDOWS");device.put("id",parts[3]);found.put(device);}
+      } catch(SocketTimeoutException timeout) { break; }
+     }
+    }
+   } catch(Exception ignored) {}
+   return found.toString();
   }
   @JavascriptInterface public synchronized String loadSnapshot() {
    try {
