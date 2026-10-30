@@ -1,27 +1,9 @@
-/* Embedded Tailscale connection state. Pair once; reconnect automatically whenever Tailscale returns. */
-(()=>{'use strict';
- const native=!!window.AndroidBackup;
- let wasConnected=false,attempting=false;
- const connected=()=>{try{return native&&window.AndroidBackup.isTailscaleConnected()===true}catch{return false}};
- function refresh(){
-  const ready=native?connected():['localhost','127.0.0.1'].includes(location.hostname);
-  const panel=document.querySelector('.sync-settings');
-  if(panel)panel.hidden=native&&!ready;
-  let chip=document.getElementById('tailscaleStatusChip');
-  if(ready){
-   if(!chip){chip=document.createElement('span');chip.id='tailscaleStatusChip';chip.className='tailscale-status-chip';document.querySelector('.header-actions')?.appendChild(chip)}
-   const cfg=window.CyberpunkBridge?.config||{};
-   chip.textContent=cfg.endpoint&&cfg.token?'TAILSCALE // AUTO':'TAILSCALE // PAREAR';
-   chip.hidden=false;
-  }else if(chip)chip.hidden=true;
-  if(ready&&!wasConnected){
-   const cfg=window.CyberpunkBridge?.config||{};
-   if(cfg.endpoint&&cfg.token&&!attempting){
-    attempting=true;const status=document.getElementById('syncStatus');if(status)status.textContent='Tailscale conectado. Sincronizando automaticamente...';
-    window.CyberpunkBridge?.sync?.().then(()=>{if(status)status.textContent='Conectado · sincronização automática ativa.'}).catch(err=>{if(status)status.textContent='Tailscale ativo, mas o servidor não respondeu: '+err.message}).finally(()=>{attempting=false});
-   }
-  }
-  wasConnected=ready;
- }
- refresh();setInterval(refresh,2500);
+/* LAN discovery and automatic reconnection. No Tailscale and no manual IP entry. */
+(()=>{'use strict';const native=!!window.AndroidBackup;let scanning=false,devices=[];
+ const $=id=>document.getElementById(id),setStatus=t=>{const n=$('lanScanState');if(n)n.textContent=t};
+ function render(list){devices=list||[];const box=$('lanDevices');if(!box)return;if(!devices.length){box.innerHTML='<p class="helper">Nenhum dispositivo encontrado. Confira se os aparelhos estão na mesma rede Wi-Fi/LAN.</p>';return}box.innerHTML=devices.map((d,i)=>'<button type="button" class="lan-device" data-device-index="'+i+'"><span class="lan-device-icon">▣</span><span><strong>'+String(d.name||'Cyberpunk Diário').replace(/[&<>"]/g,'')+'</strong><small>'+String(d.host||'Rede local').replace(/[&<>"]/g,'')+' · '+String(d.platform||'DISPOSITIVO COMPATÍVEL')+'</small></span><b>SELECIONAR →</b></button>').join('')}
+ async function scan(){if(scanning)return;scanning=true;setStatus('Procurando na rede local…');try{let found=[];if(native)found=JSON.parse(window.AndroidBackup.discoverDevices()||'[]');else{const r=await fetch('/api/devices',{cache:'no-store'});if(r.ok)found=await r.json()}render(found);setStatus(found.length?found.length+' dispositivo(s) encontrado(s)':'Busca concluída · nenhum dispositivo encontrado');const cfg=window.CyberpunkBridge?.config||{};if(cfg.token&&cfg.endpoint&&found.some(d=>d.url===cfg.endpoint))window.CyberpunkBridge.sync().catch(()=>{})}catch(e){setStatus('Falha na descoberta: '+e.message)}finally{scanning=false}}
+ document.addEventListener('click',e=>{if(e.target.closest('[data-discover]')){scan();return}const b=e.target.closest('[data-device-index]');if(!b)return;const d=devices[Number(b.dataset.deviceIndex)];if(!d)return;const form=$('syncForm'),endpoint=form?.querySelector('[name=endpoint]'),token=form?.querySelector('[name=token]'),status=$('syncStatus');if(endpoint)endpoint.value=d.url;const cfg=window.CyberpunkBridge?.config||{};if(cfg.token&&token&&!token.value)token.value=cfg.token;if(cfg.token&&token?.value){try{window.CyberpunkBridge.configure(d.url,token.value);window.CyberpunkBridge.sync().then(()=>{if(status)status.textContent='Conectado a '+d.name+' · sincronização LAN ativa.'}).catch(err=>{if(status)status.textContent='Dispositivo encontrado, mas a conexão falhou: '+err.message})}catch(err){if(status)status.textContent=err.message}}else if(status)status.textContent='Computador selecionado: '+d.name+'. Informe o código mostrado no Windows e toque em PAREAR E SINCRONIZAR.'});
+ document.addEventListener('submit',e=>{if(e.target.id==='syncForm'&&!e.target.querySelector('[name=endpoint]')?.value){e.preventDefault();const s=$('syncStatus');if(s)s.textContent='Selecione primeiro um computador encontrado na rede local.'}});
+ const observer=new MutationObserver(()=>{const box=$('lanDevices');if(box&&!box.dataset.initialized){box.dataset.initialized='1';scan()}});observer.observe(document.getElementById('main')||document.body,{childList:true,subtree:true});setInterval(()=>{if($('lanDevices'))scan()},15000);
 })();
