@@ -12,6 +12,12 @@ import android.webkit.WebSettings;
 import android.view.View;
 import android.graphics.Color;
 import android.content.Intent;
+import android.content.ContentValues;
+import android.content.ContentUris;
+import android.database.Cursor;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -71,6 +77,7 @@ public final class MainActivity extends Activity {
    return found.toString();
   }
   @JavascriptInterface public synchronized String loadSnapshot() {
+   String shared=readSharedSnapshot(); if(!shared.isEmpty())return shared;
    try {
     File file=new File(getFilesDir(),"cyberpunk-diario-state.json");
     if(!file.isFile() || file.length()>5000000)return "";
@@ -82,17 +89,14 @@ public final class MainActivity extends Activity {
    File target=new File(getFilesDir(),"cyberpunk-diario-state.json");
    File temp=new File(getFilesDir(),"cyberpunk-diario-state.tmp");
    try(FileOutputStream output=new FileOutputStream(temp)) {
-    output.write(json.getBytes(StandardCharsets.UTF_8));
-    output.getFD().sync();
+    output.write(json.getBytes(StandardCharsets.UTF_8)); output.getFD().sync();
     if(target.exists()&&!target.delete())return;
     if(!temp.renameTo(target)) {
-     try(FileOutputStream fallback=new FileOutputStream(target)) {
-      fallback.write(json.getBytes(StandardCharsets.UTF_8));
-      fallback.getFD().sync();
-     }
+     try(FileOutputStream fallback=new FileOutputStream(target)) { fallback.write(json.getBytes(StandardCharsets.UTF_8)); fallback.getFD().sync(); }
      temp.delete();
     }
    } catch(Exception ignored) { temp.delete(); }
+   writeSharedSnapshot(json);
   }
   @JavascriptInterface public void save(String json) {
    if(json==null || json.length()>3000000)return;
@@ -102,10 +106,60 @@ public final class MainActivity extends Activity {
    });
   }
  }
+ private static final String BACKUP_PREFIX="cyberpunk-diario-backup-";
+ private static final String BACKUP_PATH=Environment.DIRECTORY_DOWNLOADS+"/CyberpunkDiario/";
+ private String readSharedSnapshot() {
+  if(Build.VERSION.SDK_INT<29)return "";
+  String selection=MediaStore.MediaColumns.RELATIVE_PATH+"=? AND "+MediaStore.MediaColumns.DISPLAY_NAME+" LIKE ?";
+  String[] args={BACKUP_PATH,BACKUP_PREFIX+"%.json"};
+  try(Cursor cursor=getContentResolver().query(MediaStore.Downloads.EXTERNAL_CONTENT_URI,null,selection,args,MediaStore.MediaColumns.DATE_MODIFIED+" DESC")) {
+   if(cursor==null)return "";
+   while(cursor.moveToNext()) {
+    Uri uri=ContentUris.withAppendedId(MediaStore.Downloads.EXTERNAL_CONTENT_URI,cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)));
+    try(java.io.InputStream input=getContentResolver().openInputStream(uri);ByteArrayOutputStream output=new ByteArrayOutputStream()) {
+     if(input==null)continue;byte[] buffer=new byte[8192];int count,total=0;
+     while((count=input.read(buffer))!=-1){total+=count;if(total>5000000)break;output.write(buffer,0,count);}
+     if(total<=5000000){String json=output.toString("UTF-8");try{new JSONObject(json);return json;}catch(Exception invalid){android.util.Log.w("CyberpunkBackup","Backup inválido; tentando a cópia anterior",invalid);}}
+    } catch(Exception ignored) {}
+   }
+  } catch(Exception e){android.util.Log.w("CyberpunkBackup","Não foi possível ler backup compartilhado",e);}
+  return "";
+ }
+ private void writeSharedSnapshot(String json) {
+  if(Build.VERSION.SDK_INT<29)return;
+  Uri created=null;
+  try {
+   ContentValues values=new ContentValues();
+   values.put(MediaStore.MediaColumns.DISPLAY_NAME,BACKUP_PREFIX+System.currentTimeMillis()+".json");
+   values.put(MediaStore.MediaColumns.MIME_TYPE,"application/json");
+   values.put(MediaStore.MediaColumns.RELATIVE_PATH,BACKUP_PATH);
+   values.put(MediaStore.MediaColumns.IS_PENDING,1);
+   created=getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI,values);
+   if(created==null)return;
+   try(java.io.OutputStream output=getContentResolver().openOutputStream(created,"w")) {
+    if(output==null)throw new java.io.IOException("Não foi possível abrir o backup");
+    output.write(json.getBytes(StandardCharsets.UTF_8));output.flush();
+   }
+   ContentValues ready=new ContentValues();ready.put(MediaStore.MediaColumns.IS_PENDING,0);
+   getContentResolver().update(created,ready,null,null);
+   pruneSharedBackups();
+  } catch(Exception e) {
+   if(created!=null)try{getContentResolver().delete(created,null,null);}catch(Exception ignored){}
+   android.util.Log.w("CyberpunkBackup","Falha ao gravar backup compartilhado",e);
+  }
+ }
+ private void pruneSharedBackups() {
+  String selection=MediaStore.MediaColumns.RELATIVE_PATH+"=? AND "+MediaStore.MediaColumns.DISPLAY_NAME+" LIKE ?";
+  String[] args={BACKUP_PATH,BACKUP_PREFIX+"%.json"};
+  try(Cursor cursor=getContentResolver().query(MediaStore.Downloads.EXTERNAL_CONTENT_URI,new String[]{MediaStore.MediaColumns._ID},selection,args,MediaStore.MediaColumns.DATE_MODIFIED+" DESC")) {
+   if(cursor==null)return;int keep=0;
+   while(cursor.moveToNext()){long id=cursor.getLong(0);if(keep++>=3)getContentResolver().delete(ContentUris.withAppendedId(MediaStore.Downloads.EXTERNAL_CONTENT_URI,id),null,null);}
+  } catch(Exception e){android.util.Log.w("CyberpunkBackup","Falha ao limpar backups antigos",e);}
+ }
  @Override public void onCreate(Bundle saved){super.onCreate(saved);
   getWindow().setStatusBarColor(Color.rgb(10,10,14));getWindow().setNavigationBarColor(Color.rgb(10,10,14));
   web=new WebView(this);web.setBackgroundColor(Color.rgb(8,9,12));
-  web.getSettings().setJavaScriptEnabled(true);web.getSettings().setDomStorageEnabled(true);
+  web.getSettings().setJavaScriptEnabled(true);web.getSettings().setDomStorageEnabled(true);web.getSettings().setSupportZoom(false);web.getSettings().setBuiltInZoomControls(false);web.getSettings().setDisplayZoomControls(false);web.getSettings().setTextZoom(100);
   web.getSettings().setAllowFileAccess(true);web.getSettings().setAllowContentAccess(false);
   web.getSettings().setAllowFileAccessFromFileURLs(false);web.getSettings().setAllowUniversalAccessFromFileURLs(false);
   web.getSettings().setCacheMode(WebSettings.LOAD_DEFAULT);
@@ -136,6 +190,7 @@ public final class MainActivity extends Activity {
    }catch(Exception e){android.widget.Toast.makeText(this,"Não foi possível salvar backup",android.widget.Toast.LENGTH_LONG).show();}
   }backupPayload=null;}
  }
+ @Override protected void onPause(){if(web!=null)web.evaluateJavascript("window.__cyberpunkBackupNow&&window.__cyberpunkBackupNow()",null);super.onPause();}
  @Override public void onBackPressed(){if(web.canGoBack())web.goBack();else super.onBackPressed();}
  @Override protected void onDestroy(){if(web!=null){web.destroy();web=null;}super.onDestroy();}
 }
