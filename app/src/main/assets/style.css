@@ -683,3 +683,17 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .month-zoom-controls{display:flex;align-items:center;gap:6px}.month-zoom-controls button{min-width:36px;min-height:36px;touch-action:manipulation}.calendar-toolbar .calendar-nav{align-items:center;flex-wrap:wrap}
 .lan-discovery{margin:14px 0;padding:12px;border:1px solid var(--stroke);background:var(--panel2)}.lan-scan-state{font-size:10px;color:var(--muted);align-self:center}.lan-device-list{display:grid;gap:8px;margin-top:12px}.lan-device{display:flex;align-items:center;gap:12px;width:100%;padding:12px;background:var(--panel);border:1px solid var(--stroke);color:var(--txt);text-align:left}.lan-device-icon{font-size:22px;color:var(--blue)}.lan-device span:nth-child(2){display:grid;gap:4px;min-width:0;flex:1}.lan-device small{font-size:10px;color:var(--muted)}.lan-device>b{font:700 9px var(--display);color:var(--red);white-space:nowrap}.lan-device:active{border-color:var(--blue);transform:scale(.99)}
 @media(max-width:760px){.month-grid{min-width:calc(590px * var(--calendar-scale,1))}.month-grid-wrap{touch-action:pan-y}.lan-device{padding:10px}.lan-device>b{font-size:8px}}
+
+/* Calendar 1.10.7: every day cell remains square; width and height scale together. */
+.month-grid-wrap{position:relative;width:100%;max-width:100%;overflow-x:auto;overflow-y:hidden;padding:2px 2px 42px;touch-action:pan-y;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--blue) var(--panel)}
+.month-grid{display:grid!important;width:max-content!important;min-width:0!important;grid-template-columns:repeat(7,calc(112px * var(--calendar-scale,1)))!important;grid-template-rows:28px repeat(6,calc(112px * var(--calendar-scale,1)))!important;grid-auto-rows:unset!important;gap:calc(5px * var(--calendar-scale,1))!important;align-items:stretch!important;overflow:visible!important;touch-action:pan-y}
+.month-grid .day-cell{box-sizing:border-box!important;width:100%!important;height:100%!important;min-width:0!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;overflow:hidden!important;resize:none!important;padding:calc(7px * var(--calendar-scale,1))!important;gap:calc(4px * var(--calendar-scale,1))!important}
+.month-grid .weekday{min-width:0!important;display:grid;place-items:center}
+.calendar-resize-handle{position:absolute;right:3px;bottom:3px;z-index:8;width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--blue);border-radius:6px;background:var(--panel2);box-shadow:0 0 14px #00c8ff30;cursor:nwse-resize;touch-action:none;user-select:none}
+.calendar-resize-handle span{width:15px;height:15px;border-right:3px solid var(--red);border-bottom:3px solid var(--red);transform:translate(-2px,-2px)}
+.month-grid-wrap.calendar-resizing,.month-grid-wrap.calendar-pointer-down{user-select:none}
+.month-grid-wrap.calendar-dragging{cursor:grabbing}
+.month-grid-wrap.calendar-resizing .calendar-resize-handle{background:var(--blue);box-shadow:0 0 18px #00c8ff70}
+.month-grid-wrap::-webkit-scrollbar{height:7px}
+.month-grid-wrap::-webkit-scrollbar-thumb{background:var(--blue);border-radius:8px}
+@media(max-width:760px){.month-grid-wrap{touch-action:pan-y}.month-grid{grid-template-columns:repeat(7,calc(104px * var(--calendar-scale,1)))!important;grid-template-rows:26px repeat(6,calc(104px * var(--calendar-scale,1)))!important}.calendar-resize-handle{width:42px;height:42px}}
