@@ -697,3 +697,7 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .month-grid-wrap::-webkit-scrollbar{height:7px}
 .month-grid-wrap::-webkit-scrollbar-thumb{background:var(--blue);border-radius:8px}
 @media(max-width:760px){.month-grid-wrap{touch-action:pan-y}.month-grid{grid-template-columns:repeat(7,calc(104px * var(--calendar-scale,1)))!important;grid-template-rows:26px repeat(6,calc(104px * var(--calendar-scale,1)))!important}.calendar-resize-handle{width:42px;height:42px}}
+
+
+/* v1.11.1 — task detail readability and full description. */
+.task-detail{max-width:900px;width:100%;margin:0 auto}.detail-heading{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:24px}.detail-heading .tag{margin:0}.detail-status{font:700 9px var(--display);letter-spacing:1px;color:var(--blue);padding:7px 10px;border:1px solid var(--stroke);border-radius:4px}.task-detail h1{font-size:clamp(24px,4vw,36px);line-height:1.25;overflow-wrap:anywhere}.task-description-content{min-height:120px;max-height:none!important;height:auto!important;overflow:visible!important;white-space:normal;overflow-wrap:anywhere;word-break:break-word}.task-description-content h2{font:700 11px var(--display);letter-spacing:1.3px;color:var(--blue);margin:0 0 18px}.task-description-content p{white-space:pre-wrap;line-height:1.8;margin:0 0 14px}.task-description-content li{line-height:1.75;margin:5px 0}.task-detail-actions{display:flex;flex-wrap:wrap;gap:10px}.task-detail-actions button{min-height:42px}.task-detail-actions .danger{color:var(--red);border-color:var(--red)}
