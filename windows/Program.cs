@@ -4,6 +4,8 @@ using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Drawing;
+using System.Windows.Forms;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -49,10 +51,10 @@ internal static class Program
 
         app.Use(async (context, next) =>
         {
-            context.Response.Headers.AccessControlAllowOrigin = "*";
-            context.Response.Headers.AccessControlAllowMethods = "GET, PUT, OPTIONS";
-            context.Response.Headers.AccessControlAllowHeaders = "Content-Type, Authorization";
-            context.Response.Headers.CacheControl = "no-store";
+            context.Response.Headers["Access-Control-Allow-Origin"] = "*";
+            context.Response.Headers["Access-Control-Allow-Methods"] = "GET, PUT, OPTIONS";
+            context.Response.Headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization";
+            context.Response.Headers["Cache-Control"] = "no-store";
             if (HttpMethods.IsOptions(context.Request.Method))
             {
                 context.Response.StatusCode = StatusCodes.Status204NoContent;
@@ -214,7 +216,7 @@ internal sealed class MainForm : Form
 {
     private readonly string _token;
     private readonly LanDiscovery _discovery;
-    private readonly Microsoft.Web.WebView2.WinForms.WebView2 _web = new();
+    private readonly Microsoft.Web.WebView2.WinForms.WebView2 _web = new() { Dock = DockStyle.Fill };
     private readonly Label _status = new();
     private readonly Label _pairing = new();
     private readonly Label _devices = new();
@@ -229,13 +231,13 @@ internal sealed class MainForm : Form
         BackColor = Color.FromArgb(9, 9, 13);
         ForeColor = Color.Gainsboro;
 
-        var header = new Panel { Dock = DockStyle.Top, Height = 64, BackColor = Color.FromArgb(17, 17, 23), Padding = new Padding(18, 10, 18, 8) };
+        var header = new Panel { Dock = DockStyle.Top, Height = 82, BackColor = Color.FromArgb(17, 17, 23), Padding = new Padding(18, 10, 18, 8) };
         var title = new Label { Text = "CYBERPUNK DIÁRIO", AutoSize = true, ForeColor = Color.FromArgb(255, 53, 85), Font = new Font("Segoe UI", 14, FontStyle.Bold), Location = new Point(18, 8) };
         _status.Text = "LAN ATIVA · procurando dispositivos";
         _status.AutoSize = true; _status.ForeColor = Color.LightGray; _status.Location = new Point(20, 37);
         _pairing.Text = "CÓDIGO DE PAREAMENTO: " + token;
         _pairing.AutoSize = true; _pairing.ForeColor = Color.DeepSkyBlue; _pairing.Font = new Font("Consolas", 9, FontStyle.Bold);
-        _devices.AutoSize = true; _devices.ForeColor = Color.LightGray; _devices.Location = new Point(20, 52); _devices.Font = new Font("Segoe UI", 8);
+        _devices.AutoSize = true; _devices.ForeColor = Color.LightGray; _devices.Location = new Point(20, 58); _devices.Font = new Font("Segoe UI", 8);
         _pairing.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         var copy = new Button { Text = "COPIAR CÓDIGO", AutoSize = true, FlatStyle = FlatStyle.Flat, ForeColor = Color.White, BackColor = Color.FromArgb(35, 35, 45), Anchor = AnchorStyles.Top | AnchorStyles.Right };
         copy.FlatAppearance.BorderColor = Color.FromArgb(255, 53, 85);
