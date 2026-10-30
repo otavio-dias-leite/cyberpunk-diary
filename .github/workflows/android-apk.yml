@@ -124,10 +124,10 @@ jobs:
       - name: Publish Android and Windows downloads
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.10.7
-          name: Cyberpunk Diário 1.10.7
+          tag_name: v1.10.8
+          name: Cyberpunk Diário 1.10.8
           body: |
-            Cyberpunk Diário 1.10.7 — Android e Windows.
+            Cyberpunk Diário 1.10.8 — Android e Windows.
 
             O Windows é um aplicativo próprio com interface incorporada, sem abrir navegador externo.
             Android e Windows descobrem dispositivos compatíveis automaticamente na mesma rede Wi-Fi/LAN.
