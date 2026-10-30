@@ -701,3 +701,26 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 
 /* v1.11.1 — task detail readability and full description. */
 .task-detail{max-width:900px;width:100%;margin:0 auto}.detail-heading{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:24px}.detail-heading .tag{margin:0}.detail-status{font:700 9px var(--display);letter-spacing:1px;color:var(--blue);padding:7px 10px;border:1px solid var(--stroke);border-radius:4px}.task-detail h1{font-size:clamp(24px,4vw,36px);line-height:1.25;overflow-wrap:anywhere}.task-description-content{min-height:120px;max-height:none!important;height:auto!important;overflow:visible!important;white-space:normal;overflow-wrap:anywhere;word-break:break-word}.task-description-content h2{font:700 11px var(--display);letter-spacing:1.3px;color:var(--blue);margin:0 0 18px}.task-description-content p{white-space:pre-wrap;line-height:1.8;margin:0 0 14px}.task-description-content li{line-height:1.75;margin:5px 0}.task-detail-actions{display:flex;flex-wrap:wrap;gap:10px}.task-detail-actions button{min-height:42px}.task-detail-actions .danger{color:var(--red);border-color:var(--red)}
+
+
+/* v1.11.2 — month calendar without zoom controls; swipe anywhere, including day cells. */
+.month-zoom-controls,.calendar-zoom-controls,.calendar-resize-handle{display:none!important}
+.month-grid-wrap{container-type:inline-size;position:relative!important;width:100%!important;max-width:100%!important;overflow:hidden!important;overflow-x:hidden!important;overflow-y:visible!important;padding:2px 0 12px!important;touch-action:pan-y!important;overscroll-behavior-x:none!important;scrollbar-width:none!important;-webkit-overflow-scrolling:auto!important}
+.month-grid-wrap::-webkit-scrollbar{display:none!important}
+.month-grid{display:grid!important;width:100%!important;min-width:0!important;max-width:100%!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;grid-template-rows:26px repeat(6,calc((100cqw - 30px)/7))!important;grid-auto-rows:unset!important;gap:5px!important;overflow:visible!important;touch-action:pan-y!important}
+.month-grid .day-cell{width:100%!important;min-width:0!important;height:100%!important;min-height:0!important;max-height:none!important;aspect-ratio:1/1!important;overflow:hidden!important;padding:4px!important;gap:2px!important;touch-action:pan-y!important}
+.month-grid .day-number{font-size:clamp(8px,1.4vw,12px)!important}
+.month-grid .day-total{font-size:clamp(5px,.7vw,8px)!important}
+.month-grid .day-task{min-width:0!important;max-width:100%!important;padding:2px!important;gap:1px!important}
+.month-grid .day-task-title{font-size:clamp(6px,.8vw,9px)!important;line-height:1.15!important;-webkit-line-clamp:2!important}
+.month-grid .day-task-check{width:13px!important;height:13px!important;min-width:13px!important;font-size:8px!important}
+.month-grid .day-note-item,.month-grid .day-more{font-size:clamp(5px,.7vw,8px)!important}
+.month-grid-wrap.calendar-pointer-down{user-select:none;-webkit-user-select:none}
+.month-grid-wrap.calendar-dragging{cursor:grabbing}
+.calendar-hint{display:none!important}
+@media(max-width:760px){
+ .month-grid{grid-template-rows:22px repeat(6,calc((100cqw - 22px)/7))!important;gap:3px!important}
+ .month-grid .day-cell{padding:3px!important;gap:2px!important}
+ .month-grid .day-task-title{-webkit-line-clamp:1!important}
+ .month-grid .day-task-check{width:11px!important;height:11px!important;min-width:11px!important}
+}
