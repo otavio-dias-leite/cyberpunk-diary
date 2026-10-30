@@ -4,7 +4,7 @@
  * For real privacy use Android screen lock or add encrypted native storage. */
 (()=>{'use strict';
  const REG='cyberpunk-diario-local-profiles-v1',ACTIVE='cyberpunk-diario-active-profile-v1',LEGACY='cyberpunk-diario-v1';
- const snapshot=()=>{try{const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k!==null)data[k]=localStorage.getItem(k)}window.AndroidBackup?.saveSnapshot?.(JSON.stringify(data))}catch(e){console.warn('Falha ao salvar snapshot Android',e)}};
+ const snapshot=()=>{try{const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k!==null&&k!=='cyberpunk-sync-config')data[k]=localStorage.getItem(k)}window.AndroidBackup?.saveSnapshot?.(JSON.stringify(data))}catch(e){console.warn('Falha ao salvar snapshot Android',e)}};
  const read=()=>{try{const x=JSON.parse(localStorage.getItem(REG)||'[]');return Array.isArray(x)?x.filter(p=>p&&typeof p.id==='string'&&typeof p.name==='string'):[]}catch{return []}};
  const save=p=>{localStorage.setItem(REG,JSON.stringify(p));snapshot()};
  const currentId=()=>{const id=localStorage.getItem(ACTIVE);return read().some(p=>p.id===id)?id:null};
