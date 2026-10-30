@@ -121,6 +121,7 @@ jobs:
         with:
           name: Cyberpunk-Diario-Windows
           path: release/windows
+      - uses: actions/checkout@v4
       - name: Read application version
         id: app-version
         run: |
