@@ -124,7 +124,7 @@ jobs:
       - name: Read application version
         id: app-version
         run: |
-          VERSION=$(sed -n "s/.*versionName ['\\\"]\\([^'\\\"]*\\)['\\\"].*/\\1/p" app/build.gradle | head -1)
+          VERSION=$(awk -F"\047" '/versionName/ {print $2; exit}' app/build.gradle)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
       - name: Publish Android and Windows downloads
