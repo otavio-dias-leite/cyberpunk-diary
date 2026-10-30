@@ -103,7 +103,7 @@ jobs:
       - name: Package Windows executable with bundled Java runtime
         shell: pwsh
         run: |
-          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.8.0 --vendor "Otavio Dias Leite"
+          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.9.0 --vendor "Otavio Dias Leite"
           Compress-Archive -Path desktop/build/installer/CyberpunkDiario -DestinationPath desktop/build/Cyberpunk-Diario-Desktop-Windows.zip -Force
       - uses: actions/upload-artifact@v4
         with:
@@ -129,7 +129,7 @@ jobs:
         run: gradle --no-daemon :desktop:jar
       - name: Package Linux application with bundled Java runtime
         run: |
-          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.8.0 --vendor "Otavio Dias Leite"
+          jpackage --type app-image --input desktop/build/libs --dest desktop/build/installer --name CyberpunkDiario --main-jar CyberpunkDiarioDesktop.jar --main-class com.cyberpunkdiario.desktop.DesktopServer --app-version 1.9.0 --vendor "Otavio Dias Leite"
           tar -czf desktop/build/Cyberpunk-Diario-Desktop-Linux.tar.gz -C desktop/build/installer CyberpunkDiario
       - uses: actions/upload-artifact@v4
         with:
@@ -159,10 +159,10 @@ jobs:
       - name: Publish Android, Windows and Linux downloads
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.8.0
-          name: Cyberpunk Diário 1.8.0
+          tag_name: v1.9.0
+          name: Cyberpunk Diário 1.9.0
           body: |
-            Cyberpunk Diário 1.8.0 — Android, Windows e Linux.
+            Cyberpunk Diário 1.9.0 — Android, Windows e Linux.
 
             Os pacotes Android, Windows e Linux são gerados automaticamente pelo GitHub Actions.
             Se a chave Android persistente estiver configurada, o APK será assinado para atualização direta.
