@@ -606,3 +606,14 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .tailscale-status-chip{display:inline-flex;align-items:center;min-height:28px;padding:5px 9px;border:1px solid #00c8ff66;color:#75e8ff;background:#00c8ff12;font:700 8px var(--display);letter-spacing:.6px;white-space:nowrap}
 .sync-settings[hidden]{display:none!important}
 @media(max-width:760px){.tailscale-status-chip{font-size:7px;padding:4px 6px;max-width:120px;white-space:normal;text-align:center}.header-actions{flex-wrap:wrap;justify-content:flex-end}}
+
+/* Dynamic agenda cells: show the full description without clipping or inner scrolling. */
+.month-grid{grid-auto-rows:auto!important;align-items:stretch}
+.day-cell{height:auto!important;min-height:calc(88px * var(--calendar-scale,1))!important;max-height:none!important;overflow:visible!important;resize:none!important;align-self:stretch;white-space:normal}
+.day-task,.day-note-item{height:auto!important;max-height:none!important;overflow:visible!important;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word;flex:0 0 auto;line-height:1.45}
+.day-task-heading{display:flex;align-items:flex-start;gap:5px;flex-wrap:wrap}
+.day-task-heading strong{font-weight:800;min-width:0;flex:1}
+.day-task-description,.day-note-description{display:block;margin-top:5px;padding-top:5px;border-top:1px solid var(--stroke);font-size:10px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;color:var(--txt);opacity:.92}
+.day-note-description{border-top-color:#00c8ff33}
+.day-cell-head{flex:0 0 auto}
+@media(max-width:760px){.day-task-description,.day-note-description{font-size:10px;line-height:1.5}.day-cell{overflow:visible!important}}
