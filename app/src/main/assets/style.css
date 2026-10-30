@@ -529,3 +529,69 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .routine-subtasks{max-height:none}
 .subtask-row{min-height:34px;white-space:normal;overflow-wrap:anywhere}
 @media(max-width:760px){.habit-card{display:flex;flex-wrap:wrap}.habit-copy{flex:1 1 100%}.habit-actions{display:flex;flex-wrap:wrap}}
+
+
+/* v1.9.0 — isolated palettes: Soulkiller red/blue, Cyberpunk 2077 yellow/black. */
+/* Each theme preview owns its own colors; the active theme never recolors other swatches. */
+.theme-option.theme-red{--swatch:#ff3555}
+.theme-option.theme-matrix{--swatch:#68ee8a}
+.theme-option.theme-carbon{--swatch:#c0bec1}
+.theme-option.theme-midnight{--swatch:#65a9ff}
+.theme-option.theme-soulkiller{--swatch:#ff3555}
+.theme-option.theme-cyberpunk{--swatch:#fcee0a}
+.theme-option.theme-mono{--swatch:#f2f2f2}
+.theme-option.theme-red .theme-swatch{background:linear-gradient(110deg,#090b0e 0 45%,#ff3555 46% 100%)}
+.theme-option.theme-matrix .theme-swatch{background:linear-gradient(110deg,#090b0e 0 45%,#68ee8a 46% 100%)}
+.theme-option.theme-carbon .theme-swatch{background:linear-gradient(110deg,#090b0e 0 45%,#c0bec1 46% 100%)}
+.theme-option.theme-midnight .theme-swatch{background:linear-gradient(110deg,#090b0e 0 45%,#65a9ff 46% 100%)}
+.theme-option.theme-soulkiller .theme-swatch{background:linear-gradient(110deg,#ff3555 0 48%,#00c8ff 52% 100%)}
+.theme-option.theme-cyberpunk .theme-swatch{background:linear-gradient(110deg,#090909 0 48%,#fcee0a 52% 100%)}
+.theme-option.theme-mono .theme-swatch{background:linear-gradient(110deg,#090909 0 48%,#f2f2f2 52% 100%)}
+.theme-option.theme-soulkiller .theme-swatch i{background:#ff3555;box-shadow:0 0 9px #ff3555}
+.theme-option.theme-soulkiller .theme-swatch b{background:#00c8ff;box-shadow:0 0 8px #00c8ff}
+.theme-option.theme-cyberpunk .theme-swatch i{background:#fcee0a;box-shadow:0 0 9px #fcee0a}
+.theme-option.theme-cyberpunk .theme-swatch b{background:#fcee0a;box-shadow:0 0 8px #fcee0a}
+
+/* Soulkiller — restore the original red + electric-blue identity. */
+:root[data-theme="soulkiller"]{
+ --bg:#070b13;--panel:#0d1420;--panel2:#142033;--stroke:#24415b;
+ --txt:#edf7ff;--muted:#9db4c8;--red:#ff3555;--redwash:#ff355522;
+ --blue:#00c8ff;--green:#00c8ff;--theme-glow:#ff355566;--theme-halo:#ff355522;
+}
+:root[data-theme="soulkiller"] .primary{background:#ff3555;color:#080b12;border-color:#ff748a;box-shadow:0 0 12px #ff355533}
+:root[data-theme="soulkiller"] .brand-icon,:root[data-theme="soulkiller"] .theme-logo{color:#ff3555;border-color:#ff3555}
+:root[data-theme="soulkiller"] .nav-item.active{color:#ff3555}
+:root[data-theme="soulkiller"] .tag.blue,:root[data-theme="soulkiller"] .markdown code,:root[data-theme="soulkiller"] .history-date{color:#00c8ff}
+:root[data-theme="soulkiller"] .day-task{background:#00c8ff18;color:#dffaff;border-left-color:#00c8ff}
+:root[data-theme="soulkiller"] .day-note-item{background:#ff355518;border-left-color:#ff3555;color:#ffdce2}
+:root[data-theme="soulkiller"] .week-task:not(.completed){border-left-color:#00c8ff;background:linear-gradient(90deg,#00c8ff18,#ff35550d)}
+:root[data-theme="soulkiller"] .theme-option.selected{border-color:#ff3555}
+:root[data-theme="soulkiller"] .theme-option.theme-red .theme-swatch,
+:root[data-theme="soulkiller"] .theme-option.theme-matrix .theme-swatch,
+:root[data-theme="soulkiller"] .theme-option.theme-carbon .theme-swatch,
+:root[data-theme="soulkiller"] .theme-option.theme-midnight .theme-swatch,
+:root[data-theme="soulkiller"] .theme-option.theme-cyberpunk .theme-swatch,
+:root[data-theme="soulkiller"] .theme-option.theme-mono .theme-swatch{background:inherit}
+
+/* Cyberpunk — high-contrast Night City yellow and deep black, without Soulkiller accents. */
+:root[data-theme="cyberpunk"]{
+ color-scheme:dark;--bg:#080808;--panel:#111111;--panel2:#1b1b1b;--stroke:#45410c;
+ --txt:#f5f2d8;--muted:#aaa68a;--red:#fcee0a;--redwash:#fcee0a20;
+ --blue:#d7c900;--green:#fcee0a;--theme-glow:#fcee0a66;--theme-halo:#fcee0a24;
+}
+:root[data-theme="cyberpunk"] body{background-color:#080808}
+:root[data-theme="cyberpunk"] .sidebar,:root[data-theme="cyberpunk"] .bottom-nav{background:#090909;border-color:#4a4300}
+:root[data-theme="cyberpunk"] .system-strip{background:#fcee0a;color:#080808}
+:root[data-theme="cyberpunk"] .hero,:root[data-theme="cyberpunk"] .dashboard-hero{background:radial-gradient(circle at 88% 15%,#fcee0a22,transparent 44%),linear-gradient(120deg,#1b1b13,#090909);border-color:#625900}
+:root[data-theme="cyberpunk"] .brand-icon,:root[data-theme="cyberpunk"] .theme-logo{color:#fcee0a;border-color:#fcee0a}
+:root[data-theme="cyberpunk"] .primary{background:#fcee0a;color:#090909;border:1px solid #fff36a;box-shadow:inset 0 -3px 0 #9e8f00,0 0 13px #fcee0a30}
+:root[data-theme="cyberpunk"] .nav-item.active{color:#fcee0a;background:#fcee0a16;border-color:#fcee0a55}
+:root[data-theme="cyberpunk"] .task-card:not(.done){border-left-color:#fcee0a}
+:root[data-theme="cyberpunk"] .tag,:root[data-theme="cyberpunk"] .day-task{color:#fffbd0;background:#fcee0a18;border-color:#fcee0a55}
+:root[data-theme="cyberpunk"] .tag.blue,:root[data-theme="cyberpunk"] .markdown code,:root[data-theme="cyberpunk"] .history-date{color:#fcee0a}
+:root[data-theme="cyberpunk"] .progress-fill{background:linear-gradient(90deg,#fcee0a,#b9a900);box-shadow:0 0 10px #fcee0a44}
+:root[data-theme="cyberpunk"] .mission-status{border-left-color:#fcee0a}
+:root[data-theme="cyberpunk"] .day-cell.today,:root[data-theme="cyberpunk"] .week-column.today{border-color:#fcee0a;box-shadow:inset 0 0 10px #fcee0a18}
+:root[data-theme="cyberpunk"] .week-task:not(.completed){background:#fcee0a12;border-left-color:#fcee0a}
+:root[data-theme="cyberpunk"] .tiny-btn:hover,:root[data-theme="cyberpunk"] .secondary:hover{color:#fcee0a;border-color:#fcee0a}
+:root[data-theme="cyberpunk"] .theme-option.selected{border-color:#fcee0a}
