@@ -51,8 +51,8 @@ function monthPage(){
   const d=add(start,i),date=iso(d),tasks=occurrences(d),dayNotes=(state.notes||[]).filter(n=>n.date===date),count=tasks.length+dayNotes.length;
   cells+=`<div class="day-cell ${d.getMonth()!==first.getMonth()?'other':''} ${date===iso(today())?'today':''} ${date===focus?'selected':''}" data-select-day="${date}" role="button" tabindex="0" aria-label="Selecionar ${esc(friendly(d))}" style="--day-items:${count}">
    <div class="day-cell-head"><span class="day-number">${d.getDate()}</span><span class="day-total">${count?count+' ITENS':''}</span></div>
-   ${tasks.map(t=>`<div class="day-task ${done(t,d)?'completed':''}" title="${esc(t.title)}"><span>${esc(t.startTime||'')}</span> ${esc(t.title)}</div>`).join('')}
-   ${dayNotes.map(n=>`<div class="day-note-item" title="${esc(n.title)}">✎ ${esc(n.title)}</div>`).join('')}
+   ${tasks.map(t=>`<div class="day-task ${done(t,d)?'completed':''}"><div class="day-task-heading"><span>${esc(t.startTime||'')}</span><strong>${esc(t.title)}</strong></div>${t.description?'<div class="day-task-description">'+esc(t.description)+'</div>':''}</div>`).join('')}
+   ${dayNotes.map(n=>`<div class="day-note-item"><strong>✎ ${esc(n.title)}</strong>${n.body?'<div class="day-note-description">'+esc(n.body)+'</div>':''}</div>`).join('')}
    ${count===0?'<span class="day-empty">—</span>':''}
   </div>`;
  }
