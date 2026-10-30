@@ -121,13 +121,19 @@ jobs:
         with:
           name: Cyberpunk-Diario-Windows
           path: release/windows
+      - name: Read application version
+        id: app-version
+        run: |
+          VERSION=$(sed -n "s/.*versionName ['\\\"]\\([^'\\\"]*\\)['\\\"].*/\\1/p" app/build.gradle | head -1)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
       - name: Publish Android and Windows downloads
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.10.9
-          name: Cyberpunk Diário 1.10.9
+          tag_name: ${{ steps.app-version.outputs.tag }}
+          name: Cyberpunk Diário ${{ steps.app-version.outputs.version }}
           body: |
-            Cyberpunk Diário 1.10.9 — Android e Windows.
+            Cyberpunk Diário ${{ steps.app-version.outputs.version }} — Android e Windows.
 
             O Windows é um aplicativo próprio com interface incorporada, sem abrir navegador externo.
             Android e Windows descobrem dispositivos compatíveis automaticamente na mesma rede Wi-Fi/LAN.
