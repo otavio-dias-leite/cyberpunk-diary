@@ -462,3 +462,7 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 :root[data-theme="soulkiller"] .task-card,
 :root[data-theme="soulkiller"] .settings-card{background-color:#0d1420}
 :root[data-theme="soulkiller"] .week-task:not(.completed){background-color:#142033}
+
+/* Links apresentados como ações do sistema, sem URLs soltas. */
+.link-button,.task-link{display:inline-flex;align-items:center;gap:7px;margin:5px 5px 5px 0;padding:9px 13px;border:1px solid color-mix(in srgb,var(--red) 55%,transparent);border-radius:8px;background:linear-gradient(110deg,var(--redwash),#ffffff05);color:var(--red);font-size:11px;font-weight:800;letter-spacing:.35px;text-decoration:none;box-shadow:inset 0 0 12px #ff355508;transition:background .18s,border-color .18s,transform .18s}
+.link-button:hover,.task-link:hover{background:var(--redwash);border-color:var(--red);transform:translateY(-1px);text-decoration:none}
