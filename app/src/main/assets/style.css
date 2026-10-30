@@ -601,3 +601,8 @@ body,button,input,textarea,select,label,.markdown,.helper,.task-time,.task-card,
 .calendar-resize-handle span{width:13px;height:13px;border-right:3px solid var(--accent,var(--red));border-bottom:3px solid var(--accent,var(--red));transform:translate(-2px,-2px)}
 .calendar-hint{line-height:1.7}
 @media(max-width:760px){.calendar-zoom-controls{gap:3px;margin-left:2px}.calendar-zoom-controls>span{display:none}.calendar-zoom-controls button{min-width:36px;min-height:40px;padding:5px}.calendar-nav{flex-wrap:wrap}.month-grid-wrap{touch-action:pan-y}}
+
+/* Embedded Tailscale status indicator. */
+.tailscale-status-chip{display:inline-flex;align-items:center;min-height:28px;padding:5px 9px;border:1px solid #00c8ff66;color:#75e8ff;background:#00c8ff12;font:700 8px var(--display);letter-spacing:.6px;white-space:nowrap}
+.sync-settings[hidden]{display:none!important}
+@media(max-width:760px){.tailscale-status-chip{font-size:7px;padding:4px 6px;max-width:120px;white-space:normal;text-align:center}.header-actions{flex-wrap:wrap;justify-content:flex-end}}
