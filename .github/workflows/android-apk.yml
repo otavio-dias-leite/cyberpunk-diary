@@ -113,6 +113,7 @@ jobs:
     needs: [android, windows]
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: Cyberpunk-Diario-Android
@@ -121,7 +122,6 @@ jobs:
         with:
           name: Cyberpunk-Diario-Windows
           path: release/windows
-      - uses: actions/checkout@v4
       - name: Read application version
         id: app-version
         run: |
