@@ -1,7 +1,7 @@
 plugins { id 'application' }
 
 group = 'com.cyberpunkdiario'
-version = '1.10.1'
+version = '1.10.2'
 
 application {
     mainClass = 'com.cyberpunkdiario.desktop.DesktopServer'
