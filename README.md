@@ -1,4 +1,4 @@
-# Cyberpunk Diário 1.7.0 — Android, Windows e Linux
+# Cyberpunk Diário 1.7.1 — Android, Windows e Linux
 
 O Cyberpunk Diário funciona offline no Android, Windows e Linux. O aplicativo Android mantém os dados locais e pode sincronizar com o aplicativo desktop pela rede local, sem depender de nuvem ou de um serviço externo.
 
@@ -6,7 +6,7 @@ O Cyberpunk Diário funciona offline no Android, Windows e Linux. O aplicativo A
 
 A versão mais recente é publicada em [Releases](https://github.com/otavio-dias-leite/cyberpunk-diary/releases).
 
-- **Android:** instale `app-debug.apk`. A versão 1.7.0 mantém o mesmo `applicationId` e incrementa o `versionCode` para permitir atualização direta.
+- **Android:** instale `app-debug.apk`. A versão 1.7.1 mantém o mesmo `applicationId` e incrementa o `versionCode` para permitir atualização direta.
 - **Windows:** extraia `Cyberpunk-Diario-Desktop-Windows.zip` e execute `CyberpunkDiario.exe`. O pacote inclui runtime Java.
 - **Linux:** extraia `Cyberpunk-Diario-Desktop-Linux.tar.gz` e execute `CyberpunkDiario/bin/CyberpunkDiario`. O pacote inclui runtime Java.
 
@@ -46,7 +46,26 @@ Para iniciar manualmente:
 3. Clique em **Run workflow**.
 4. Baixe os artefatos Android e Windows quando os dois jobs terminarem.
 
-Em push para `main`, os dois pacotes são publicados na Release `v1.4.0`.
+Em push para `main`, os três pacotes são publicados na Release `v1.7.1`.
+
+
+## Assinatura Android e atualização sem conflito
+
+Os APKs de atualização devem ser assinados sempre com o mesmo keystore. O build antigo usava a assinatura de depuração automática do runner do GitHub Actions, que muda entre execuções; por isso o Android pode recusar a instalação por cima da versão antiga.
+
+Configure uma chave permanente uma única vez e guarde uma cópia segura dela. Não a perca: futuras atualizações precisam da mesma chave.
+
+1. Gere o keystore localmente:
+   `keytool -genkeypair -v -keystore cyberpunk-release.jks -alias cyberpunk -keyalg RSA -keysize 2048 -validity 10000`
+2. Converta o arquivo para Base64. Linux: `base64 -w 0 cyberpunk-release.jks`. PowerShell: `[Convert]::ToBase64String([IO.File]::ReadAllBytes("cyberpunk-release.jks"))`.
+3. No GitHub, abra **Settings → Secrets and variables → Actions → New repository secret** e cadastre:
+   - `ANDROID_KEYSTORE_BASE64`: conteúdo Base64 do arquivo.
+   - `ANDROID_KEYSTORE_PASSWORD`: senha do keystore.
+   - `ANDROID_KEY_ALIAS`: `cyberpunk`.
+   - `ANDROID_KEY_PASSWORD`: senha da chave (pode ser a mesma do keystore).
+4. Execute novamente o workflow. Ele compila o APK Release assinado e valida a assinatura antes de publicar.
+
+**Migração única:** APKs antigos gerados pelo workflow com chave debug efêmera não podem ser atualizados por um APK assinado com uma chave permanente diferente. Se o Android ainda acusar conflito na primeira instalação desta migração, faça backup/exportação dos dados, desinstale a versão antiga uma única vez e instale o novo APK assinado. Depois disso, as próximas versões poderão ser instaladas por cima sem desinstalar, desde que o keystore seja preservado.
 
 ## Estrutura
 
