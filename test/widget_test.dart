@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:cyberpunk_diary/main.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('all four themes are registered', () {
     expect(themes.keys, containsAll(['Cyberpunk Red', 'Cyberpunk', 'Matrix', 'Soul Killer']));
     expect(themes.values.toSet(), hasLength(4));
