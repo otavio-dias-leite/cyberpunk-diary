@@ -3,6 +3,8 @@ import 'package:cyberpunk_diary/data.dart';
 import 'package:cyberpunk_diary/main.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   test('all four themes build with distinct accents', () {
     for (final entry in themes.entries) {
       expect(buildTheme(entry.key).colorScheme.primary, entry.value);
