@@ -12,6 +12,6 @@ class SyncService {
     final response=await http.post(uri.resolve('/v1/sync'),headers:headers,body:jsonEncode({'items':local.map((e)=>e.toMap()).toList()})).timeout(const Duration(seconds:20));
     if(response.statusCode!=200) throw Exception('HTTP ${response.statusCode}');
     final data=jsonDecode(response.body) as Map<String,dynamic>;
-    for(final raw in (data['items'] as List)){final incoming=DiaryItem.fromMap(Map<String,Object?>.from(raw));final current=local.where((e)=>e.id==incoming.id).firstOrNull;if(current==null||incoming.updatedAt>current.updatedAt){await save(incoming);}}
+    for(final raw in (data['items'] as List)){final incoming=DiaryItem.fromMap(Map<String,Object?>.from(raw));DiaryItem? current; for(final item in local){if(item.id==incoming.id){current=item;break;}} if(current==null||incoming.updatedAt>current.updatedAt){await save(incoming);}}
   }
 }
