@@ -99,7 +99,6 @@ class _DiaryHomeState extends State<DiaryHome> {
     final weekStart=DateTime(focus.year,focus.month,focus.day).subtract(Duration(days:focus.weekday%7));
     final weekItems=visible.where((e)=>e.kind!='note' && e.dueAt!=null && !DateTime.fromMillisecondsSinceEpoch(e.dueAt!).isBefore(weekStart) && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).isBefore(weekStart.add(const Duration(days:7)))).toList();
     final monthItems=visible.where((e)=>e.kind!='note' && e.dueAt!=null && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).year==focus.year && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).month==focus.month).toList();
-    final undated=visible.where((e)=>e.dueAt==null).toList();
     return Scaffold(appBar:AppBar(title:const Text('CYBERPUNK DIARY',style:TextStyle(fontWeight:FontWeight.w900,letterSpacing:1.4,fontSize:17)),actions:[IconButton(tooltip:'Sincronização',onPressed:()=>_syncDialog(),icon:const Icon(Icons.sync)),PopupMenuButton<String>(icon:const Icon(Icons.palette_outlined),onSelected:_setTheme,itemBuilder:(_)=>themes.keys.map((e)=>PopupMenuItem(value:e,child:Text(e))).toList())]),
       floatingActionButton:FloatingActionButton.extended(onPressed:_showCreateMenu,icon:const Icon(Icons.add),label:const Text('CRIAR')),
       body:loading?const Center(child:CircularProgressIndicator()):Column(children:[
@@ -226,7 +225,7 @@ class _DiaryHomeState extends State<DiaryHome> {
                 child: ExpansionTile(
                   leading: const Icon(Icons.checklist),
                   title: Text(item.title),
-                  subtitle: Text('\${entries.where((entry) => entry['done'] == true).length}/\${entries.length} concluídos'),
+                  subtitle: Text('${entries.where((entry) => entry['done'] == true).length}/${entries.length} concluídos'),
                   children: entries.asMap().entries.map((entry) => CheckboxListTile(
                     dense: true,
                     value: entry.value['done'] == true,
