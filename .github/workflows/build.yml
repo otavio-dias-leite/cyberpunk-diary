@@ -48,9 +48,20 @@ jobs:
         with:
           name: windows-zip
           path: cyberpunk-diary-windows.zip
+  sync-host:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - working-directory: sync-host
+        run: go test ./...
+      - working-directory: sync-host
+        run: go vet ./...
   release:
     if: github.ref == 'refs/heads/main'
-    needs: [android, windows]
+    needs: [android, windows, sync-host]
     runs-on: ubuntu-latest
     permissions:
       contents: write
