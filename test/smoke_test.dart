@@ -1,9 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:cyberpunk_diary/data.dart';
 import 'package:cyberpunk_diary/main.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  GoogleFonts.config.allowRuntimeFetching = false;
 
   test('all four themes build with distinct accents', () {
     for (final entry in themes.entries) {
