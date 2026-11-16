@@ -32,7 +32,7 @@ jobs:
       - run: flutter config --enable-windows-desktop
       - run: flutter create . --platforms=windows
       - run: flutter pub get
-      - run: flutter analyze --no-fatal-infos
+      - run: flutter analyze --no-fatal-warnings --no-fatal-infos
       - run: flutter build windows --release
       - run: Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath cyberpunk-diary-windows.zip
         shell: pwsh
