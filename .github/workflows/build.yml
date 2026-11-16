@@ -36,6 +36,14 @@ jobs:
       - run: flutter build windows --release
       - run: Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath cyberpunk-diary-windows.zip
         shell: pwsh
+      - run: choco install innosetup --no-progress -y
+        shell: pwsh
+      - run: '& "$env:ProgramFiles(x86)\\Inno Setup 6\\ISCC.exe" installer.iss'
+        shell: pwsh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: CyberpunkDiary-Setup-1.0.0.exe
       - uses: actions/upload-artifact@v4
         with:
           name: windows-zip
@@ -53,15 +61,20 @@ jobs:
           path: dist/android
       - uses: actions/download-artifact@v4
         with:
-          name: windows-zip
+          name: windows-installer
           path: dist/windows
-      - run: mv dist/android/app-release.apk dist/android/cyberpunk-diary-android.apk
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-zip
+          path: dist/portable
+      - run: mv dist/android/app-release.apk dist/android/CyberpunkDiary-Android-1.0.0.apk
       - uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/android/cyberpunk-diary-android.apk
-            dist/windows/cyberpunk-diary-windows.zip
-          tag_name: v2.0.0
-          name: Cyberpunk Diary v2.0.0
+            dist/android/CyberpunkDiary-Android-1.0.0.apk
+            dist/windows/CyberpunkDiary-Setup-1.0.0.exe
+            dist/portable/cyberpunk-diary-windows.zip
+          tag_name: v1.0.0
+          name: Cyberpunk Diary v1.0.0
           target_commitish: main
           generate_release_notes: true
