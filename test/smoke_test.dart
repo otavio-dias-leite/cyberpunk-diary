@@ -25,6 +25,15 @@ void main() {
     expect(restored.dueAt, item.dueAt);
     expect(restored.done, isTrue);
   });
-}
+  test('nullable fields can be explicitly cleared', () {
+    const item = DiaryItem(
+      id: 'clear-test', kind: 'task', title: 'Task', body: '',
+      dueAt: 1735689600000, done: false, updatedAt: 10,
+      deletedAt: 20,
+    );
+    final cleared = item.copy(dueAt: null, deletedAt: null);
+    expect(cleared.dueAt, isNull);
+    expect(cleared.deletedAt, isNull);
+  });
 
-  
+}
