@@ -29,9 +29,20 @@ func syncHandler(w http.ResponseWriter,r *http.Request){
  r.Body=http.MaxBytesReader(w,r.Body,8<<20);defer r.Body.Close()
  var in Payload;if err:=json.NewDecoder(r.Body).Decode(&in);err!=nil{http.Error(w,"invalid payload",400);return}
  tx,err:=db.Begin();if err!=nil{http.Error(w,"database unavailable",500);return};defer tx.Rollback()
- stmt,err:=tx.Prepare(`INSERT INTO items(id,kind,title,body,due_at,done,updated_at,deleted_at) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET kind=excluded.kind,title=excluded.title,body=excluded.body,due_at=excluded.due_at,done=excluded.done,updated_at=excluded.updated_at,deleted_at=excluded.deleted_at WHERE excluded.updated_at > items.updated_at`)
+ stmt,err:=tx.Prepare(`INSERT INTO items(id,kind,title,body,due_at,done,updated_at,deleted_at) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET kind=excluded.kind,title=excluded.title,body=excluded.body,due_at=excluded.due_at,done=excluded.done,updated_at=excluded.updated_at,deleted_at=excluded.deleted_at`)
  if err!=nil{http.Error(w,"database error",500);return};defer stmt.Close()
- for _,v:=range in.Items{if strings.TrimSpace(v.ID)==""{continue};if _,err=stmt.Exec(v.ID,v.Kind,v.Title,v.Body,v.DueAt,v.Done,v.UpdatedAt,v.DeletedAt);err!=nil{http.Error(w,"write failed",500);return}}
+ for _,v:=range in.Items{
+  if strings.TrimSpace(v.ID)==""{continue}
+  var current Item
+  scanErr:=tx.QueryRow(`SELECT id,kind,title,body,due_at,done,updated_at,deleted_at FROM items WHERE id=?`,v.ID).Scan(&current.ID,&current.Kind,&current.Title,&current.Body,&current.DueAt,&current.Done,&current.UpdatedAt,&current.DeletedAt)
+  if scanErr!=nil && scanErr!=sql.ErrNoRows{http.Error(w,"read failed",500);return}
+  shouldWrite:=scanErr==sql.ErrNoRows || v.UpdatedAt>current.UpdatedAt
+  if scanErr==nil && v.UpdatedAt==current.UpdatedAt{
+   incomingJSON,_:=json.Marshal(v);currentJSON,_:=json.Marshal(current)
+   shouldWrite=string(incomingJSON)>string(currentJSON)
+  }
+  if shouldWrite{if _,err=stmt.Exec(v.ID,v.Kind,v.Title,v.Body,v.DueAt,v.Done,v.UpdatedAt,v.DeletedAt);err!=nil{http.Error(w,"write failed",500);return}}
+ }
  if err=tx.Commit();err!=nil{http.Error(w,"commit failed",500);return}
  rows,err:=db.Query(`SELECT id,kind,title,body,due_at,done,updated_at,deleted_at FROM items`);if err!=nil{http.Error(w,"read failed",500);return};defer rows.Close()
  out:=Payload{Items:[]Item{}};for rows.Next(){var v Item;if err=rows.Scan(&v.ID,&v.Kind,&v.Title,&v.Body,&v.DueAt,&v.Done,&v.UpdatedAt,&v.DeletedAt);err!=nil{http.Error(w,"read failed",500);return};out.Items=append(out.Items,v)}
