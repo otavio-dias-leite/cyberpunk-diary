@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -58,7 +59,7 @@ class _CyberpunkDiaryState extends State<CyberpunkDiary> {
 class DiaryHome extends StatefulWidget { const DiaryHome({super.key}); @override State<DiaryHome> createState()=>_DiaryHomeState(); }
 class _DiaryHomeState extends State<DiaryHome> {
   DateTime focus = DateTime.now();
-  String view = 'Mês';
+  String view = 'Atual';
   int tab = 0;
   List<DiaryItem> items = [];
   bool loading = true;
@@ -93,9 +94,13 @@ class _DiaryHomeState extends State<DiaryHome> {
   @override Widget build(BuildContext context){
     final accent=Theme.of(context).colorScheme.primary;
     final dayItems=visible.where((e)=>e.dueAt!=null && DateUtils.isSameDay(DateTime.fromMillisecondsSinceEpoch(e.dueAt!),focus)).toList();
+    final activeTasks=visible.where((e)=>e.kind!='note' && !e.done).toList()..sort((a,b)=>(a.dueAt??a.updatedAt).compareTo(b.dueAt??b.updatedAt));
+    final weekStart=DateTime(focus.year,focus.month,focus.day).subtract(Duration(days:focus.weekday%7));
+    final weekItems=visible.where((e)=>e.kind!='note' && e.dueAt!=null && !DateTime.fromMillisecondsSinceEpoch(e.dueAt!).isBefore(weekStart) && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).isBefore(weekStart.add(const Duration(days:7)))).toList();
+    final monthItems=visible.where((e)=>e.kind!='note' && e.dueAt!=null && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).year==focus.year && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).month==focus.month).toList();
     final undated=visible.where((e)=>e.dueAt==null).toList();
     return Scaffold(appBar:AppBar(title:const Text('CYBERPUNK DIARY',style:TextStyle(fontWeight:FontWeight.w900,letterSpacing:1.4,fontSize:17)),actions:[IconButton(tooltip:'Sincronização',onPressed:()=>_syncDialog(),icon:const Icon(Icons.sync)),PopupMenuButton<String>(icon:const Icon(Icons.palette_outlined),onSelected:_setTheme,itemBuilder:(_)=>themes.keys.map((e)=>PopupMenuItem(value:e,child:Text(e))).toList())]),
-      floatingActionButton:FloatingActionButton.extended(onPressed:_showCreateMenu,icon:const Icon(Icons.add),label:const Text('NOVO')),
+      floatingActionButton:FloatingActionButton.extended(onPressed:()=>_create(tab==1?'note':'task',date:tab==0&&view!='Atual'?focus:null),icon:Icon(tab==1?Icons.note_add:Icons.add_task),label:Text(tab==1?'NOVA NOTA':'NOVA TAREFA')),
       body:loading?const Center(child:CircularProgressIndicator()):Column(children:[
         Padding(padding:const EdgeInsets.fromLTRB(12,8,12,4),child:Row(children:[
           IconButton(onPressed:()=>setState(()=>focus=DateTime(focus.year,focus.month-1,focus.day)),icon:const Icon(Icons.chevron_left)),
@@ -106,7 +111,7 @@ class _DiaryHomeState extends State<DiaryHome> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
-            children: ['Semana', 'Mês', 'Dia', 'Sem data'].map((option) {
+            children: ['Atual', 'Dia', 'Semana', 'Mês'].map((option) {
               return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -121,9 +126,10 @@ class _DiaryHomeState extends State<DiaryHome> {
           ),
         ),
         if(view=='Mês') _monthGrid(accent),
+        if(view=='Atual') Padding(padding:const EdgeInsets.fromLTRB(16,8,16,4),child:Align(alignment:Alignment.centerLeft,child:Text('TAREFA ATUAL · PRÓXIMA ATIVIDADE PENDENTE',style:TextStyle(color:accent,fontSize:10,fontWeight:FontWeight.bold)))),
         if(view=='Semana') _weekStrip(accent),
         if(view=='Dia') Padding(padding:const EdgeInsets.all(10),child:Text(DateFormat('EEEE, dd MMMM','pt_BR').format(focus).toUpperCase())),
-        Expanded(child: tab==1?_itemList(visible.where((e)=>e.kind=='note').toList()):tab==2?_itemList(visible.where((e)=>e.kind!='note').toList()):view=='Sem data'?_itemList(undated):_itemList(dayItems)),
+        Expanded(child: tab==1?_itemList(visible.where((e)=>e.kind=='note').toList()):tab==2?_itemList(visible.where((e)=>e.kind!='note').toList()):view=='Atual'?_itemList(activeTasks):view=='Semana'?_itemList(weekItems):view=='Mês'?_itemList(monthItems):_itemList(dayItems)),
       ]),
       bottomNavigationBar:NavigationBar(selectedIndex:tab,onDestinationSelected:(i)=>setState(()=>tab=i),destinations:const [NavigationDestination(icon:Icon(Icons.calendar_month),label:'Agenda'),NavigationDestination(icon:Icon(Icons.sticky_note_2_outlined),label:'Notas'),NavigationDestination(icon:Icon(Icons.checklist),label:'Tarefas')]),
     );
@@ -206,7 +212,7 @@ class _DiaryHomeState extends State<DiaryHome> {
       ),
     );
   }
-  Widget _itemList(List<DiaryItem> list)=>list.isEmpty?const Center(child:Text('Nenhum registro',style:TextStyle(color:Colors.white38))):ListView.builder(padding:const EdgeInsets.fromLTRB(12,8,12,90),itemCount:list.length,itemBuilder:(ctx,i){final e=list[i];return Card(child:ListTile(leading:e.kind=='note'?const Icon(Icons.notes):Checkbox(value:e.done,onChanged:(v)=>_done(e,v??false)),title:Text(e.title,style:TextStyle(decoration:e.done?TextDecoration.lineThrough:null)),subtitle:e.body.isEmpty?null:Text(e.body,maxLines:2,overflow:TextOverflow.ellipsis),onTap:()=>_edit(e),trailing:IconButton(icon:const Icon(Icons.delete_outline),onPressed:()=>_delete(e))));});
+  Widget _itemList(List<DiaryItem> list)=>list.isEmpty?const Center(child:Text('Nenhum registro',style:TextStyle(color:Colors.white38))):ListView.builder(padding:const EdgeInsets.fromLTRB(12,8,12,90),itemCount:list.length,itemBuilder:(ctx,i){final e=list[i];return Card(child:ListTile(leading:e.kind=='note'?const Icon(Icons.notes):Checkbox(value:e.done,onChanged:(v)=>_done(e,v??false)),title:Text(e.title,style:TextStyle(decoration:e.done?TextDecoration.lineThrough:null)),subtitle:e.body.isEmpty?null:(e.kind=='note'?MarkdownBody(data:e.body,shrinkWrap:true,styleSheet:MarkdownStyleSheet.fromTheme(Theme.of(ctx)).copyWith(p:const TextStyle(fontSize:11,color:Colors.white70),h1:const TextStyle(fontSize:15,fontWeight:FontWeight.bold),h2:const TextStyle(fontSize:13,fontWeight:FontWeight.bold))):Text(e.body,maxLines:2,overflow:TextOverflow.ellipsis)),onTap:()=>_edit(e),trailing:IconButton(icon:const Icon(Icons.delete_outline),onPressed:()=>_delete(e))));});
   Future<void> _showCreateMenu() async { final choice=await showModalBottomSheet<String>(context:context,builder:(ctx)=>SafeArea(child:Wrap(children:[for(final entry in <String,String>{'task':'Tarefa','note':'Nota','list':'Lista de tarefas'}.entries) ListTile(leading:Icon(entry.key=='note'?Icons.notes:entry.key=='list'?Icons.checklist:Icons.task_alt),title:Text(entry.value),onTap:()=>Navigator.pop(ctx,entry.key))]))); if(choice!=null) _create(choice,date:choice=='task'&&tab==0&&view!='Sem data'?focus:null); }
   Future<void> _setTheme(String value) async {themeName.value=value;final p=await SharedPreferences.getInstance();await p.setString('theme',value);}
   Future<void> _syncDialog() async {final url=TextEditingController(),token=TextEditingController();final p=await SharedPreferences.getInstance();url.text=p.getString('sync_url')??'';token.text=p.getString('sync_token')??'';final ok=await showDialog<bool>(context:context,builder:(ctx)=>AlertDialog(title:const Text('SYNC DEVICE'),content:Column(mainAxisSize:MainAxisSize.min,children:[TextField(controller:url,decoration:const InputDecoration(labelText:'Host URL')),TextField(controller:token,obscureText:true,decoration:const InputDecoration(labelText:'Token'))]),actions:[TextButton(onPressed:()=>Navigator.pop(ctx,false),child:const Text('Fechar')),FilledButton(onPressed:()=>Navigator.pop(ctx,true),child:const Text('Sincronizar'))]));if(ok==true){await p.setString('sync_url',url.text.trim());await p.setString('sync_token',token.text);try{await SyncService(url.text.trim(),token.text).sync(await DiaryDb.instance.all(),DiaryDb.instance.save);if(mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Sincronização concluída')));_refresh();}}catch(e){if(mounted)ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('Falha na sincronização: $e')));}}}
