@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter/foundation.dart';
@@ -68,28 +69,28 @@ class _DiaryHomeState extends State<DiaryHome> {
   List<DiaryItem> get visible => items.where((e)=>e.deletedAt==null).toList();
   Future<void> _create(String kind,{DateTime? date}) async {
     final title=TextEditingController(), body=TextEditingController();
-    bool checklist=false;
+    DateTime? dueDate=date;
     final ok=await showDialog<bool>(context:context,builder:(ctx)=>StatefulBuilder(builder:(ctx,change)=>AlertDialog(
       title:Text(kind=='note'?'Nova nota':kind=='list'?'Nova lista':'Nova tarefa'),
       content:SingleChildScrollView(child:Column(mainAxisSize:MainAxisSize.min,children:[
         TextField(controller:title,autofocus:true,decoration:const InputDecoration(labelText:'Título')),
         const SizedBox(height:10), TextField(controller:body,minLines:3,maxLines:7,decoration:InputDecoration(labelText:kind=='note'?'Conteúdo / Markdown':kind=='list'?'Itens (um por linha)':'Detalhes')),
-        if(kind=='list') CheckboxListTile(value:checklist,title:const Text('Lista de tarefas'),onChanged:(v)=>change(()=>checklist=v??false)),
+        if(kind!='note') Row(children:[Expanded(child:Text(dueDate==null?'Sem data':DateFormat('dd/MM/yyyy').format(dueDate!))),TextButton(onPressed:() async {final picked=await showDatePicker(context:ctx,initialDate:dueDate??focus,firstDate:DateTime(2000),lastDate:DateTime(2100));if(picked!=null)change(()=>dueDate=picked);},child:const Text('DEFINIR DATA')),if(dueDate!=null)IconButton(onPressed:()=>change(()=>dueDate=null),icon:const Icon(Icons.close))]),
       ])),
       actions:[TextButton(onPressed:()=>Navigator.pop(ctx,false),child:const Text('Cancelar')),FilledButton(onPressed:()=>Navigator.pop(ctx,true),child:const Text('Salvar'))],
     )));
     if(ok==true && title.text.trim().isNotEmpty){
       final now=DateTime.now().toUtc().millisecondsSinceEpoch;
-      await DiaryDb.instance.save(DiaryItem(id:const Uuid().v4(),kind:kind,title:title.text.trim(),body:body.text,dueAt:date?.millisecondsSinceEpoch,done:false,updatedAt:now,deletedAt:null));
+      await DiaryDb.instance.save(DiaryItem(id:const Uuid().v4(),kind:kind,title:title.text.trim(),body:kind=='list'?jsonEncode(body.text.split('\\n').map((line)=>line.trim()).where((line)=>line.isNotEmpty).map((line)=>{'text':line,'done':false}).toList()):body.text,dueAt:dueDate?.millisecondsSinceEpoch,done:false,updatedAt:now,deletedAt:null));
       await _refresh();
     }
   }
   Future<void> _edit(DiaryItem item) async {
-    final title=TextEditingController(text:item.title), body=TextEditingController(text:item.body);
+    final title=TextEditingController(text:item.title), body=TextEditingController(text:item.kind=='list'?_listLines(item.body):item.body);
     final ok=await showDialog<bool>(context:context,builder:(ctx)=>AlertDialog(title:Text(item.kind=='note'?'Editar nota':'Editar tarefa'),content:SingleChildScrollView(child:Column(mainAxisSize:MainAxisSize.min,children:[TextField(controller:title,decoration:const InputDecoration(labelText:'Título')),const SizedBox(height:10),TextField(controller:body,minLines:3,maxLines:8,decoration:const InputDecoration(labelText:'Conteúdo'))])),actions:[TextButton(onPressed:()=>Navigator.pop(ctx,false),child:const Text('Cancelar')),FilledButton(onPressed:()=>Navigator.pop(ctx,true),child:const Text('Salvar'))]));
-    if(ok==true && title.text.trim().isNotEmpty){await DiaryDb.instance.save(item.copy(title:title.text.trim(),body:body.text,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
+    if(ok==true && title.text.trim().isNotEmpty){final edited=item.kind=='list'?jsonEncode(body.text.split('\\n').map((line)=>line.trim()).where((line)=>line.isNotEmpty).map((line)=>{'text':line,'done':false}).toList()):body.text;await DiaryDb.instance.save(item.copy(title:title.text.trim(),body:edited,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
   }
-  Future<void> _done(DiaryItem e,bool value) async {await DiaryDb.instance.save(e.copy(done:value,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
+  String _listLines(String raw){try{return (jsonDecode(raw) as List).map((v)=>(v as Map)['text'].toString()).join('\\n');}catch(_){return raw;}}\n  List<Map<String,dynamic>> _decodeList(String raw){try{return (jsonDecode(raw) as List).map((v)=>Map<String,dynamic>.from(v as Map)).toList();}catch(_){return raw.split('\\n').where((v)=>v.trim().isNotEmpty).map((v)=>{'text':v,'done':false}).toList();}}\n  Future<void> _toggleListEntry(DiaryItem item,int index,bool value) async {final entries=_decodeList(item.body);entries[index]['done']=value;await DiaryDb.instance.save(item.copy(body:jsonEncode(entries),updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}\n  Future<void> _done(DiaryItem e,bool value) async {await DiaryDb.instance.save(e.copy(done:value,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
   Future<void> _delete(DiaryItem e) async {await DiaryDb.instance.save(e.copy(deletedAt:DateTime.now().toUtc().millisecondsSinceEpoch,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
   @override Widget build(BuildContext context){
     final accent=Theme.of(context).colorScheme.primary;
@@ -100,7 +101,7 @@ class _DiaryHomeState extends State<DiaryHome> {
     final monthItems=visible.where((e)=>e.kind!='note' && e.dueAt!=null && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).year==focus.year && DateTime.fromMillisecondsSinceEpoch(e.dueAt!).month==focus.month).toList();
     final undated=visible.where((e)=>e.dueAt==null).toList();
     return Scaffold(appBar:AppBar(title:const Text('CYBERPUNK DIARY',style:TextStyle(fontWeight:FontWeight.w900,letterSpacing:1.4,fontSize:17)),actions:[IconButton(tooltip:'Sincronização',onPressed:()=>_syncDialog(),icon:const Icon(Icons.sync)),PopupMenuButton<String>(icon:const Icon(Icons.palette_outlined),onSelected:_setTheme,itemBuilder:(_)=>themes.keys.map((e)=>PopupMenuItem(value:e,child:Text(e))).toList())]),
-      floatingActionButton:FloatingActionButton.extended(onPressed:()=>_create(tab==1?'note':'task',date:tab==0&&view!='Atual'?focus:null),icon:Icon(tab==1?Icons.note_add:Icons.add_task),label:Text(tab==1?'NOVA NOTA':'NOVA TAREFA')),
+      floatingActionButton:FloatingActionButton.extended(onPressed:_showCreateMenu,icon:const Icon(Icons.add),label:const Text('CRIAR')),
       body:loading?const Center(child:CircularProgressIndicator()):Column(children:[
         Padding(padding:const EdgeInsets.fromLTRB(12,8,12,4),child:Row(children:[
           IconButton(onPressed:()=>setState(()=>focus=DateTime(focus.year,focus.month-1,focus.day)),icon:const Icon(Icons.chevron_left)),
@@ -129,9 +130,9 @@ class _DiaryHomeState extends State<DiaryHome> {
         if(view=='Atual') Padding(padding:const EdgeInsets.fromLTRB(16,8,16,4),child:Align(alignment:Alignment.centerLeft,child:Text('TAREFA ATUAL · PRÓXIMA ATIVIDADE PENDENTE',style:TextStyle(color:accent,fontSize:10,fontWeight:FontWeight.bold)))),
         if(view=='Semana') _weekStrip(accent),
         if(view=='Dia') Padding(padding:const EdgeInsets.all(10),child:Text(DateFormat('EEEE, dd MMMM','pt_BR').format(focus).toUpperCase())),
-        Expanded(child: tab==1?_itemList(visible.where((e)=>e.kind=='note').toList()):tab==2?_itemList(visible.where((e)=>e.kind!='note').toList()):view=='Atual'?_itemList(activeTasks):view=='Semana'?_itemList(weekItems):view=='Mês'?_itemList(monthItems):_itemList(dayItems)),
+        Expanded(child: tab==1?_itemList(visible.where((e)=>e.kind=='note').toList()):tab==2?_itemList(visible.where((e)=>e.kind!='note').toList()):tab==3?_itemList(visible.where((e)=>e.kind!='note'&&e.dueAt==null).toList()):view=='Atual'?_itemList(activeTasks):view=='Semana'?_itemList(weekItems):view=='Mês'?_itemList(monthItems):_itemList(dayItems)),
       ]),
-      bottomNavigationBar:NavigationBar(selectedIndex:tab,onDestinationSelected:(i)=>setState(()=>tab=i),destinations:const [NavigationDestination(icon:Icon(Icons.calendar_month),label:'Agenda'),NavigationDestination(icon:Icon(Icons.sticky_note_2_outlined),label:'Notas'),NavigationDestination(icon:Icon(Icons.checklist),label:'Tarefas')]),
+      bottomNavigationBar:NavigationBar(selectedIndex:tab,onDestinationSelected:(i)=>setState(()=>tab=i),destinations:const [NavigationDestination(icon:Icon(Icons.calendar_month),label:'Agenda'),NavigationDestination(icon:Icon(Icons.sticky_note_2_outlined),label:'Notas'),NavigationDestination(icon:Icon(Icons.checklist),label:'Tarefas'),NavigationDestination(icon:Icon(Icons.event_busy),label:'Sem data')]),
     );
   }
   Widget _monthGrid(Color accent){
@@ -212,8 +213,8 @@ class _DiaryHomeState extends State<DiaryHome> {
       ),
     );
   }
-  Widget _itemList(List<DiaryItem> list)=>list.isEmpty?const Center(child:Text('Nenhum registro',style:TextStyle(color:Colors.white38))):ListView.builder(padding:const EdgeInsets.fromLTRB(12,8,12,90),itemCount:list.length,itemBuilder:(ctx,i){final e=list[i];return Card(child:ListTile(leading:e.kind=='note'?const Icon(Icons.notes):Checkbox(value:e.done,onChanged:(v)=>_done(e,v??false)),title:Text(e.title,style:TextStyle(decoration:e.done?TextDecoration.lineThrough:null)),subtitle:e.body.isEmpty?null:(e.kind=='note'?MarkdownBody(data:e.body,shrinkWrap:true,styleSheet:MarkdownStyleSheet.fromTheme(Theme.of(ctx)).copyWith(p:const TextStyle(fontSize:11,color:Colors.white70),h1:const TextStyle(fontSize:15,fontWeight:FontWeight.bold),h2:const TextStyle(fontSize:13,fontWeight:FontWeight.bold))):Text(e.body,maxLines:2,overflow:TextOverflow.ellipsis)),onTap:()=>_edit(e),trailing:IconButton(icon:const Icon(Icons.delete_outline),onPressed:()=>_delete(e))));});
-  Future<void> _showCreateMenu() async { final choice=await showModalBottomSheet<String>(context:context,builder:(ctx)=>SafeArea(child:Wrap(children:[for(final entry in <String,String>{'task':'Tarefa','note':'Nota','list':'Lista de tarefas'}.entries) ListTile(leading:Icon(entry.key=='note'?Icons.notes:entry.key=='list'?Icons.checklist:Icons.task_alt),title:Text(entry.value),onTap:()=>Navigator.pop(ctx,entry.key))]))); if(choice!=null) _create(choice,date:choice=='task'&&tab==0&&view!='Sem data'?focus:null); }
+  Widget _itemList(List<DiaryItem> list)=>list.isEmpty?const Center(child:Text('Nenhum registro',style:TextStyle(color:Colors.white38))):ListView.builder(padding:const EdgeInsets.fromLTRB(12,8,12,90),itemCount:list.length,itemBuilder:(ctx,i){final e=list[i];return Card(child:e.kind=='list'?ExpansionTile(leading:const Icon(Icons.checklist),title:Text(e.title),subtitle:const Text('Lista de tarefas'),children:_decodeList(e.body).asMap().entries.map((entry)=>CheckboxListTile(dense:true,value:entry.value['done']==true,title:Text(entry.value['text'].toString()),onChanged:(v)=>_toggleListEntry(e,entry.key,v??false))).toList()):ListTile(leading:e.kind=='note'?const Icon(Icons.notes):Checkbox(value:e.done,onChanged:(v)=>_done(e,v??false)),title:Text(e.title,style:TextStyle(decoration:e.done?TextDecoration.lineThrough:null)),subtitle:e.body.isEmpty?null:(e.kind=='note'?MarkdownBody(data:e.body,shrinkWrap:true,styleSheet:MarkdownStyleSheet.fromTheme(Theme.of(ctx)).copyWith(p:const TextStyle(fontSize:11,color:Colors.white70),h1:const TextStyle(fontSize:15,fontWeight:FontWeight.bold),h2:const TextStyle(fontSize:13,fontWeight:FontWeight.bold))):Text(e.body,maxLines:2,overflow:TextOverflow.ellipsis)),onTap:()=>_edit(e),trailing:IconButton(icon:const Icon(Icons.delete_outline),onPressed:()=>_delete(e))));});
+  undefined
   Future<void> _setTheme(String value) async {themeName.value=value;final p=await SharedPreferences.getInstance();await p.setString('theme',value);}
   Future<void> _syncDialog() async {final url=TextEditingController(),token=TextEditingController();final p=await SharedPreferences.getInstance();url.text=p.getString('sync_url')??'';token.text=p.getString('sync_token')??'';final ok=await showDialog<bool>(context:context,builder:(ctx)=>AlertDialog(title:const Text('SYNC DEVICE'),content:Column(mainAxisSize:MainAxisSize.min,children:[TextField(controller:url,decoration:const InputDecoration(labelText:'Host URL')),TextField(controller:token,obscureText:true,decoration:const InputDecoration(labelText:'Token'))]),actions:[TextButton(onPressed:()=>Navigator.pop(ctx,false),child:const Text('Fechar')),FilledButton(onPressed:()=>Navigator.pop(ctx,true),child:const Text('Sincronizar'))]));if(ok==true){await p.setString('sync_url',url.text.trim());await p.setString('sync_token',token.text);try{await SyncService(url.text.trim(),token.text).sync(await DiaryDb.instance.all(),DiaryDb.instance.save);if(mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Sincronização concluída')));_refresh();}}catch(e){if(mounted)ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('Falha na sincronização: $e')));}}}
 }
