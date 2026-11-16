@@ -12,7 +12,7 @@ A local-first personal planner for Android, Windows, macOS and Linux. Orbitron t
 ## Sync model
 The PC (or another always-on machine) runs `sync-host`. Devices connect to it over the local network or over a private encrypted network such as Tailscale. Tailscale uses WireGuard encryption and provides LAN/direct or internet connectivity without exposing the sync host publicly. The app sync protocol uses bearer-token authentication, incremental change exchange, per-item timestamps and tombstones. This is a practical Syncthing-inspired device sync workflow, not Syncthing's block-level folder replication.
 
-1. Run the host: `cd sync-host && SYNC_TOKEN='use-a-long-random-secret' SYNC_ADDR=':8787' go run .`
+1. Run the host: `cd sync-host && SYNC_TOKEN='use-a-long-random-secret' SYNC_ADDR='0.0.0.0:8787' go run .`
 2. On the phone, enter the host URL (for example `http://192.168.1.20:8787` on a trusted LAN, or the HTTPS/Tailscale Serve URL when away) and the same token in Settings → Sync.
 3. Keep the host running. For internet access, install Tailscale on both devices and use the PC's Tailscale address; use Tailscale Serve for HTTPS.
 
