@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter/foundation.dart';
@@ -80,14 +81,14 @@ class _DiaryHomeState extends State<DiaryHome> {
     )));
     if(ok==true && title.text.trim().isNotEmpty){
       final now=DateTime.now().toUtc().millisecondsSinceEpoch;
-      await DiaryDb.instance.save(DiaryItem(id:const Uuid().v4(),kind:kind,title:title.text.trim(),body:body.text,dueAt:date?.millisecondsSinceEpoch,done:false,updatedAt:now,deletedAt:null));
+      await DiaryDb.instance.save(DiaryItem(id:const Uuid().v4(),kind:kind,title:title.text.trim(),body:kind=='list'?jsonEncode(body.text.split('\n').map((line)=>line.trim()).where((line)=>line.isNotEmpty).map((line)=>{'text':line,'done':false}).toList()):body.text,dueAt:date?.millisecondsSinceEpoch,done:false,updatedAt:now,deletedAt:null));
       await _refresh();
     }
   }
   Future<void> _edit(DiaryItem item) async {
-    final title=TextEditingController(text:item.title), body=TextEditingController(text:item.body);
+    final title=TextEditingController(text:item.title), body=TextEditingController(text:item.kind=='list'?_listLines(item.body):item.body);
     final ok=await showDialog<bool>(context:context,builder:(ctx)=>AlertDialog(title:Text(item.kind=='note'?'Editar nota':'Editar tarefa'),content:SingleChildScrollView(child:Column(mainAxisSize:MainAxisSize.min,children:[TextField(controller:title,decoration:const InputDecoration(labelText:'Título')),const SizedBox(height:10),TextField(controller:body,minLines:3,maxLines:8,decoration:const InputDecoration(labelText:'Conteúdo'))])),actions:[TextButton(onPressed:()=>Navigator.pop(ctx,false),child:const Text('Cancelar')),FilledButton(onPressed:()=>Navigator.pop(ctx,true),child:const Text('Salvar'))]));
-    if(ok==true && title.text.trim().isNotEmpty){await DiaryDb.instance.save(item.copy(title:title.text.trim(),body:body.text,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
+    if(ok==true && title.text.trim().isNotEmpty){await DiaryDb.instance.save(item.copy(title:title.text.trim(),body:item.kind=='list'?jsonEncode(body.text.split('\n').map((line)=>line.trim()).where((line)=>line.isNotEmpty).map((line)=>{'text':line,'done':false}).toList()):body.text,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
   }
   Future<void> _done(DiaryItem e,bool value) async {await DiaryDb.instance.save(e.copy(done:value,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
   Future<void> _delete(DiaryItem e) async {await DiaryDb.instance.save(e.copy(deletedAt:DateTime.now().toUtc().millisecondsSinceEpoch,updatedAt:DateTime.now().toUtc().millisecondsSinceEpoch));await _refresh();}
@@ -212,7 +213,64 @@ class _DiaryHomeState extends State<DiaryHome> {
       ),
     );
   }
-  Widget _itemList(List<DiaryItem> list)=>list.isEmpty?const Center(child:Text('Nenhum registro',style:TextStyle(color:Colors.white38))):ListView.builder(padding:const EdgeInsets.fromLTRB(12,8,12,90),itemCount:list.length,itemBuilder:(ctx,i){final e=list[i];return Card(child:ListTile(leading:e.kind=='note'?const Icon(Icons.notes):Checkbox(value:e.done,onChanged:(v)=>_done(e,v??false)),title:Text(e.title,style:TextStyle(decoration:e.done?TextDecoration.lineThrough:null)),subtitle:e.body.isEmpty?null:(e.kind=='note'?MarkdownBody(data:e.body,shrinkWrap:true,styleSheet:MarkdownStyleSheet.fromTheme(Theme.of(ctx)).copyWith(p:const TextStyle(fontSize:11,color:Colors.white70),h1:const TextStyle(fontSize:15,fontWeight:FontWeight.bold),h2:const TextStyle(fontSize:13,fontWeight:FontWeight.bold))):Text(e.body,maxLines:2,overflow:TextOverflow.ellipsis)),onTap:()=>_edit(e),trailing:IconButton(icon:const Icon(Icons.delete_outline),onPressed:()=>_delete(e))));});
+  Widget _itemList(List<DiaryItem> list) => list.isEmpty
+      ? const Center(child: Text('Nenhum registro', style: TextStyle(color: Colors.white38)))
+      : ListView.builder(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 90),
+          itemCount: list.length,
+          itemBuilder: (ctx, i) {
+            final item = list[i];
+            if (item.kind == 'list') {
+              final entries = _decodeList(item.body);
+              return Card(
+                child: ExpansionTile(
+                  leading: const Icon(Icons.checklist),
+                  title: Text(item.title),
+                  subtitle: Text('\${entries.where((entry) => entry['done'] == true).length}/\${entries.length} concluídos'),
+                  children: entries.asMap().entries.map((entry) => CheckboxListTile(
+                    dense: true,
+                    value: entry.value['done'] == true,
+                    title: Text(entry.value['text'].toString()),
+                    onChanged: (value) => _toggleListEntry(item, entry.key, value ?? false),
+                  )).toList(),
+                ),
+              );
+            }
+            return Card(
+              child: ListTile(
+                leading: item.kind == 'note'
+                    ? const Icon(Icons.notes)
+                    : Checkbox(value: item.done, onChanged: (value) => _done(item, value ?? false)),
+                title: Text(item.title, style: TextStyle(decoration: item.done ? TextDecoration.lineThrough : null)),
+                subtitle: item.body.isEmpty
+                    ? null
+                    : item.kind == 'note'
+                        ? MarkdownBody(data: item.body, shrinkWrap: true)
+                        : Text(item.body, maxLines: 2, overflow: TextOverflow.ellipsis),
+                onTap: () => _edit(item),
+                trailing: IconButton(icon: const Icon(Icons.delete_outline), onPressed: () => _delete(item)),
+              ),
+            );
+          },
+        );
+
+  String _listLines(String raw) => _decodeList(raw).map((entry) => entry['text'].toString()).join('\n');
+
+  List<Map<String, dynamic>> _decodeList(String raw) {
+    try {
+      return (jsonDecode(raw) as List).map((entry) => Map<String, dynamic>.from(entry as Map)).toList();
+    } catch (_) {
+      return raw.split('\n').where((line) => line.trim().isNotEmpty)
+          .map((line) => <String, dynamic>{'text': line, 'done': false}).toList();
+    }
+  }
+
+  Future<void> _toggleListEntry(DiaryItem item, int index, bool value) async {
+    final entries = _decodeList(item.body);
+    entries[index]['done'] = value;
+    await DiaryDb.instance.save(item.copy(body: jsonEncode(entries), updatedAt: DateTime.now().toUtc().millisecondsSinceEpoch));
+    await _refresh();
+  }
   Future<void> _showCreateMenu() async { final choice=await showModalBottomSheet<String>(context:context,builder:(ctx)=>SafeArea(child:Wrap(children:[for(final entry in <String,String>{'task':'Tarefa','note':'Nota','list':'Lista de tarefas'}.entries) ListTile(leading:Icon(entry.key=='note'?Icons.notes:entry.key=='list'?Icons.checklist:Icons.task_alt),title:Text(entry.value),onTap:()=>Navigator.pop(ctx,entry.key))]))); if(choice!=null) _create(choice,date:choice=='task'&&tab==0&&view!='Sem data'?focus:null); }
   Future<void> _setTheme(String value) async {themeName.value=value;final p=await SharedPreferences.getInstance();await p.setString('theme',value);}
   Future<void> _syncDialog() async {final url=TextEditingController(),token=TextEditingController();final p=await SharedPreferences.getInstance();url.text=p.getString('sync_url')??'';token.text=p.getString('sync_token')??'';final ok=await showDialog<bool>(context:context,builder:(ctx)=>AlertDialog(title:const Text('SYNC DEVICE'),content:Column(mainAxisSize:MainAxisSize.min,children:[TextField(controller:url,decoration:const InputDecoration(labelText:'Host URL')),TextField(controller:token,obscureText:true,decoration:const InputDecoration(labelText:'Token'))]),actions:[TextButton(onPressed:()=>Navigator.pop(ctx,false),child:const Text('Fechar')),FilledButton(onPressed:()=>Navigator.pop(ctx,true),child:const Text('Sincronizar'))]));if(ok==true){await p.setString('sync_url',url.text.trim());await p.setString('sync_token',token.text);try{await SyncService(url.text.trim(),token.text).sync(await DiaryDb.instance.all(),DiaryDb.instance.save);if(mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content:Text('Sincronização concluída')));_refresh();}}catch(e){if(mounted)ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text('Falha na sincronização: $e')));}}}
