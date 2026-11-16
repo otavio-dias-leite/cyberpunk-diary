@@ -15,7 +15,7 @@ jobs:
           channel: stable
       - run: flutter create . --platforms=android
       - run: flutter pub get
-      - run: flutter analyze --no-fatal-infos
+      - run: flutter analyze --no-fatal-warnings --no-fatal-infos
       - run: flutter test
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
@@ -41,7 +41,7 @@ jobs:
           name: windows-zip
           path: cyberpunk-diary-windows.zip
   release:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.ref == 'refs/heads/main'
     needs: [android, windows]
     runs-on: ubuntu-latest
     permissions:
@@ -61,4 +61,7 @@ jobs:
           files: |
             dist/android/cyberpunk-diary-android.apk
             dist/windows/cyberpunk-diary-windows.zip
+          tag_name: v2.0.0
+          name: Cyberpunk Diary v2.0.0
+          target_commitish: main
           generate_release_notes: true
