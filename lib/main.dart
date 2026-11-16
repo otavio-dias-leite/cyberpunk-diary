@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import 'data.dart';
@@ -28,7 +29,7 @@ ThemeData buildTheme(String name) {
   return ThemeData(
     brightness: Brightness.dark, scaffoldBackgroundColor: bg,
     colorScheme: ColorScheme.dark(primary: accent, secondary: accent, surface: const Color(0xFF15171D)),
-    fontFamily: 'Orbitron', useMaterial3: true,
+    textTheme: GoogleFonts.orbitronTextTheme(ThemeData.dark().textTheme), fontFamily: GoogleFonts.orbitron().fontFamily, useMaterial3: true,
     appBarTheme: const AppBarTheme(backgroundColor: Color(0xFF0D0E13), elevation: 0),
     cardTheme: CardThemeData(color: const Color(0xFF14161D), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: accent.withValues(alpha: .22)))),
     inputDecorationTheme: InputDecorationTheme(filled: true, fillColor: const Color(0xFF171920), border: OutlineInputBorder(borderRadius: BorderRadius.circular(10))),
