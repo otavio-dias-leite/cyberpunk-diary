@@ -103,7 +103,23 @@ class _DiaryHomeState extends State<DiaryHome> {
           IconButton(onPressed:()=>setState(()=>focus=DateTime(focus.year,focus.month+1,focus.day)),icon:const Icon(Icons.chevron_right)),
           IconButton(onPressed:()=>setState(()=>focus=DateTime.now()),icon:const Icon(Icons.today)),
         ])),
-        Padding(padding:const EdgeInsets.symmetric(horizontal:12),child:Row(children:['Semana','Mês','Dia','Sem data'].map((v)=>Expanded(child:Padding(padding:const EdgeInsets.symmetric(horizontal:2),child:ChoiceChip(label:Center(child:Text(v,style:const TextStyle(fontSize:10))),selected:view==v,onSelected:(_)=>setState(()=>view=v)))).toList())),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: Row(
+            children: ['Semana', 'Mês', 'Dia', 'Sem data'].map((option) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 2),
+                  child: ChoiceChip(
+                    label: Center(child: Text(option, style: const TextStyle(fontSize: 10))),
+                    selected: view == option,
+                    onSelected: (_) => setState(() => view = option),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
         if(view=='Mês') _monthGrid(accent),
         if(view=='Semana') _weekStrip(accent),
         if(view=='Dia') Padding(padding:const EdgeInsets.all(10),child:Text(DateFormat('EEEE, dd MMMM','pt_BR').format(focus).toUpperCase())),
@@ -116,10 +132,80 @@ class _DiaryHomeState extends State<DiaryHome> {
     final first=DateTime(focus.year,focus.month,1); final start=first.subtract(Duration(days:first.weekday%7));
     return Padding(padding:const EdgeInsets.symmetric(horizontal:10),child:Column(children:[
       Row(children:['D','S','T','Q','Q','S','S'].map((d)=>Expanded(child:Center(child:Text(d,style:const TextStyle(fontSize:10,color:Colors.white54))))).toList()),
-      for(int w=0;w<6;w++) Row(children:List.generate(7,(d){final date=start.add(Duration(days:w*7+d));final selected=DateUtils.isSameDay(date,focus);final count=visible.where((e)=>e.dueAt!=null&&DateUtils.isSameDay(DateTime.fromMillisecondsSinceEpoch(e.dueAt!),date)).length;return Expanded(child:InkWell(onTap:()=>setState(()=>focus=date),child:Container(height:35,margin:const EdgeInsets.all(2),decoration:BoxDecoration(color:selected?accent.withValues(alpha:.18):null,border:selected?Border.all(color:accent):null,borderRadius:BorderRadius.circular(7)),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[Text('${date.day}',style:TextStyle(fontSize:11,color:date.month==focus.month?Colors.white:Colors.white30)),if(count>0)Container(width:4,height:4,decoration:BoxDecoration(color:accent,shape:BoxShape.circle))])));})) ,
+      for (int week = 0; week < 6; week++)
+        Row(
+          children: List.generate(7, (dayIndex) {
+            final date = start.add(Duration(days: week * 7 + dayIndex));
+            final selected = DateUtils.isSameDay(date, focus);
+            final count = visible.where((item) =>
+              item.dueAt != null &&
+              DateUtils.isSameDay(DateTime.fromMillisecondsSinceEpoch(item.dueAt!), date)
+            ).length;
+            return Expanded(
+              child: InkWell(
+                onTap: () => setState(() => focus = date),
+                child: Container(
+                  height: 35,
+                  margin: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    color: selected ? accent.withValues(alpha: .18) : null,
+                    border: selected ? Border.all(color: accent) : null,
+                    borderRadius: BorderRadius.circular(7),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('${date.day}', style: TextStyle(
+                        fontSize: 11,
+                        color: date.month == focus.month ? Colors.white : Colors.white30,
+                      )),
+                      if (count > 0)
+                        Container(width: 4, height: 4, decoration: BoxDecoration(
+                          color: accent, shape: BoxShape.circle,
+                        )),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
     ]));
   }
-  Widget _weekStrip(Color accent){final start=focus.subtract(Duration(days:focus.weekday%7));return SizedBox(height:66,child:Row(children:List.generate(7,(i){final d=start.add(Duration(days:i));final sel=DateUtils.isSameDay(d,focus);return Expanded(child:InkWell(onTap:()=>setState(()=>focus=d),child:Container(margin:const EdgeInsets.all(3),decoration:BoxDecoration(color:sel?accent.withValues(alpha:.18):null,borderRadius:BorderRadius.circular(9),border:sel?Border.all(color:accent):null),child:Column(mainAxisAlignment:MainAxisAlignment.center,children:[Text(DateFormat('E','pt_BR').format(d).toUpperCase(),style:const TextStyle(fontSize:9)),Text('${d.day}',style:const TextStyle(fontWeight:FontWeight.bold))])));}))); }
+  Widget _weekStrip(Color accent) {
+    final start = focus.subtract(Duration(days: focus.weekday % 7));
+    return SizedBox(
+      height: 66,
+      child: Row(
+        children: List.generate(7, (index) {
+          final date = start.add(Duration(days: index));
+          final selected = DateUtils.isSameDay(date, focus);
+          return Expanded(
+            child: InkWell(
+              onTap: () => setState(() => focus = date),
+              child: Container(
+                margin: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: selected ? accent.withValues(alpha: .18) : null,
+                  borderRadius: BorderRadius.circular(9),
+                  border: selected ? Border.all(color: accent) : null,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(DateFormat('E', 'pt_BR').format(date).toUpperCase(),
+                      style: const TextStyle(fontSize: 9)),
+                    Text('${date.day}',
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
+    );
+  }
   Widget _itemList(List<DiaryItem> list)=>list.isEmpty?const Center(child:Text('Nenhum registro',style:TextStyle(color:Colors.white38))):ListView.builder(padding:const EdgeInsets.fromLTRB(12,8,12,90),itemCount:list.length,itemBuilder:(ctx,i){final e=list[i];return Card(child:ListTile(leading:e.kind=='note'?const Icon(Icons.notes):Checkbox(value:e.done,onChanged:(v)=>_done(e,v??false)),title:Text(e.title,style:TextStyle(decoration:e.done?TextDecoration.lineThrough:null)),subtitle:e.body.isEmpty?null:Text(e.body,maxLines:2,overflow:TextOverflow.ellipsis),onTap:()=>_edit(e),trailing:IconButton(icon:const Icon(Icons.delete_outline),onPressed:()=>_delete(e))));});
   Future<void> _showCreateMenu() async { final choice=await showModalBottomSheet<String>(context:context,builder:(ctx)=>SafeArea(child:Wrap(children:[for(final entry in <String,String>{'task':'Tarefa','note':'Nota','list':'Lista de tarefas'}.entries) ListTile(leading:Icon(entry.key=='note'?Icons.notes:entry.key=='list'?Icons.checklist:Icons.task_alt),title:Text(entry.value),onTap:()=>Navigator.pop(ctx,entry.key))]))); if(choice!=null) _create(choice,date:choice=='task'&&tab==0&&view!='Sem data'?focus:null); }
   Future<void> _setTheme(String value) async {themeName.value=value;final p=await SharedPreferences.getInstance();await p.setString('theme',value);}
