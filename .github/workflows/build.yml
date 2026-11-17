@@ -49,7 +49,7 @@ jobs:
             "scripts": {
               "desktop": "electron .",
               "icons": "node tools/generate-icons.cjs",
-          "build:web": "esbuild tools/native-location-entry.js --bundle --format=iife --outfile=web/assets/native-location.bundle.js",
+            "build:web": "esbuild tools/native-location-entry.js --bundle --format=iife --outfile=web/assets/native-location.bundle.js",
               "build:windows": "electron-builder --win nsis --publish never"
             },
             "dependencies": {
