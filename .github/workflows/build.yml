@@ -1,93 +1,226 @@
-name: Build
+name: Cyberpunk Diary 1.0 — Build and Release
+
 on:
   push:
     branches: [main]
-    tags: ['v*']
-  pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cyberpunk-diary-release
+  cancel-in-progress: false
+
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      source_sha: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Extract web app and replace legacy scaffold
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP='Cyberpunk_Diary_8.4_Links_Funcionais (1).zip'
+          test -f "$ZIP"
+          rm -rf web
+          mkdir -p web
+          unzip -q "$ZIP" -d web
+          rm -f "$ZIP"
+          rm -rf lib test sync-host docs
+          rm -f pubspec.yaml analysis_options.yaml installer.iss
+          mkdir -p desktop
+          cat > package.json <<'EOF'
+          {
+            "name": "cyberpunk-diary",
+            "version": "1.0.0",
+            "private": true,
+            "description": "Cyberpunk Diary 1.0 — offline-first planner",
+            "main": "desktop/main.cjs",
+            "scripts": {
+              "desktop": "electron .",
+              "build:windows": "electron-builder --win nsis"
+            },
+            "dependencies": {
+              "@capacitor/android": "^7.4.3",
+              "@capacitor/core": "^7.4.3"
+            },
+            "devDependencies": {
+              "@capacitor/cli": "^7.4.3",
+              "electron": "^38.2.0",
+              "electron-builder": "^26.0.12"
+            },
+            "build": {
+              "appId": "br.com.otaviodiasleite.cyberpunkdiary",
+              "productName": "Cyberpunk Diary",
+              "directories": { "output": "dist/windows" },
+              "files": ["desktop/**/*", "web/**/*", "server/**/*", "package.json"],
+              "win": { "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.0.0.${ext}" },
+              "nsis": {
+                "oneClick": false,
+                "allowToChangeInstallationDirectory": true,
+                "createDesktopShortcut": true,
+                "createStartMenuShortcut": true
+              }
+            }
+          }
+          EOF
+          cat > capacitor.config.json <<'EOF'
+          {
+            "appId": "br.com.otaviodiasleite.cyberpunkdiary",
+            "appName": "Cyberpunk Diary",
+            "webDir": "web",
+            "server": { "androidScheme": "https" }
+          }
+          EOF
+          cat > desktop/main.cjs <<'EOF'
+          const { app, BrowserWindow, shell } = require('electron');
+          const path = require('node:path');
+          function createWindow() {
+            const win = new BrowserWindow({
+              width: 1440, height: 920, minWidth: 900, minHeight: 620,
+              backgroundColor: '#0b0c0f',
+              autoHideMenuBar: true,
+              webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
+            });
+            win.loadFile(path.join(__dirname, '..', 'web', 'index.html'));
+            win.webContents.setWindowOpenHandler(({ url }) => {
+              if (/^https?:\/\//i.test(url)) shell.openExternal(url);
+              return { action: 'deny' };
+            });
+          }
+          app.whenReady().then(() => {
+            createWindow();
+            app.on('activate', () => {
+              if (BrowserWindow.getAllWindows().length === 0) createWindow();
+            });
+          });
+          app.on('window-all-closed', () => {
+            if (process.platform !== 'darwin') app.quit();
+          });
+          EOF
+          cat > .gitignore <<'EOF'
+          node_modules/
+          dist/
+          android/.gradle/
+          android/build/
+          android/app/build/
+          .DS_Store
+          EOF
+          cat > README.md <<'EOF'
+          # Cyberpunk Diary 1.0
+
+          Agenda pessoal offline-first para Windows e Android. Esta versão consolida a aplicação web 8.4 enviada no repositório e publica o produto como versão 1.0.0.
+
+          ## Funcionalidades
+          - Visões Agora, Dia, Semana e Mês.
+          - Tarefas, recorrências, tags, hábitos e notas Markdown.
+          - Temas Cyberpunk Red, Soulkiller, Cyberpunk, Midnight e Synthwave.
+          - Backup/importação e armazenamento local automático.
+          - Links funcionais em descrições, editor visual e notas.
+          - Sincronização P2P opcional por servidor de sinalização Node.js.
+
+          ## Downloads
+          Os instaladores Windows e Android são publicados em GitHub Releases após a compilação do workflow Cyberpunk Diary 1.0.
+
+          ## Executar localmente
+          Requer Node.js 20 ou superior.
+          npm install
+          npm run desktop
+
+          Para Android, com Android SDK e Java 21:
+          npx cap add android
+          npx cap sync android
+          cd android && ./gradlew assembleDebug
+
+          ## Dados
+          Os dados são mantidos localmente no armazenamento do aplicativo/navegador. Faça backups regulares pelo menu Backup / Importar. O servidor de sinalização não é um banco de dados e não armazena as notas ou tarefas.
+          EOF
+          npm install
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Replace legacy app with Cyberpunk Diary 1.0 web edition [skip ci]" || true
+          git push origin HEAD:main
+      - name: Expose prepared commit
+        id: commit
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
   android:
+    needs: prepare
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
         with:
-          channel: stable
-      - run: flutter create . --platforms=android
-      - run: flutter pub get
-      - run: flutter analyze --no-fatal-warnings --no-fatal-infos
-      - run: flutter test
-      - run: flutter build apk --release
+          ref: ${{ needs.prepare.outputs.source_sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npm ci
+      - name: Generate Android project and sync web assets
+        run: |
+          npx cap add android
+          npx cap sync android
+      - name: Build installable Android APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: android-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          name: CyberpunkDiary-Android-1.0.0
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
   windows:
+    needs: prepare
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
         with:
-          channel: stable
-      - run: flutter config --enable-windows-desktop
-      - run: flutter create . --platforms=windows
-      - run: flutter pub get
-      - run: flutter analyze --no-fatal-warnings --no-fatal-infos
-      - run: flutter build windows --release
-      - run: Compress-Archive -Path build/windows/x64/runner/Release/* -DestinationPath cyberpunk-diary-windows.zip
-        shell: pwsh
-      - run: choco install innosetup --no-progress -y
-        shell: pwsh
-      - run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" installer.iss'
-        shell: pwsh
+          ref: ${{ needs.prepare.outputs.source_sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build Windows installer
+        run: npm run build:windows
       - uses: actions/upload-artifact@v4
         with:
-          name: windows-installer
-          path: CyberpunkDiary-Setup-1.0.0.exe
-      - uses: actions/upload-artifact@v4
-        with:
-          name: windows-zip
-          path: cyberpunk-diary-windows.zip
-  sync-host:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-      - working-directory: sync-host
-        run: go mod tidy
-      - working-directory: sync-host
-        run: go test ./...
-      - working-directory: sync-host
-        run: go vet ./...
+          name: CyberpunkDiary-Windows-1.0.0
+          path: dist/windows/*.exe
+          if-no-files-found: error
+
   release:
-    if: github.ref == 'refs/heads/main'
-    needs: [android, windows, sync-host]
+    needs: [prepare, android, windows]
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: android-apk
-          path: dist/android
+          name: CyberpunkDiary-Android-1.0.0
+          path: release
       - uses: actions/download-artifact@v4
         with:
-          name: windows-installer
-          path: dist/windows
-      - uses: actions/download-artifact@v4
-        with:
-          name: windows-zip
-          path: dist/portable
-      - run: mv dist/android/app-release.apk dist/android/CyberpunkDiary-Android-1.0.0.apk
-      - uses: softprops/action-gh-release@v2
-        with:
-          files: |
-            dist/android/CyberpunkDiary-Android-1.0.0.apk
-            dist/windows/CyberpunkDiary-Setup-1.0.0.exe
-            dist/portable/cyberpunk-diary-windows.zip
-          tag_name: v1.0.0
-          name: Cyberpunk Diary v1.0.0
-          target_commitish: main
-          generate_release_notes: true
+          name: CyberpunkDiary-Windows-1.0.0
+          path: release
+      - name: Publish version 1.0.0
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1.0.0 release/* \
+            --repo "${GITHUB_REPOSITORY}" \
+            --title "Cyberpunk Diary 1.0.0" \
+            --notes "Primeiro lançamento consolidado do Cyberpunk Diary 1.0. Aplicação web 8.4 empacotada para Android e Windows."
