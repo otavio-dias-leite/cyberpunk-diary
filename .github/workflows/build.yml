@@ -64,7 +64,7 @@ jobs:
               "productName": "Cyberpunk Diary",
               "directories": { "output": "dist/windows" },
               "files": ["desktop/**/*", "web/**/*", "server/**/*", "package.json"],
-              "win": { "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.0.0.${ext}" },
+              "win": { "icon": "web/assets/icon.ico", "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.0.0.${ext}" },
               "nsis": {
                 "oneClick": false,
                 "allowToChangeInstallationDirectory": true,
@@ -146,6 +146,7 @@ jobs:
           Os dados são mantidos localmente no armazenamento do aplicativo/navegador. Faça backups regulares pelo menu Backup / Importar. O servidor de sinalização não é um banco de dados e não armazena as notas ou tarefas.
           EOF
           npm install
+          npm run icons
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -174,6 +175,7 @@ jobs:
       - name: Generate Android project and sync web assets
         run: |
           npx cap add android
+          npm run icons
           npx cap sync android
       - name: Generate unified leaf icon
         run: npm run icons
