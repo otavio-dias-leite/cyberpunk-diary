@@ -1,27 +1,29 @@
-# Cyberpunk Diary 1.0
+# Cyberpunk Diary 1.2.0
 
-Agenda pessoal offline-first para Windows e Android. Esta versão consolida a aplicação web 8.4 enviada no repositório e publica o produto como versão 1.0.0.
+Agenda pessoal offline-first para Windows, Android e navegador.
 
 ## Funcionalidades
 - Visões Agora, Dia, Semana e Mês.
 - Tarefas, recorrências, tags, hábitos e notas Markdown.
 - Temas Cyberpunk Red, Soulkiller, Cyberpunk, Midnight e Synthwave.
 - Backup/importação e armazenamento local automático.
-- Links funcionais em descrições, editor visual e notas.
-- Sincronização P2P opcional por servidor de sinalização Node.js.
+- Sincronização P2P opcional.
+
+## Versão 1.2.0
+- Barra superior fixa com a identidade Cyberpunk Diary.
+- Notificações passam a ocupar uma faixa própria abaixo do cabeçalho, sem cobrir botões, campos ou conteúdo.
 
 ## Downloads
-Os instaladores Windows e Android são publicados em GitHub Releases após a compilação do workflow Cyberpunk Diary 1.0.
+Os instaladores Android e Windows são publicados em GitHub Releases após a compilação do workflow.
 
 ## Executar localmente
 Requer Node.js 20 ou superior.
-npm install
-npm run desktop
+`npm install`
+`npm run desktop`
 
 Para Android, com Android SDK e Java 21:
-npx cap add android
-npx cap sync android
-cd android && ./gradlew assembleDebug
+`npx cap add android`
+`npx cap sync android`
+`cd android && ./gradlew assembleDebug`
 
-## Dados
-Os dados são mantidos localmente no armazenamento do aplicativo/navegador. Faça backups regulares pelo menu Backup / Importar. O servidor de sinalização não é um banco de dados e não armazena as notas ou tarefas.
+Os dados são mantidos localmente no armazenamento do aplicativo/navegador. Faça backups regulares pelo menu Backup / Importar.
