@@ -1,13 +1,13 @@
 {
   "name": "cyberpunk-diary",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
-  "description": "Cyberpunk Diary 1.1 — offline-first planner",
+  "description": "Cyberpunk Diary 1.2.0 — offline-first planner",
   "main": "desktop/main.cjs",
   "scripts": {
     "desktop": "electron .",
     "icons": "node tools/generate-icons.cjs",
-  "build:web": "esbuild tools/native-location-entry.js --bundle --format=iife --outfile=web/assets/native-location.bundle.js",
+    "build:web": "esbuild tools/native-location-entry.js --bundle --format=iife --outfile=web/assets/native-location.bundle.js",
     "build:windows": "electron-builder --win nsis --publish never"
   },
   "dependencies": {
@@ -26,9 +26,22 @@
   "build": {
     "appId": "br.com.otaviodiasleite.cyberpunkdiary",
     "productName": "Cyberpunk Diary",
-    "directories": { "output": "dist/windows" },
-    "files": ["desktop/**/*", "web/**/*", "server/**/*", "package.json"],
-    "win": { "icon": "web/assets/icon.ico", "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.1.0.${ext}" },
+    "directories": {
+      "output": "dist/windows"
+    },
+    "files": [
+      "desktop/**/*",
+      "web/**/*",
+      "server/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "web/assets/icon.ico",
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "CyberpunkDiary-Setup-1.2.0.${ext}"
+    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
