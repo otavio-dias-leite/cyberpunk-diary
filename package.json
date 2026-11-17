@@ -1,8 +1,8 @@
 {
   "name": "cyberpunk-diary",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "private": true,
-  "description": "Cyberpunk Diary 1.3.2 — offline-first planner",
+  "description": "Cyberpunk Diary 1.4.0 — icon dock and swipe navigation",
   "main": "desktop/main.cjs",
   "scripts": {
     "desktop": "electron .",
@@ -41,7 +41,7 @@
       "target": [
         "nsis"
       ],
-      "artifactName": "CyberpunkDiary-Setup-1.3.2.${ext}"
+      "artifactName": "CyberpunkDiary-Setup-1.4.0.${ext}"
     },
     "nsis": {
       "oneClick": false,

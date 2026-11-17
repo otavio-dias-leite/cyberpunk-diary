@@ -614,3 +614,23 @@ img,canvas,svg{max-width:100%}
 @media(prefers-reduced-motion:reduce){
   .sidebar,.sidebar-scrim,.workspace,.panel{transition:none!important;animation:none!important}
 }
+
+
+/* 1.4.0 — Instagram-inspired icon dock and horizontal page navigation */
+.sidebar,.sidebar-scrim,#menuBtn{display:none!important}
+.app{display:block;min-height:100dvh;padding-bottom:calc(82px + env(safe-area-inset-bottom,0px))}
+.workspace{min-height:100dvh}
+.top{position:sticky;top:0;z-index:20;backdrop-filter:blur(18px);background:color-mix(in srgb,var(--aside) 92%,transparent);border-bottom:1px solid var(--stroke)}
+.top-actions{gap:7px}.top-actions button{padding:7px 10px;min-height:34px}.top-actions #syncDot{font-size:8px;color:var(--alt)}
+#theme{max-width:105px;padding:7px 6px;border:1px solid var(--stroke);border-radius:7px;background:var(--panel);font-size:10px}
+.app-dock{position:fixed;z-index:40;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);width:min(620px,calc(100vw - 24px));display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;padding:8px;background:color-mix(in srgb,var(--aside) 94%,transparent);border:1px solid var(--stroke);border-radius:17px;box-shadow:0 12px 40px #0009;backdrop-filter:blur(20px)}
+.app-dock button{min-width:0;min-height:52px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:transparent;border:1px solid transparent;border-radius:11px;color:var(--muted)}
+.app-dock button svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app-dock button:first-child svg{fill:none}.app-dock button span{font:500 9px Orbitron,sans-serif;line-height:1.1}
+.app-dock button.active{color:var(--accent);background:var(--soft);border-color:color-mix(in srgb,var(--accent) 35%,transparent)}
+.app-dock button.active svg{filter:drop-shadow(0 0 5px var(--soft))}
+main{padding-bottom:22px;touch-action:pan-y}
+@media(min-width:851px){.app{padding-bottom:92px}.app-dock{bottom:18px}.top{padding-inline:clamp(18px,2vw,32px)}main{max-width:1500px}}
+@media(max-width:600px){.top{height:calc(58px + env(safe-area-inset-top,0px));min-height:calc(58px + env(safe-area-inset-top,0px));padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}.top-brand{font-size:10px}.top-brand svg{width:23px;height:23px}.top-meta{gap:5px}.top-meta>#heading{display:none}.top-actions{gap:4px}.top-actions #todayText{display:none}#theme{max-width:76px;font-size:9px}.top-actions button{padding:6px 8px;min-width:34px}.app-dock{bottom:calc(7px + env(safe-area-inset-bottom,0px));width:calc(100vw - 18px);padding:6px;gap:2px;border-radius:15px}.app-dock button{min-height:48px}.app-dock button svg{width:20px;height:20px}.app-dock button span{font-size:8px}}
+@media(orientation:landscape) and (max-height:500px){.app{padding-bottom:70px}.app-dock{width:min(520px,calc(100vw - 30px));bottom:5px;padding:4px}.app-dock button{min-height:40px;flex-direction:row}.app-dock button span{font-size:9px}.app-dock button svg{width:18px;height:18px}}
+@media(prefers-reduced-motion:reduce){.app-dock,.app-dock button{transition:none!important}}
