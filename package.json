@@ -1,8 +1,8 @@
 {
   "name": "cyberpunk-diary",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "private": true,
-  "description": "Cyberpunk Diary 1.4.0 — icon dock and swipe navigation",
+  "description": "Cyberpunk Diary 1.5.0 — reliability and cross-platform release",
   "main": "desktop/main.cjs",
   "scripts": {
     "desktop": "electron .",
@@ -41,7 +41,7 @@
       "target": [
         "nsis"
       ],
-      "artifactName": "CyberpunkDiary-Setup-1.4.0.${ext}"
+      "artifactName": "CyberpunkDiary-Setup-1.5.0.${ext}"
     },
     "nsis": {
       "oneClick": false,
