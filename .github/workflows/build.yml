@@ -49,18 +49,21 @@ jobs:
             "scripts": {
               "desktop": "electron .",
               "icons": "node tools/generate-icons.cjs",
+    "build:web": "esbuild tools/native-location-entry.js --bundle --format=iife --outfile=web/assets/native-location.bundle.js",
               "build:windows": "electron-builder --win nsis --publish never"
             },
             "dependencies": {
               "@capacitor/android": "^7.4.3",
-              "@capacitor/core": "^7.4.3"
+              "@capacitor/core": "^7.4.3",
+    "@capacitor/geolocation": "^7.1.5"
             },
             "devDependencies": {
               "@capacitor/cli": "^7.4.3",
               "electron": "^38.2.0",
               "electron-builder": "^26.0.12",
               "sharp": "^0.34.4",
-              "png-to-ico": "^2.1.8"
+              "png-to-ico": "^2.1.8",
+    "esbuild": "^0.25.10"
             },
             "build": {
               "appId": "br.com.otaviodiasleite.cyberpunkdiary",
@@ -151,6 +154,7 @@ jobs:
           EOF
           npm install
           npm run icons
+          npm run build:web
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
@@ -180,6 +184,7 @@ jobs:
         run: |
           npx cap add android
           npm run icons
+          npm run build:web
           npx cap sync android
       - name: Build installable Android APK
         run: |
@@ -204,8 +209,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Generate unified leaf icon
+      - name: Generate app icons and native GPS bridge
         run: npm run icons
+          npm run build:web
       - name: Build Windows installer
         run: npm run build:windows
       - uses: actions/upload-artifact@v4
