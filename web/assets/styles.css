@@ -426,3 +426,17 @@ button,.task,.calendar-event,.note-row,.daybox{transition:background-color .18s 
 /* Notificações não cobrem imagens nem controles na parte inferior da tela. */
 @supports(padding:env(safe-area-inset-bottom)){body{padding-bottom:env(safe-area-inset-bottom)}}
 @media(max-width:600px){.toast{top:calc(env(safe-area-inset-top,0px) + 10px);width:calc(100vw - 24px);max-width:none;font-size:12px;text-align:center}}
+
+
+/* 1.2.0 — top identity bar and non-overlapping notifications */
+.top{height:66px;min-height:66px;justify-content:flex-start;gap:14px;background:var(--aside);position:relative;z-index:2}
+.top-brand{display:flex;align-items:center;gap:9px;white-space:nowrap;font:700 13px Orbitron,sans-serif;letter-spacing:.055em;color:var(--text)}
+.top-brand svg{width:30px;height:30px;color:var(--accent);flex:none}
+.top-brand b{color:var(--accent)}
+.top-meta{margin-left:auto;display:flex;align-items:center;gap:14px;min-width:0}
+.top-meta>#heading{font:600 11px Orbitron,sans-serif;color:var(--accent)}
+#toast.toast{position:static;inset:auto;transform:none;z-index:auto;display:none;flex:none;width:auto;max-width:none;max-height:130px;overflow:auto;margin:10px 22px 0;padding:10px 14px;box-shadow:none;pointer-events:auto;text-align:left}
+#toast.toast.show{display:block;animation:toastFlowIn .16s ease-out both}
+@keyframes toastFlowIn{from{opacity:0;max-height:0;padding-block:0;margin-top:0}to{opacity:1;max-height:130px}}
+@media(max-width:850px){.top{padding:0 12px;gap:9px}.top-brand{font-size:11px}.top-brand svg{width:26px;height:26px}.top-meta{gap:7px}#toast.toast{margin:8px 12px 0;padding:9px 11px}}
+@media(max-width:480px){.top{height:58px;min-height:58px}.top-brand{font-size:10px;gap:6px}.top-brand svg{width:24px;height:24px}.top-meta>#heading{font-size:9px}#toast.toast{font-size:11px}}
