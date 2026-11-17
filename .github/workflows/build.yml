@@ -235,6 +235,9 @@ jobs:
           if gh release view v1.0.0 --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
             gh release upload v1.0.0 release/* --repo "${GITHUB_REPOSITORY}" --clobber
           else
+            if gh release view v1.0.0 --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
+            gh release upload v1.0.0 release/* --repo "${GITHUB_REPOSITORY}" --clobber
+          else
             gh release create v1.0.0 release/* \
               --repo "${GITHUB_REPOSITORY}" \
               --title "Cyberpunk Diary 1.0.0" \
