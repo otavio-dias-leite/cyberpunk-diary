@@ -1,6 +1,6 @@
-# Cyberpunk Diary 1.2.1
+# Cyberpunk Diary 1.3.0
 
-Agenda pessoal offline-first para Windows, Android e navegador. A versão 1.2.1 adiciona uma barra superior permanente e notificações em faixa própria, sem sobrepor a interface.
+Agenda pessoal offline-first para Windows, Android e navegador. A versão 1.3.0 adiciona uma barra superior permanente e notificações em faixa própria, sem sobrepor a interface.
 
 ## Funcionalidades
 - Visões Agora, Dia, Semana e Mês.
@@ -11,7 +11,7 @@ Agenda pessoal offline-first para Windows, Android e navegador. A versão 1.2.1 
 - Sincronização P2P opcional por servidor de sinalização Node.js.
 
 ## Downloads
-Os instaladores Windows e Android são publicados em GitHub Releases após a compilação do workflow Cyberpunk Diary 1.2.1.
+Os instaladores Windows e Android são publicados em GitHub Releases após a compilação do workflow Cyberpunk Diary 1.3.0.
 
 ## Executar localmente
 Requer Node.js 20 ou superior.

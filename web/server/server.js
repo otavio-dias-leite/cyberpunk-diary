@@ -29,7 +29,7 @@ server.on('upgrade',(req,socket,head)=>{
 });
 const send=(ws,data)=>{if(ws.readyState===WebSocket.OPEN)ws.send(JSON.stringify(data))};
 const allowedId=/^[a-zA-Z0-9-]{16,128}$/;
-function leave(ws){if(!ws.room)return;const room=rooms.get(ws.room);room?.delete(ws.device);if(room?.size===0)rooms.delete(ws.room);else for(const other of room.values())send(other,{type:'left',id:ws.device});ws.room=null}
+function leave(ws){if(!ws.room)return;const room=rooms.get(ws.room);room?.delete(ws.device);if(room?.size===0)rooms.delete(ws.room);else for(const other of room.values())send(other.ws,{type:'left',id:ws.device});ws.room=null}
 wss.on('connection',ws=>{
   ws.room=null;ws.device=null;let packets=0;
   const reset=setInterval(()=>{packets=0},1000);
@@ -38,16 +38,16 @@ wss.on('connection',ws=>{
     let m;try{m=JSON.parse(String(raw))}catch{return}
     if(m.type==='join'){
       if(!allowedId.test(m.room)||!allowedId.test(m.device)){send(ws,{type:'error',message:'ID inválido'});return}
-      leave(ws);ws.room=m.room;ws.device=m.device;
+      leave(ws);ws.room=m.room;ws.device=m.device;ws.deviceName=String(m.name||'Cyberpunk Diary').slice(0,40);
       let room=rooms.get(ws.room);if(!room){if(rooms.size>=1000){send(ws,{type:'error',message:'Servidor ocupado'});ws.close();return}rooms.set(ws.room,room=new Map())}
       if(room.size>=15){send(ws,{type:'error',message:'Sala cheia'});ws.close();return}
       if(room.has(ws.device)){send(ws,{type:'error',message:'Dispositivo duplicado'});ws.close();return}
-      const ids=[...room.keys()];room.set(ws.device,ws);send(ws,{type:'peers',ids});for(const p of room.values())if(p!==ws)send(p,{type:'joined',id:ws.device});return;
+      const devices=[...room.entries()].map(([id,entry])=>({id,name:entry.name}));room.set(ws.device,{ws,name:ws.deviceName});send(ws,{type:'peers',devices});for(const p of room.values())if(p.ws!==ws)send(p.ws,{type:'joined',id:ws.device,name:ws.deviceName});return;
     }
     if(m.type==='signal'&&ws.room&&typeof m.to==='string'){
       const body=m.body;
       if(!body||typeof body!=='object')return;
-      const target=rooms.get(ws.room)?.get(m.to);
+      const target=rooms.get(ws.room)?.get(m.to)?.ws;
       if(target&&target!==ws)send(target,{type:'signal',from:ws.device,body});
     }
   });
