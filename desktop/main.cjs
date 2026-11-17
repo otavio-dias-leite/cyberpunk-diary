@@ -4,6 +4,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1440, height: 920, minWidth: 900, minHeight: 620,
     backgroundColor: '#0b0c0f',
+    icon: path.join(__dirname, '..', 'web', 'assets', 'icon.png'),
     autoHideMenuBar: true,
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
   });
