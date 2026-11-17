@@ -48,6 +48,7 @@ jobs:
             "main": "desktop/main.cjs",
             "scripts": {
               "desktop": "electron .",
+              "icons": "node tools/generate-icons.cjs",
               "build:windows": "electron-builder --win nsis --publish never"
             },
             "dependencies": {
@@ -57,7 +58,9 @@ jobs:
             "devDependencies": {
               "@capacitor/cli": "^7.4.3",
               "electron": "^38.2.0",
-              "electron-builder": "^26.0.12"
+              "electron-builder": "^26.0.12",
+              "sharp": "^0.34.4",
+              "png-to-ico": "^2.1.8"
             },
             "build": {
               "appId": "br.com.otaviodiasleite.cyberpunkdiary",
@@ -89,6 +92,7 @@ jobs:
             const win = new BrowserWindow({
               width: 1440, height: 920, minWidth: 900, minHeight: 620,
               backgroundColor: '#0b0c0f',
+              icon: path.join(__dirname, '..', 'web', 'assets', 'icon.png'),
               autoHideMenuBar: true,
               webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
             });
@@ -177,8 +181,6 @@ jobs:
           npx cap add android
           npm run icons
           npx cap sync android
-      - name: Generate unified leaf icon
-        run: npm run icons
       - name: Build installable Android APK
         run: |
           cd android
