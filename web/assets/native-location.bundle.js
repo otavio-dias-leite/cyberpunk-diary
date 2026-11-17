@@ -596,8 +596,37 @@
   });
   f();
 
+  // node_modules/@capacitor/status-bar/dist/esm/index.js
+  init_dist();
+
+  // node_modules/@capacitor/status-bar/dist/esm/definitions.js
+  var Style;
+  (function(Style2) {
+    Style2["Dark"] = "DARK";
+    Style2["Light"] = "LIGHT";
+    Style2["Default"] = "DEFAULT";
+  })(Style || (Style = {}));
+  var Animation;
+  (function(Animation2) {
+    Animation2["None"] = "NONE";
+    Animation2["Slide"] = "SLIDE";
+    Animation2["Fade"] = "FADE";
+  })(Animation || (Animation = {}));
+
+  // node_modules/@capacitor/status-bar/dist/esm/index.js
+  var StatusBar = registerPlugin("StatusBar");
+
   // tools/native-location-entry.js
   window.CyberpunkGeolocation = Geolocation2;
+  window.CyberpunkStatusBar = StatusBar;
+  if (window.Capacitor?.isNativePlatform?.()) {
+    StatusBar.setOverlaysWebView({ overlay: false }).catch(() => {
+    });
+    StatusBar.setBackgroundColor({ color: "#0b0c0f" }).catch(() => {
+    });
+    StatusBar.setStyle({ style: Style.Light }).catch(() => {
+    });
+  }
 })();
 /*! Bundled license information:
 

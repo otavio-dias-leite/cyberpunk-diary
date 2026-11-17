@@ -2,7 +2,7 @@
   "name": "cyberpunk-diary",
   "version": "1.2.1",
   "private": true,
-  "description": "Cyberpunk Diary 1.2.1 — edge-swipe menu and Android status bar fix",
+  "description": "Cyberpunk Diary 1.2.1 — offline-first planner",
   "main": "desktop/main.cjs",
   "scripts": {
     "desktop": "electron .",
@@ -27,22 +27,9 @@
   "build": {
     "appId": "br.com.otaviodiasleite.cyberpunkdiary",
     "productName": "Cyberpunk Diary",
-    "directories": {
-      "output": "dist/windows"
-    },
-    "files": [
-      "desktop/**/*",
-      "web/**/*",
-      "server/**/*",
-      "package.json"
-    ],
-    "win": {
-      "icon": "web/assets/icon.ico",
-      "target": [
-        "nsis"
-      ],
-      "artifactName": "CyberpunkDiary-Setup-1.2.1.${ext}"
-    },
+    "directories": { "output": "dist/windows" },
+    "files": ["desktop/**/*", "web/**/*", "server/**/*", "package.json"],
+    "win": { "icon": "web/assets/icon.ico", "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.2.1.${ext}" },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
