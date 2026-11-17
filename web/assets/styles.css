@@ -440,3 +440,16 @@ button,.task,.calendar-event,.note-row,.daybox{transition:background-color .18s 
 @keyframes toastFlowIn{from{opacity:0;max-height:0;padding-block:0;margin-top:0}to{opacity:1;max-height:130px}}
 @media(max-width:850px){.top{padding:0 12px;gap:9px}.top-brand{font-size:11px}.top-brand svg{width:26px;height:26px}.top-meta{gap:7px}#toast.toast{margin:8px 12px 0;padding:9px 11px}}
 @media(max-width:480px){.top{height:58px;min-height:58px}.top-brand{font-size:10px;gap:6px}.top-brand svg{width:24px;height:24px}.top-meta>#heading{font-size:9px}#toast.toast{font-size:11px}}
+
+
+/* 1.2.1 — edge-swipe navigation and Android system-bar separation */
+@media(max-width:850px){
+  .sidebar{display:flex;inset:0 auto 0 0;width:min(290px,84vw);height:100dvh;transform:translateX(-105%);visibility:hidden;transition:transform .22s ease,visibility .22s ease;z-index:50;overflow-y:auto;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(18px + env(safe-area-inset-bottom,0px))}
+  .sidebar.open{display:flex;transform:translateX(0);visibility:visible}
+  .sidebar-scrim{position:fixed;inset:0;background:#0009;opacity:0;visibility:hidden;z-index:49;transition:opacity .22s ease,visibility .22s ease}
+  .sidebar-scrim.open{opacity:1;visibility:visible}
+  .workspace{min-width:0}
+  .top{padding-top:env(safe-area-inset-top,0px);height:calc(59px + env(safe-area-inset-top,0px));min-height:calc(59px + env(safe-area-inset-top,0px))}
+}
+@media(max-width:500px){.top{height:calc(54px + env(safe-area-inset-top,0px));min-height:calc(54px + env(safe-area-inset-top,0px))}}
+@media(prefers-reduced-motion:reduce){.sidebar,.sidebar-scrim{transition:none!important}}
