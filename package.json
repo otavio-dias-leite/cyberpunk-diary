@@ -6,7 +6,7 @@
   "main": "desktop/main.cjs",
   "scripts": {
     "desktop": "electron .",
-    "build:windows": "electron-builder --win nsis"
+    "build:windows": "electron-builder --win nsis --publish never"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
