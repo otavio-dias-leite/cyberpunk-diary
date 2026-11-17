@@ -465,3 +465,152 @@ button,.task,.calendar-event,.note-row,.daybox{transition:background-color .18s 
 .sync-device-actions{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:wrap}.sync-device-actions button{font-size:10px;padding:6px 8px}
 .sync-device-state{font-size:10px;color:var(--muted);white-space:nowrap}.sync-device-state.connected{color:var(--alt)}
 @media(max-width:500px){.sync-device{grid-template-columns:25px minmax(0,1fr)}.sync-device-actions{grid-column:2;justify-content:flex-start}.sync-device-icon{width:25px;height:25px}}
+
+
+/* 1.3.1 — Adaptive workspace: Android portrait/landscape and resizable Windows desktop */
+html{min-width:0;min-height:100%;overflow-x:clip}
+body{min-width:0;min-height:100dvh;overflow-x:clip}
+.app{width:100%;min-width:0;min-height:100dvh}
+.workspace{width:100%;min-width:0}
+main{width:100%;min-width:0;padding:clamp(12px,1.7vw,28px) clamp(12px,2.2vw,34px) 30px}
+.panel{min-width:0;max-width:100%}
+.toolbar,.toolbar-left,.toolbar-right,.top,.top-meta,.top-actions{min-width:0}
+.toolbar{row-gap:9px}
+.toolbar-left,.toolbar-right{max-width:100%}
+button,input,select,textarea{max-width:100%;min-width:0}
+img,canvas,svg{max-width:100%}
+.notes-layout{grid-template-columns:minmax(190px, min(25%,280px)) minmax(0,1fr);align-items:stretch}
+.notes-list,.note-edit{min-width:0;max-width:100%}
+.note-edit textarea,.markdown-editor,.markdown-source,.rich-description{width:100%;max-width:100%;overflow-wrap:anywhere}
+.week-wrap,.month-panel{width:100%;min-width:0;overscroll-behavior-x:contain}
+.grid-month{width:100%;min-width:0;grid-template-columns:repeat(7,minmax(0,1fr))}
+.daybox{min-width:0}
+.dialog{width:min(620px,calc(100vw - 28px));max-width:100%}
+.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.qr-area{grid-template-columns:minmax(130px,196px) minmax(0,1fr)}
+.qr-frame{width:min(196px,100%)}
+.sync-layout,.sync-devices,.sync-device{min-width:0;max-width:100%}
+
+/* Desktop window: fluid sidebar, balanced reading width and stable resize behavior. */
+@media(min-width:851px){
+  .app{grid-template-columns:clamp(184px,17vw,248px) minmax(0,1fr);align-items:stretch}
+  .sidebar{position:sticky;width:auto;min-width:0;height:100dvh;max-height:100dvh;overflow-y:auto;overscroll-behavior:contain;padding:clamp(14px,1.5vw,24px) clamp(10px,1vw,16px)}
+  .brand{font-size:clamp(10px,.8vw,12px)}
+  .sidebar nav button{padding:clamp(9px,.85vw,13px) clamp(10px,1vw,15px)}
+  .workspace{min-height:100dvh}
+  .top{position:sticky;top:0;z-index:20;padding-inline:clamp(18px,2vw,32px);backdrop-filter:blur(16px);background:color-mix(in srgb,var(--aside) 94%,transparent)}
+  main{max-width:1760px}
+  .notes-layout{min-height:calc(100dvh - 150px)}
+  .note-edit{min-height:0}
+  .markdown-editor{min-height:420px}
+  .week-grid{min-width:0;grid-template-columns:repeat(7,minmax(0,1fr))}
+  .week-col{min-width:0}
+}
+@media(min-width:851px) and (max-width:1100px){
+  .app{grid-template-columns:176px minmax(0,1fr)}
+  main{padding:14px}
+  .panel{padding:12px}
+  .top-brand{font-size:11px}
+  .notes-layout{grid-template-columns:minmax(160px,220px) minmax(0,1fr)}
+  .week-grid{min-width:900px}
+}
+@media(min-width:1101px) and (max-width:1440px){
+  .app{grid-template-columns:205px minmax(0,1fr)}
+  main{padding-inline:clamp(18px,2vw,28px)}
+}
+@media(min-width:1441px){
+  .app{grid-template-columns:230px minmax(0,1fr)}
+  main{padding-inline:36px}
+}
+
+/* Android portrait: prevent clipped controls, undersized touch targets and calendar overflow. */
+@media(max-width:850px){
+  html,body{width:100%;min-width:0}
+  .app{display:block;width:100%;min-height:100dvh}
+  .workspace{width:100%;max-width:100%;min-height:100dvh}
+  main{padding:12px max(12px,env(safe-area-inset-left)) calc(18px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-right))}
+  .top{width:100%;gap:8px;padding-left:max(10px,env(safe-area-inset-left));padding-right:max(10px,env(safe-area-inset-right))}
+  .top-brand{min-width:0;flex:0 1 auto}
+  .top-meta{flex:1 1 auto;justify-content:flex-end}
+  .top-meta>#heading{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .top-actions{flex:0 0 auto}
+  .toolbar{align-items:flex-start}
+  .toolbar-left,.toolbar-right{gap:6px}
+  .toolbar button,.top button,.sync-device-actions button{min-height:38px}
+  .panel{padding:clamp(10px,2.5vw,15px);border-radius:10px}
+  .notes-layout{grid-template-columns:minmax(0,1fr);gap:10px}
+  .notes-list{grid-template-columns:repeat(2,minmax(0,1fr));max-height:210px;overflow:auto;overscroll-behavior:contain}
+  .note-edit{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto minmax(220px,1fr) auto}
+  .markdown-editor{min-height:240px;max-height:55dvh}
+  .markdown-source{min-height:220px;max-height:50dvh}
+  .grid-month{gap:3px}
+  .daybox{min-height:clamp(78px,17vw,132px);max-height:180px;padding:5px;gap:4px}
+  .daybox.expanded{grid-column:span 7;grid-row:auto;min-height:230px;max-height:none}
+  .day-head{min-width:0}
+  .day-title-line{max-width:100%;min-width:0}
+  .daynum{font-size:clamp(10px,2.8vw,15px)}
+  .calendar-event{min-width:0;max-width:100%;overflow-wrap:anywhere}
+  .event-title{overflow-wrap:anywhere}
+  .week-wrap{margin-inline:-2px}
+  .week-grid{min-width:850px}
+  .dialog{width:min(620px,calc(100vw - 24px));max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));padding:clamp(12px,3vw,18px)}
+  .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .field input,.field select,.field textarea{font-size:16px}
+  .qr-area{grid-template-columns:minmax(0,1fr)}
+  .qr-frame{width:min(190px,65vw);margin-inline:auto}
+  .qr-side{align-items:stretch}
+  .sync-device{grid-template-columns:28px minmax(0,1fr)}
+  .sync-device-actions{grid-column:2;justify-content:flex-start}
+  .toast{max-width:calc(100vw - 24px)}
+}
+@media(max-width:520px){
+  main{padding-inline:10px}
+  .top{gap:6px}
+  .top-brand{font-size:10px;gap:5px}
+  .top-brand svg{width:23px;height:23px}
+  .top-meta>#heading{font-size:9px}
+  .toolbar-left,.toolbar-right{width:100%}
+  .toolbar-right{justify-content:flex-start}
+  .notes-list{grid-template-columns:1fr;max-height:180px}
+  .form-grid{grid-template-columns:minmax(0,1fr)}
+  .field.full{grid-column:auto}
+  .grid-month{gap:2px}
+  .daybox{min-height:74px;max-height:130px;padding:3px}
+  .daybox.expanded{min-height:220px}
+  .grid-month .daybox .day-title-line .heading-weather-symbol{font-size:16px}
+  .grid-month .daybox .weather-inline{font-size:9px}
+  .daybox:not(.expanded) .event-title{font-size:8px}
+  .daybox:not(.expanded) .event-meta time{font-size:7px}
+  .panel h2{line-height:1.5}
+}
+ 
+/* Android landscape: reclaim horizontal space without turning the drawer into a permanent rail. */
+@media(max-width:850px) and (orientation:landscape){
+  .top{height:calc(48px + env(safe-area-inset-top,0px));min-height:calc(48px + env(safe-area-inset-top,0px))}
+  main{padding-top:9px}
+  .sidebar{width:min(300px,48vw)}
+  .notes-layout{grid-template-columns:minmax(150px,32%) minmax(0,1fr);align-items:stretch}
+  .notes-list{grid-template-columns:1fr;max-height:calc(100dvh - 170px)}
+  .note-edit{grid-template-rows:auto auto auto minmax(160px,1fr) auto}
+  .markdown-editor{min-height:160px;max-height:48dvh}
+  .grid-month{gap:3px}
+  .daybox{min-height:100px;max-height:145px}
+  .daybox.expanded{grid-column:span 3;grid-row:span 2;min-height:230px}
+  .dialog{max-height:calc(100dvh - 16px);width:min(700px,calc(100vw - 24px))}
+  .qr-area{grid-template-columns:minmax(110px,160px) minmax(0,1fr)}
+  .qr-frame{width:min(160px,100%)}
+}
+
+/* Small desktop windows and split-screen tablet widths. */
+@media(min-width:600px) and (max-width:850px){
+  .notes-layout{grid-template-columns:minmax(170px,30%) minmax(0,1fr)}
+  .notes-list{grid-template-columns:1fr;max-height:65dvh}
+  .grid-month .daybox{min-height:115px}
+}
+@media(hover:none) and (pointer:coarse){
+  button,.daybox,.week-event,.note-row{touch-action:manipulation}
+  button{min-height:38px}
+}
+@media(prefers-reduced-motion:reduce){
+  .sidebar,.sidebar-scrim,.workspace,.panel{transition:none!important;animation:none!important}
+}
