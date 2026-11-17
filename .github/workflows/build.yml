@@ -126,7 +126,7 @@ jobs:
           cat > README.md <<'EOF'
           # Cyberpunk Diary 1.2.0
 
-          Agenda pessoal offline-first para Windows e Android. Esta versão consolida a aplicação web 8.4 enviada no repositório e publica o produto como versão 1.0.0.
+          Agenda pessoal offline-first para Windows, Android e navegador. A versão 1.2.0 adiciona uma barra superior permanente e notificações em faixa própria, sem sobrepor a interface.
 
           ## Funcionalidades
           - Visões Agora, Dia, Semana e Mês.
@@ -244,6 +244,6 @@ jobs:
           else
             gh release create v1.2.0 release/* \
               --repo "${GITHUB_REPOSITORY}" \
-              --title "Cyberpunk Diary 1.2.0.0" \
-              --notes "Cyberpunk Diary 1.2.0.0. Atualização do aplicativo web e instaladores Android e Windows."
+              --title "Cyberpunk Diary 1.2.0" \
+              --notes "Cyberpunk Diary 1.2.0. Atualização do aplicativo web e instaladores Android e Windows."
           fi
