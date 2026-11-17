@@ -210,7 +210,8 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Generate app icons and native GPS bridge
-        run: npm run icons
+        run: |
+          npm run icons
           npm run build:web
       - name: Build Windows installer
         run: npm run build:windows
