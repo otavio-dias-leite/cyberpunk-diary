@@ -27,11 +27,15 @@ jobs:
         run: |
           set -euo pipefail
           ZIP='Cyberpunk_Diary_8.4_Links_Funcionais (1).zip'
-          test -f "$ZIP"
-          rm -rf web
-          mkdir -p web
-          unzip -q "$ZIP" -d web
-          rm -f "$ZIP"
+          if [ -f "$ZIP" ]; then
+            rm -rf web
+            mkdir -p web
+            unzip -q "$ZIP" -d web
+            rm -f "$ZIP"
+          elif [ ! -f web/index.html ]; then
+            echo "ZIP original e aplicação extraída não encontrados" >&2
+            exit 1
+          fi
           rm -rf lib test sync-host docs
           rm -f pubspec.yaml analysis_options.yaml installer.iss
           mkdir -p desktop
@@ -44,7 +48,7 @@ jobs:
             "main": "desktop/main.cjs",
             "scripts": {
               "desktop": "electron .",
-              "build:windows": "electron-builder --win nsis"
+              "build:windows": "electron-builder --win nsis --publish never"
             },
             "dependencies": {
               "@capacitor/android": "^7.4.3",
