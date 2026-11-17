@@ -294,30 +294,59 @@ async function loadContext(force=false){
   saveContext();if(['day','week','month'].includes(db.settings.mode)&&$('#overlay').hidden)render();
  }finally{contextLoading=false}
 }
-function locateForWeather(initiatedByUser=false){
+async function locateForWeather(initiatedByUser=false){
  if(geolocationInFlight)return;
- if(!navigator.geolocation||!window.isSecureContext){if(initiatedByUser)toast('GPS requer HTTPS ou localhost. Informe a cidade.');return}
+ const nativeGeo=window.CyberpunkGeolocation;
+ if(!nativeGeo&&(!navigator.geolocation||!window.isSecureContext)){
+  if(initiatedByUser)toast('GPS requer permissão e conexão segura. Informe a cidade manualmente.');
+  return;
+ }
  geolocationInFlight=true;
- const status=$('#cityStatus');if(status)status.textContent='Obtendo localização…';
- navigator.geolocation.getCurrentPosition(pos=>{
-  geolocationInFlight=false;const lat=pos.coords.latitude,lon=pos.coords.longitude;
-  if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
+ const status=$('#cityStatus');if(status)status.textContent='Solicitando permissão de localização…';
+ const success=pos=>{
+  geolocationInFlight=false;
+  const lat=pos?.coords?.latitude,lon=pos?.coords?.longitude;
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)){if(status)status.textContent='O GPS não retornou coordenadas válidas.';return}
   const moved=!Number.isFinite(context.lat)||!Number.isFinite(context.lon)||Math.abs(context.lat-lat)>.02||Math.abs(context.lon-lon)>.02;
   context.lat=lat;context.lon=lon;context.locationMode='auto';context.geoLast=Date.now();context.city='Localização atual (GPS)';
   if(moved){context.weather={};context.historyLoaded={}}context.updated='';saveContext();
-  if($('#overlay')&&!$('#overlay').hidden)close();if(initiatedByUser)toast('Localização ativada');loadContext(true);render();
- },err=>{
-  geolocationInFlight=false;const msg=err.code===1?'Permissão de localização negada. Informe a cidade.':err.code===2?'Localização indisponível. Informe a cidade.':'GPS demorou a responder. Tente novamente.';
-  if(err.code===1){context.locationMode='manual';saveContext()}
+  if($('#overlay')&&!$('#overlay').hidden)close();
+  if(initiatedByUser)toast('Localização ativada');
+  loadContext(true);render();
+ };
+ const failure=err=>{
+  geolocationInFlight=false;
+  const code=err?.code;
+  const msg=code===1?'Permissão de localização negada. Autorize o acesso ao GPS nas configurações do aplicativo.':code===2?'Localização indisponível. Ative o GPS do dispositivo e tente novamente.':code===3?'O GPS demorou a responder. Tente novamente.':(err?.message||'Não foi possível acessar o GPS.');
   const el=$('#cityStatus');if(el)el.textContent=msg;
   if(initiatedByUser)toast(msg);
- },{enableHighAccuracy:false,maximumAge:30*60*1000,timeout:12000});
+ };
+ try{
+  if(nativeGeo){
+   let permission=await nativeGeo.checkPermissions();
+   if(permission.location!=='granted'&&permission.coarseLocation!=='granted'){
+    permission=await nativeGeo.requestPermissions();
+   }
+   if(permission.location!=='granted'&&permission.coarseLocation!=='granted'){
+    failure({code:1});return;
+   }
+   const pos=await nativeGeo.getCurrentPosition({enableHighAccuracy:true,timeout:20000,maximumAge:300000});
+   success(pos);
+  }else{
+   navigator.geolocation.getCurrentPosition(success,failure,{enableHighAccuracy:true,maximumAge:300000,timeout:20000});
+  }
+ }catch(err){failure(err)}
 }
 async function enableAutomaticLocation(){
  if(context.locationMode==='manual')return;
- if(!navigator.geolocation||!window.isSecureContext)return;
  if(Number.isFinite(context.lat)&&Number.isFinite(context.lon)&&Date.now()-(context.geoLast||0)<60*60000)return;
- try{if(navigator.permissions?.query){const permission=await navigator.permissions.query({name:'geolocation'});if(permission.state==='denied'){context.locationMode='manual';saveContext();return}}}catch{}
+ const nativeGeo=window.CyberpunkGeolocation;
+ if(nativeGeo){
+  try{const permission=await nativeGeo.checkPermissions();if(permission.location==='denied'&&permission.coarseLocation==='denied')return}catch{}
+  locateForWeather(false);return;
+ }
+ if(!navigator.geolocation||!window.isSecureContext)return;
+ try{if(navigator.permissions?.query){const permission=await navigator.permissions.query({name:'geolocation'});if(permission.state==='denied')return}}catch{}
  locateForWeather(false);
 }
 async function selectCity(city){city=city.trim();if(city.length<2)return toast('Informe uma cidade');const status=$('#cityStatus');if(status)status.textContent='Buscando…';try{const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=10&language=pt&format=json`,{signal:AbortSignal.timeout(10000)});if(!r.ok)throw Error('Busca indisponível');const candidates=(await r.json()).results||[];const place=candidates.find(p=>p.country_code==='BR')||candidates[0];if(!place)throw Error('Cidade não encontrada');context.city=`${place.name}, ${place.admin1||place.country}`;context.lat=place.latitude;context.lon=place.longitude;context.locationMode='manual';context.geoLast=0;context.weather={};context.historyLoaded={};context.updated='';saveContext();close();toast(`Clima: ${context.city}`);loadContext(true)}catch(e){if(status)status.textContent=e.message}}
