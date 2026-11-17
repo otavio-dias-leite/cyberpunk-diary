@@ -1,4 +1,4 @@
-name: Cyberpunk Diary 1.3.0 — Build and Release
+name: Cyberpunk Diary — Build and Release
 
 on:
   push:
@@ -16,162 +16,24 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      source_sha: ${{ steps.commit.outputs.sha }}
+      version: ${{ steps.meta.outputs.version }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
-          fetch-depth: 0
-      - name: Extract web app and replace legacy scaffold
-        shell: bash
-        run: |
-          set -euo pipefail
-          ZIP='Cyberpunk_Diary_8.4_Links_Funcionais (1).zip'
-          if [ -f "$ZIP" ]; then
-            rm -rf web
-            mkdir -p web
-            unzip -q "$ZIP" -d web
-            rm -f "$ZIP"
-          elif [ ! -f web/index.html ]; then
-            echo "ZIP original e aplicação extraída não encontrados" >&2
-            exit 1
-          fi
-          rm -rf lib test sync-host docs
-          rm -f pubspec.yaml analysis_options.yaml installer.iss
-          mkdir -p desktop
-          cat > package.json <<'EOF'
-          {
-            "name": "cyberpunk-diary",
-            "version": "1.3.0",
-            "private": true,
-            "description": "Cyberpunk Diary 1.3.0 — offline-first planner",
-            "main": "desktop/main.cjs",
-            "scripts": {
-              "desktop": "electron .",
-              "icons": "node tools/generate-icons.cjs",
-              "build:web": "esbuild tools/native-location-entry.js --bundle --format=iife --outfile=web/assets/native-location.bundle.js",
-              "build:windows": "electron-builder --win nsis --publish never"
-            },
-            "dependencies": {
-              "@capacitor/android": "^7.4.3",
-              "@capacitor/core": "^7.4.3",
-              "@capacitor/geolocation": "^7.1.5",
-              "@capacitor/status-bar": "^7.0.1"
-            },
-            "devDependencies": {
-              "@capacitor/cli": "^7.4.3",
-              "electron": "^38.2.0",
-              "electron-builder": "^26.0.12",
-              "sharp": "^0.34.4",
-              "png-to-ico": "^2.1.8",
-              "esbuild": "^0.25.10"
-            },
-            "build": {
-              "appId": "br.com.otaviodiasleite.cyberpunkdiary",
-              "productName": "Cyberpunk Diary",
-              "directories": { "output": "dist/windows" },
-              "files": ["desktop/**/*", "web/**/*", "server/**/*", "package.json"],
-              "win": { "icon": "web/assets/icon.ico", "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.3.0.${ext}" },
-              "nsis": {
-                "oneClick": false,
-                "allowToChangeInstallationDirectory": true,
-                "createDesktopShortcut": true,
-                "createStartMenuShortcut": true
-              }
-            }
-          }
-          EOF
-          cat > capacitor.config.json <<'EOF'
-          {
-            "appId": "br.com.otaviodiasleite.cyberpunkdiary",
-            "appName": "Cyberpunk Diary",
-            "webDir": "web",
-            "server": { "androidScheme": "https" }
-          }
-          EOF
-          cat > desktop/main.cjs <<'EOF'
-          const { app, BrowserWindow, shell } = require('electron');
-          const path = require('node:path');
-          function createWindow() {
-            const win = new BrowserWindow({
-              width: 1440, height: 920, minWidth: 900, minHeight: 620,
-              backgroundColor: '#0b0c0f',
-              icon: path.join(__dirname, '..', 'web', 'assets', 'icon.png'),
-              autoHideMenuBar: true,
-              webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
-            });
-            win.loadFile(path.join(__dirname, '..', 'web', 'index.html'));
-            win.webContents.setWindowOpenHandler(({ url }) => {
-              if (/^https?:\/\//i.test(url)) shell.openExternal(url);
-              return { action: 'deny' };
-            });
-          }
-          app.whenReady().then(() => {
-            createWindow();
-            app.on('activate', () => {
-              if (BrowserWindow.getAllWindows().length === 0) createWindow();
-            });
-          });
-          app.on('window-all-closed', () => {
-            if (process.platform !== 'darwin') app.quit();
-          });
-          EOF
-          cat > .gitignore <<'EOF'
-          node_modules/
-          dist/
-          android/.gradle/
-          android/build/
-          android/app/build/
-          .DS_Store
-          EOF
-          cat > README.md <<'EOF'
-          # Cyberpunk Diary 1.3.0
-
-          Agenda pessoal offline-first para Windows, Android e navegador. A versão 1.3.0 adiciona uma barra superior permanente e notificações em faixa própria, sem sobrepor a interface.
-
-          ## Funcionalidades
-          - Visões Agora, Dia, Semana e Mês.
-          - Tarefas, recorrências, tags, hábitos e notas Markdown.
-          - Temas Cyberpunk Red, Soulkiller, Cyberpunk, Midnight e Synthwave.
-          - Backup/importação e armazenamento local automático.
-          - Links funcionais em descrições, editor visual e notas.
-          - Sincronização P2P opcional por servidor de sinalização Node.js.
-
-          ## Downloads
-          Os instaladores Windows e Android são publicados em GitHub Releases após a compilação do workflow Cyberpunk Diary 1.3.0.
-
-          ## Executar localmente
-          Requer Node.js 20 ou superior.
-          npm install
-          npm run desktop
-
-          Para Android, com Android SDK e Java 21:
-          npx cap add android
-          npx cap sync android
-          cd android && ./gradlew assembleDebug
-
-          ## Dados
-          Os dados são mantidos localmente no armazenamento do aplicativo/navegador. Faça backups regulares pelo menu Backup / Importar. O servidor de sinalização não é um banco de dados e não armazena as notas ou tarefas.
-          EOF
-          npm install
-          npm run icons
-          npm run build:web
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Replace legacy app with Cyberpunk Diary 1.3.0 web edition [skip ci]" || true
-          git push origin HEAD:main
-      - name: Expose prepared commit
-        id: commit
-        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          ref: ${{ github.sha }}
+      - name: Read app version
+        id: meta
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
   android:
     needs: prepare
     runs-on: ubuntu-latest
+    outputs:
+      apk_ready: ${{ steps.signing.outputs.configured }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.prepare.outputs.source_sha }}
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -187,15 +49,84 @@ jobs:
           npm run icons
           npm run build:web
           npx cap sync android
-      - name: Build installable Android APK
+      - name: Check persistent Android signing key
+        id: signing
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        shell: bash
+        run: |
+          if [[ -n "$ANDROID_KEYSTORE_BASE64" && -n "$ANDROID_KEYSTORE_PASSWORD" && -n "$ANDROID_KEY_ALIAS" && -n "$ANDROID_KEY_PASSWORD" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::APK não publicado: configure os quatro segredos de assinatura Android no repositório."
+          fi
+      - name: Configure permanent Android signing and version code
+        if: steps.signing.outputs.configured == 'true'
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          APP_VERSION: ${{ needs.prepare.outputs.version }}
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: |
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/cyberpunk-diary-release.p12
+          cat > android/keystore.properties <<EOF
+          storeFile=cyberpunk-diary-release.p12
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          keyPassword=$ANDROID_KEY_PASSWORD
+          EOF
+          python3 - <<'PY'
+          import os, re
+          from pathlib import Path
+          gradle = Path("android/app/build.gradle")
+          source = gradle.read_text()
+          source, n1 = re.subn(r'versionCode\s+\d+', f'versionCode {10000 + int(os.environ["BUILD_NUMBER"])}', source, count=1)
+          source, n2 = re.subn(r'versionName\s+"[^"]+"', f'versionName "{os.environ["APP_VERSION"]}"', source, count=1)
+          if n1 != 1 or n2 != 1:
+              raise SystemExit("Não foi possível definir versionCode/versionName no Gradle")
+          source += """
+          
+          // Signing persistente para permitir atualização sobre a versão anterior.
+          android {
+              signingConfigs {
+                  release {
+                      def signingProps = new Properties()
+                      def signingFile = rootProject.file("keystore.properties")
+                      signingProps.load(new FileInputStream(signingFile))
+                      storeFile file(signingProps["storeFile"])
+                      storePassword signingProps["storePassword"]
+                      keyAlias signingProps["keyAlias"]
+                      keyPassword signingProps["keyPassword"]
+                  }
+              }
+              buildTypes {
+                  release {
+                      signingConfig signingConfigs.release
+                      minifyEnabled false
+                  }
+              }
+          }
+          """
+          gradle.write_text(source)
+          PY
+      - name: Build signed, updateable Android APK
+        if: steps.signing.outputs.configured == 'true'
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleRelease
+          cp app/build/outputs/apk/release/app-release.apk "../CyberpunkDiary-Android-${{ needs.prepare.outputs.version }}.apk"
       - uses: actions/upload-artifact@v4
+        if: steps.signing.outputs.configured == 'true'
         with:
-          name: CyberpunkDiary-Android-1.3.0
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: CyberpunkDiary-Android-${{ needs.prepare.outputs.version }}
+          path: CyberpunkDiary-Android-${{ needs.prepare.outputs.version }}.apk
           if-no-files-found: error
 
   windows:
@@ -204,7 +135,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.prepare.outputs.source_sha }}
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -218,33 +149,39 @@ jobs:
         run: npm run build:windows
       - uses: actions/upload-artifact@v4
         with:
-          name: CyberpunkDiary-Windows-1.3.0
+          name: CyberpunkDiary-Windows-${{ needs.prepare.outputs.version }}
           path: dist/windows/*.exe
           if-no-files-found: error
 
   release:
     needs: [prepare, android, windows]
+    if: always() && needs.prepare.result == 'success' && needs.windows.result == 'success' && (needs.android.result == 'success' || needs.android.result == 'skipped')
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: CyberpunkDiary-Android-1.3.0
+          name: CyberpunkDiary-Windows-${{ needs.prepare.outputs.version }}
           path: release
-      - uses: actions/download-artifact@v4
+      - name: Download Android APK when signing is configured
+        if: needs.android.outputs.apk_ready == 'true'
+        uses: actions/download-artifact@v4
         with:
-          name: CyberpunkDiary-Windows-1.3.0
+          name: CyberpunkDiary-Android-${{ needs.prepare.outputs.version }}
           path: release
-      - name: Publish version 1.3.0
+      - name: Publish versioned release
         env:
           GH_TOKEN: ${{ github.token }}
+          APP_VERSION: ${{ needs.prepare.outputs.version }}
+          APK_READY: ${{ needs.android.outputs.apk_ready }}
         run: |
-          if gh release view v1.3.0 --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
-            gh release upload v1.3.0 release/* --repo "${GITHUB_REPOSITORY}" --clobber
+          if [ "$APK_READY" = "true" ]; then
+            NOTES="Cyberpunk Diary $APP_VERSION. APK Android assinado com chave persistente para atualizações in-place e instalador Windows."
           else
-            gh release create v1.3.0 release/* \
-              --repo "${GITHUB_REPOSITORY}" \
-              --title "Cyberpunk Diary 1.3.0" \
-              --notes "Cyberpunk Diary 1.3.0. Atualização do aplicativo web e instaladores Android e Windows."
+            NOTES="Cyberpunk Diary $APP_VERSION. Instalador Windows. APK aguardando configuração da chave persistente de assinatura Android nos GitHub Actions secrets."
+          fi
+          if gh release view "v$APP_VERSION" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "v$APP_VERSION" release/* --repo "$GITHUB_REPOSITORY" --clobber
+            gh release edit "v$APP_VERSION" --repo "$GITHUB_REPOSITORY" --notes "$NOTES"
+          else
+            gh release create "v$APP_VERSION" release/* --repo "$GITHUB_REPOSITORY" --title "Cyberpunk Diary $APP_VERSION" --notes "$NOTES"
           fi

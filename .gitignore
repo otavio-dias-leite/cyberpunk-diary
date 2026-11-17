@@ -4,3 +4,7 @@ android/.gradle/
 android/build/
 android/app/build/
 .DS_Store
+
+android/keystore.properties
+android/*.jks
+android/*.p12
