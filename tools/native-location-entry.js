@@ -6,5 +6,5 @@ window.CyberpunkStatusBar = StatusBar;
 if (window.Capacitor?.isNativePlatform?.()) {
   StatusBar.setOverlaysWebView({ overlay: false }).catch(() => {});
   StatusBar.setBackgroundColor({ color: '#0b0c0f' }).catch(() => {});
-  StatusBar.setStyle({ style: Style.Dark }).catch(() => {});
+  StatusBar.setStyle({ style: Style.Light }).catch(() => {});
 }
