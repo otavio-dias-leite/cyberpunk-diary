@@ -1,0 +1,6 @@
+{
+  "appId": "br.com.otaviodiasleite.cyberpunkdiary",
+  "appName": "Cyberpunk Diary",
+  "webDir": "web",
+  "server": { "androidScheme": "https" }
+}

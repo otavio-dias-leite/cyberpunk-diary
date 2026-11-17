@@ -1,0 +1,424 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&display=swap');
+:root,[data-theme=carbon]{--bg:#0b0c0f;--aside:#101114;--panel:#17191d;--surface:#202227;--stroke:#34363c;--text:#f0f1f2;--muted:#9da0aa;--accent:#e53935;--alt:#ff7070;--soft:#e539351c;--accentText:#fff}
+[data-theme=soulkiller]{--bg:#080d17;--aside:#0c1424;--panel:#132037;--surface:#1a2b43;--stroke:#30455f;--text:#eff5ff;--muted:#a0b0ca;--accent:#f34b59;--alt:#35c6ff;--soft:#f34b5924;--accentText:#fff}
+[data-theme=cyberpunk]{--bg:#11110d;--aside:#1a1b13;--panel:#24251a;--surface:#2d2e20;--stroke:#45472e;--text:#fbfae2;--muted:#cacba4;--accent:#f2e900;--alt:#35d6d6;--soft:#f2e90020;--accentText:#151515}
+[data-theme=midnight]{--bg:#080f1b;--aside:#0d192c;--panel:#14243a;--surface:#1c3047;--stroke:#2b4564;--text:#f2f7ff;--muted:#a5bcd3;--accent:#7bbcff;--alt:#6beddc;--soft:#7bbcff1c;--accentText:#0a1a2f}
+[data-theme=synthwave]{--bg:#120b22;--aside:#1b1030;--panel:#26183d;--surface:#33234b;--stroke:#503763;--text:#fff2ff;--muted:#c6a9d2;--accent:#bb71ff;--alt:#ff6ac0;--soft:#bb71ff20;--accentText:#190d27}
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden}body{font:13px Orbitron, sans-serif;background:var(--bg);color:var(--text)}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--alt);outline-offset:2px}button,select,input,textarea{color:var(--text)}button{background:var(--surface);border:1px solid var(--stroke);border-radius:7px;padding:9px 12px}button:hover{border-color:var(--accent)}button.primary{background:var(--accent);border-color:var(--accent);color:var(--accentText);font-weight:700}.app{display:grid;grid-template-columns:190px minmax(0,1fr);min-height:100dvh}.sidebar{position:sticky;top:0;height:100dvh;background:var(--aside);border-right:1px solid var(--stroke);padding:18px 11px;display:flex;flex-direction:column;z-index:4}.brand{display:flex;align-items:center;gap:8px;padding:3px 7px 22px;font:600 10px Orbitron,sans-serif;line-height:1.65;letter-spacing:.03em}.brand svg{width:29px;height:29px;color:var(--accent);flex:none}.brand span{color:var(--accent)}.sidebar nav{display:grid;gap:3px}.sidebar nav button{width:100%;text-align:left;background:none;border:1px solid transparent;padding:11px 14px;color:var(--muted)}.sidebar nav button.active{background:var(--soft);border-color:var(--stroke);color:var(--accent);font-weight:700}.sidebottom{margin-top:auto;display:grid;gap:9px}.sidebottom label,.mini-label{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}.sidebottom select,.side-action{width:100%;background:var(--panel);font-size:12px}.side-action{text-align:left}.side-action span{float:right;color:var(--muted)}.workspace{min-width:0;display:flex;flex-direction:column}.top{height:59px;min-height:59px;border-bottom:1px solid var(--stroke);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 22px}.top>span{font:600 14px Orbitron,sans-serif;color:var(--accent)}.top-actions{display:flex;gap:12px;align-items:center}.top-actions span{font-size:11px;color:var(--muted)}main{width:100%;max-width:1550px;margin:0 auto;padding:19px 22px 24px;min-width:0}.toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:13px}.toolbar-left,.toolbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.toolbar strong{font-size:14px;text-transform:capitalize}.small{padding:7px 10px;font-size:11px}.muted{color:var(--muted)}.pill{border-radius:20px;border:1px solid var(--stroke);padding:5px 8px;color:var(--muted);font-size:11px}.panel{background:var(--panel);border:1px solid var(--stroke);border-radius:9px;padding:15px;min-width:0}.panel h2{font-size:13px;margin:0 0 12px}.items{display:grid;gap:6px}.task{display:flex;align-items:center;gap:9px;min-width:0;padding:11px;background:var(--surface);border:1px solid var(--stroke);border-radius:7px}.task input{accent-color:var(--accent);width:16px;height:16px;flex:none}.task-body{min-width:0;flex:1}.task-title{font-size:12px;font-weight:600;overflow-wrap:anywhere}.task.done{opacity:.5}.task.done .task-title{text-decoration:line-through}.task-sub{font-size:10px;margin-top:5px;color:var(--muted)}.task-sub span{color:var(--alt)}.task button{padding:5px 8px;background:transparent;font-size:13px}.empty{padding:24px;text-align:center;color:var(--muted);border:1px dashed var(--stroke);border-radius:7px}.grid-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.weekday{text-align:center;color:var(--muted);font-size:10px;padding:8px 0}.daybox{min-width:0;min-height:76px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:6px;background:var(--surface);border:1px solid var(--stroke);padding:8px}.daybox.selected,.daybox.today{border-color:var(--accent)}.daybox.other{opacity:.45}.daynum{font:600 11px Orbitron}.day-count{color:var(--accent);font-size:10px}.day-preview{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;color:var(--muted)}.week-wrap{overflow-x:auto;max-width:100%}.week-grid{display:grid;grid-template-columns:repeat(7,minmax(120px,1fr));gap:6px;min-width:770px}.week-col{min-width:0;min-height:280px;padding:10px;background:var(--surface);border:1px solid var(--stroke);border-radius:7px}.week-head{width:100%;display:flex;justify-content:space-between;padding:0 0 9px;background:transparent;border:0;color:var(--text);font-size:11px}.week-event{width:100%;display:block;text-align:left;padding:8px;border-left:2px solid var(--accent);margin:6px 0;font-size:10px;overflow-wrap:anywhere}.week-event small{color:var(--muted);display:block;margin-top:4px}.week-event.done{opacity:.45}.day-list{max-width:850px}.day-panel{position:fixed;z-index:10;top:0;right:0;width:min(380px,100%);height:100dvh;background:var(--aside);border-left:1px solid var(--accent);box-shadow:-12px 0 35px #0008;padding:18px;overflow-y:auto}.day-panel .toolbar{margin-bottom:20px}.day-panel[hidden],.overlay[hidden]{display:none}.overlay{position:fixed;inset:0;background:#000a;z-index:9;display:grid;place-items:center;padding:16px}.dialog{width:min(570px,100%);max-height:min(92dvh,850px);overflow:auto;background:var(--panel);border:1px solid var(--accent);border-radius:12px;padding:21px;box-shadow:0 20px 70px #0009}.dialog header{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.dialog h2{font:600 15px Orbitron;margin:0}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:6px;min-width:0}.field.full{grid-column:1/-1}.field label{font-size:11px;color:var(--muted)}.field input,.field select,.field textarea,.note-edit input,.note-edit textarea{width:100%;min-width:0;border:1px solid var(--stroke);border-radius:6px;background:var(--surface);padding:10px;font-size:12px}.field textarea{resize:vertical;min-height:70px}.weekdays{display:flex;flex-wrap:wrap;gap:7px}.weekdays label{display:flex;align-items:center;gap:3px;background:var(--surface);border:1px solid var(--stroke);border-radius:6px;padding:7px;font-size:11px}.weekdays input{accent-color:var(--accent)}.dialog footer{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.notes-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:12px;min-height:65dvh}.notes-list{display:grid;align-content:start;gap:7px}.note-row{display:grid;text-align:left;gap:5px;min-width:0}.note-row small{color:var(--muted)}.note-row.active{border-color:var(--accent);background:var(--soft)}.note-edit{display:grid;grid-template-rows:auto auto minmax(250px,1fr);align-content:start;gap:10px}.note-edit textarea{height:100%;min-height:320px;resize:vertical;line-height:1.6}.note-date{max-width:180px}.note-controls{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.tag{display:inline-block;padding:2px 6px;border-radius:4px;background:var(--soft);color:var(--alt);margin-right:5px}.banner{font-size:11px;color:var(--muted);margin-bottom:12px}.syncstatus{font-size:11px;color:var(--alt);line-height:1.7}.code{font:12px Orbitron,sans-serif;overflow-wrap:anywhere;padding:10px;border:1px solid var(--stroke);border-radius:6px;background:var(--surface)}.toast{position:fixed;bottom:18px;right:18px;z-index:30;padding:10px 15px;border:1px solid var(--accent);background:var(--panel);color:var(--text);border-radius:7px;display:none;max-width:350px}.toast.show{display:block}.mobile{display:none}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+@media(min-width:1400px){.app{grid-template-columns:205px minmax(0,1fr)}.week-grid{min-width:0}}
+@media(max-width:850px){.app{grid-template-columns:1fr}.sidebar{display:none;position:fixed;width:210px;box-shadow:15px 0 50px #0009}.sidebar.open{display:flex}.mobile{display:block}.top{padding:0 12px}main{padding:12px}.top-actions span{display:none}.notes-layout{grid-template-columns:1fr}.notes-list{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-month{gap:3px}.daybox{padding:5px;min-height:57px}.day-count{font-size:9px}}
+@media(max-width:480px){.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.top{gap:5px}.top>span{font-size:11px}.top-actions button{font-size:11px;padding:8px}.weekday{font-size:9px}.day-preview{display:none}.notes-list{grid-template-columns:1fr}.dialog{padding:14px}}
+[hidden]{display:none!important}
+
+/* 4.1 — tidy interactions, softer transitions, accessible motion */
+:root{color-scheme:dark}body{transition:background-color .24s ease,color .24s ease}
+button,.panel,.daybox,.task,.week-col,.note-row,input,select,textarea{transition:background-color .19s ease,border-color .19s ease,color .19s ease,box-shadow .19s ease,opacity .19s ease,transform .19s ease}
+button:active{transform:scale(.985)}button:hover:not(:disabled){background-color:var(--soft)}button.primary:hover{background:var(--accent);filter:brightness(1.09)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline-offset:2px}
+.daybox:hover,.note-row:hover,.week-event:hover{border-color:var(--accent);background:var(--soft)}
+.day-panel{width:min(370px,calc(100vw - 12px));overscroll-behavior:contain;box-shadow:-16px 0 50px #0009}
+.day-panel.panel-enter{animation:panelIn .23s cubic-bezier(.2,.75,.3,1) both}
+.view-enter{animation:viewIn .21s ease-out both}
+.dialog{animation:dialogIn .2s cubic-bezier(.2,.75,.3,1) both}
+.toast.show{animation:toastIn .2s ease-out both}
+@keyframes panelIn{from{opacity:.5;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes viewIn{from{opacity:.65;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@keyframes dialogIn{from{opacity:0;transform:translateY(9px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sync-layout{gap:10px}.sync-buttons{display:flex;flex-direction:row;gap:7px}.qr-area{display:grid;grid-template-columns:auto minmax(0,1fr);gap:15px;align-items:center;border:1px solid var(--stroke);border-radius:9px;padding:13px;background:var(--surface)}
+.qr-frame{background:white;border-radius:8px;padding:7px;max-width:100%;width:196px;aspect-ratio:1;display:grid;place-items:center}.qr-frame canvas{width:100%;height:auto;aspect-ratio:1;image-rendering:pixelated}
+.qr-side{display:flex;align-items:flex-start;flex-direction:column;gap:9px;min-width:0}.qr-side strong{font-size:12px}.qr-side p{margin:0;font-size:11px;line-height:1.5}.qr-side small{font-size:10px;line-height:1.5}.qr-side button{font-size:11px;padding:7px 10px}
+.pair-notice{padding:10px 12px;border:1px solid var(--accent);border-radius:7px;color:var(--text);background:var(--soft);font-size:12px;line-height:1.5}
+@media(max-width:500px){.qr-area{grid-template-columns:1fr}.qr-frame{margin-inline:auto}.qr-side{align-items:stretch}.dialog{padding:14px}.top{height:54px;min-height:54px}.toolbar-left strong{width:100%;order:2}.daybox{min-height:54px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* V5: readable event cards, expanding month cells, Notion-inspired tags and live Markdown */
+.month-panel{padding:10px}.grid-month{align-items:stretch;gap:5px}.daybox{min-height:150px;max-height:245px;overflow:auto;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;padding:7px;scrollbar-width:thin}.daybox.expanded{grid-column:span 3;grid-row:span 2;max-height:none;min-height:300px;background:var(--panel);border-color:var(--accent);box-shadow:0 7px 25px #0005;animation:expandCell .2s ease-out}.day-head{display:flex;align-items:center;justify-content:space-between;width:100%;padding:1px 3px 6px;background:none;border:0;color:var(--text);border-bottom:1px solid var(--stroke)}.expand-icon{color:var(--muted);opacity:.6}.day-head:hover .expand-icon{opacity:1;color:var(--accent)}.cal-events{display:grid;align-content:start;gap:5px;min-width:0}.calendar-event{background:var(--soft);border-left:2px solid var(--accent);border-radius:4px;padding:6px;min-width:0;display:grid;gap:3px;text-align:left;color:var(--text);font-size:11px}.calendar-event.done{opacity:.46}.event-main{display:flex;gap:5px;align-items:flex-start;min-width:0;cursor:pointer}.event-main input{margin:1px 0 0;accent-color:var(--accent);flex:none;width:13px;height:13px}.event-title{font-weight:600;line-height:1.35;overflow-wrap:anywhere;min-width:0}.event-meta{display:flex;gap:3px;flex-wrap:wrap;align-items:center;font-size:10px;color:var(--muted)}.event-meta time{display:block;width:100%;font-variant-numeric:tabular-nums}.event-meta .tag{font-size:9px;padding:2px 4px;margin:0}.event-action{font-size:10px;padding:1px 3px;color:var(--alt);background:transparent;border:0;justify-self:start}.note-event{width:100%;border-left-color:var(--alt);background:var(--surface);cursor:pointer}.note-snippet{color:var(--muted);font-size:10px;overflow-wrap:anywhere;line-height:1.5}.day-extra{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:8px}.week-col{min-height:400px;max-height:min(75dvh,850px);overflow-y:auto;scrollbar-width:thin}.week-col.today{border-color:var(--accent)}.week-col .calendar-event{padding:8px}.week-col .event-title{font-size:12px}.week-grid{grid-template-columns:repeat(7,minmax(140px,1fr));min-width:980px}.tag-picker{display:grid;position:relative;gap:6px}.chosen-tags{display:flex;gap:5px;flex-wrap:wrap}.tag.removable{border-color:var(--stroke);font-size:11px}.tag-suggestions{position:absolute;top:100%;left:0;right:0;z-index:10;display:grid;gap:3px;max-height:190px;overflow:auto;background:var(--panel);border:1px solid var(--accent);padding:5px;border-radius:7px;box-shadow:0 12px 30px #0009}.tag-suggestions button{text-align:left;border:0;background:transparent}.tag-suggestions button:hover{background:var(--soft)}.note-edit{grid-template-rows:auto auto auto minmax(250px,1fr) auto}.editor-toolbar{display:flex;gap:5px;flex-wrap:wrap}.editor-toolbar button{padding:6px 10px}.editor-toolbar button:last-child{margin-left:auto}.markdown-editor{min-height:360px;max-height:70dvh;overflow-y:auto;background:var(--surface);border:1px solid var(--stroke);border-radius:7px;padding:15px;outline:none;font-size:13px;line-height:1.6;white-space:normal;overflow-wrap:anywhere}.markdown-editor:focus{border-color:var(--accent)}.markdown-editor:empty:before{content:attr(data-placeholder);color:var(--muted);pointer-events:none}.markdown-content h1{font-size:1.9rem;line-height:1.25;margin:12px 0;font-weight:700}.markdown-content h2{font-size:1.55rem;line-height:1.3;margin:11px 0}.markdown-content h3{font-size:1.25rem;margin:10px 0}.markdown-content p{margin:5px 0;min-height:1em}.markdown-content ul{padding-left:22px}.markdown-content a{color:var(--alt)}.markdown-content code{padding:2px 5px;background:var(--soft);border-radius:4px}.markdown-source{width:100%;min-height:350px;background:var(--surface);border:1px solid var(--stroke);color:var(--text);padding:15px;resize:vertical;line-height:1.6}.editor-hint{font-size:10px}.empty-day{font-size:10px}.notes-layout{min-height:65dvh}@keyframes expandCell{from{opacity:.55;transform:scale(.985)}to{opacity:1;transform:scale(1)}}@media(min-width:1500px){.week-grid{min-width:0;grid-template-columns:repeat(7,minmax(0,1fr))}}@media(max-width:850px){.daybox{min-height:105px;max-height:180px;padding:4px}.daybox.expanded{grid-column:span 4;min-height:250px}.calendar-event{font-size:10px;padding:4px}.event-meta time{font-size:9px}.daynum{font-size:11px}.month-panel{padding:5px}.grid-month{gap:3px}}@media(max-width:600px){.grid-month{grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}.daybox{min-height:88px;max-height:146px;padding:3px;gap:3px}.daybox.expanded{grid-column:span 7;min-height:250px}.daybox:not(.expanded) .event-meta,.daybox:not(.expanded) .note-snippet,.daybox:not(.expanded) .event-action,.daybox:not(.expanded) .expand-icon{display:none}.daybox:not(.expanded) .calendar-event{padding:3px 2px}.daybox:not(.expanded) .event-main input{width:11px;height:11px}.daybox:not(.expanded) .event-title{font-size:9px}.day-head{padding:0}.week-grid{grid-template-columns:repeat(7,minmax(160px,1fr))}.markdown-content h1{font-size:1.65rem}.markdown-content h2{font-size:1.35rem}}@media(prefers-reduced-motion:reduce){.daybox.expanded{animation:none}}
+/* Keep metadata available even on narrow screens: overflow stays inside each day. */
+@media(max-width:600px){.daybox:not(.expanded) .event-meta{display:flex}.daybox:not(.expanded) .note-snippet{display:block;font-size:9px;line-height:1.2}.daybox:not(.expanded) .calendar-event .tag{font-size:8px;padding:1px 2px}.daybox:not(.expanded) .event-action{display:none}.daybox:not(.expanded) .event-meta time{display:block;font-size:8px}.daybox:not(.expanded) .event-title{font-size:9px}}
+
+/* V5.1: calendar stability, legibility and responsive framing */
+.workspace,main,.panel,.notes-layout,.note-card{min-width:0}
+.day-panel{display:none!important}
+.month-panel{width:100%;overflow-x:auto;max-width:100%}
+.grid-month{grid-template-columns:repeat(7,minmax(0,1fr));width:100%;min-width:0}
+.daybox{min-width:0;min-height:110px;max-height:190px;overflow:auto;overscroll-behavior:contain}
+.daybox.expanded{grid-column:span 3;grid-row:span 2;min-height:275px;max-height:none;overflow:auto}
+.day-actions{padding:12px 0 0;display:flex;gap:8px}
+.day-list{max-width:100%;overflow:auto}
+.note-controls{display:flex;align-items:end;gap:9px;flex-wrap:wrap}
+.note-controls label{display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted);min-width:0}
+.note-controls input,.note-controls select{max-width:100%;min-width:0}
+.note-edit{min-width:0}
+.markdown-editor h1,.markdown-preview h1{font-size:clamp(1.45rem,2vw,2rem);line-height:1.25}
+.markdown-editor h2,.markdown-preview h2{font-size:clamp(1.2rem,1.6vw,1.6rem)}
+.markdown-editor blockquote,.markdown-preview blockquote{border-left:3px solid var(--accent);margin:10px 0;padding:4px 12px;color:var(--muted)}
+.markdown-preview{border:1px solid var(--stroke);border-radius:7px;padding:12px;margin-top:10px;min-height:60px}
+.markdown-source{min-height:220px;max-height:48dvh}
+.week-wrap{max-width:100%;overflow-x:auto}
+.week-grid{min-width:950px}
+.week-col{min-width:0}
+@media(min-width:1450px){.week-grid{min-width:0}}
+@media(max-width:850px){.daybox{min-height:80px;max-height:135px}.daybox.expanded{grid-column:span 7;max-height:none;min-height:220px}.month-panel{padding:5px}.grid-month{gap:3px}}
+@media(max-width:600px){.daybox:not(.expanded) .event-meta,.daybox:not(.expanded) .event-action{display:none}.daybox:not(.expanded) .calendar-event{padding:4px 2px}.daybox{min-height:67px;max-height:105px}.daybox.expanded .event-meta{display:flex}.daybox.expanded .event-action{display:block}.note-controls{align-items:stretch}.notes-layout{display:flex;flex-direction:column}.notes-list{max-height:24dvh;overflow:auto}.day-head{min-height:22px}}
+
+/* V5.2 — Calendar stays in a rigid 7-column grid. Expanded detail overlays its cell. */
+.grid-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));grid-auto-flow:row;align-items:stretch;gap:5px;isolation:isolate}
+.daybox,.daybox.expanded{grid-column:auto!important;grid-row:auto!important;min-width:0;position:relative;min-height:135px;max-height:190px;overflow:hidden;transform:none!important;animation:none!important;border-radius:8px;transition:border-color .18s ease,background-color .18s ease,box-shadow .18s ease}
+.daybox:hover{border-color:var(--accent)}.daybox.expanded{z-index:8;overflow:visible;box-shadow:none}
+.daybox .cal-events{overflow:auto;min-height:0;scrollbar-width:thin}
+.day-details{position:absolute;z-index:15;top:-1px;left:-1px;width:min(380px,calc(100vw - 235px));min-width:260px;max-height:min(68dvh,620px);overflow:auto;padding:12px;background:var(--panel);border:1px solid var(--accent);border-radius:10px;box-shadow:0 14px 45px #000a;animation:detailReveal .2s cubic-bezier(.2,.85,.2,1) both}
+.daybox:nth-child(7n + 6) .day-details,.daybox:nth-child(7n + 7) .day-details{left:auto;right:-1px}
+.detail-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;text-transform:capitalize}.detail-top button{border:0;background:var(--soft);padding:4px 9px}.detail-events{display:grid;gap:7px;max-height:45dvh;overflow:auto;scrollbar-width:thin}
+.calendar-event{grid-template-columns:auto minmax(0,1fr);align-items:start;gap:7px}.calendar-event>input{accent-color:var(--accent);width:14px;height:14px;margin:2px 0}.event-open,.task-open{padding:0;border:0;background:transparent;text-align:left;color:inherit;min-width:0;display:grid;gap:4px;cursor:pointer;outline-offset:3px}.event-open:hover .event-title,.task-open:hover .task-title{color:var(--accent)}.event-open .event-meta{display:flex}.event-meta .tag{max-width:100%;overflow-wrap:anywhere}.task-open{flex:1}.task-open .task-title{display:block}.task-open .task-sub{display:block}.task{align-items:center}
+.daybox:not(.expanded) .event-open .event-title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.daybox:not(.expanded) .event-meta .tag:nth-of-type(n+3){display:none}
+.note-edit{display:flex;flex-direction:column;min-height:0;gap:12px}.note-card{min-width:0}.notes-layout{grid-template-columns:minmax(170px,230px) minmax(0,1fr);min-height:0}.note-edit #noteTitle{border:0;background:none;border-radius:0;padding:5px 1px;font-size:clamp(20px,2.3vw,30px);font-weight:700;outline-offset:3px}.note-edit #noteTitle:focus{border:0}.markdown-editor{flex:1;min-height:clamp(330px,60dvh,700px);max-height:none;line-height:1.72;background:transparent;border:1px solid transparent;padding:12px 4px;font-size:14px;outline:none;scrollbar-width:thin}.markdown-editor:focus{border-color:transparent}.markdown-editor p{margin:4px 0}.markdown-editor h1{font-size:clamp(24px,2.5vw,35px)}.markdown-editor h2{font-size:clamp(19px,2vw,27px)}.markdown-editor ul,.markdown-editor ol{padding-left:24px}.markdown-editor blockquote{border-left:3px solid var(--accent);padding-left:12px}.editor-status{font-size:10px;color:var(--muted);opacity:.75}.note-controls{border-bottom:1px solid var(--stroke);padding-bottom:8px}.delete-note{margin-left:auto;opacity:.55}.delete-note:hover{opacity:1}
+@keyframes detailReveal{from{opacity:0;transform:translateY(6px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(max-width:850px){.day-details{width:min(370px,calc(100vw - 30px));min-width:240px}.notes-layout{grid-template-columns:1fr}.notes-list{display:flex;overflow-x:auto;max-width:100%;gap:6px}.notes-list .note-row{min-width:145px}.daybox{min-height:100px;max-height:160px}}
+@media(max-width:600px){.grid-month{gap:3px}.daybox,.daybox.expanded{min-height:92px;max-height:135px}.day-details{position:fixed;left:12px!important;right:12px!important;top:50%!important;transform:translateY(-50%)!important;width:auto;min-width:0;max-height:75dvh;animation:none}.daybox.expanded{z-index:30}.daybox.expanded::before{content:'';position:fixed;inset:0;background:#0007;z-index:0;pointer-events:none}.daybox:not(.expanded) .event-meta{display:none}.daybox:not(.expanded) .calendar-event{gap:3px;padding:3px}.daybox:not(.expanded) .event-open .event-title{font-size:9px}.daybox:not(.expanded) .calendar-event>input{width:11px;height:11px}.markdown-editor{min-height:55dvh}}
+@media(prefers-reduced-motion:reduce){.day-details{animation:none}}
+
+/* Task completion inside the inline task editor */
+.finish-task{margin-right:auto;border-color:var(--accent);color:var(--accent);font-weight:650;transition:background-color .18s,border-color .18s,transform .18s}
+.finish-task:hover{background:var(--soft)}.finish-task.is-finished{border-color:var(--stroke);color:var(--muted)}
+@media(max-width:510px){.dialog footer{flex-wrap:wrap}.dialog footer .finish-task{width:100%;margin:0}.dialog footer button{flex:1}}
+
+/* 5.4 — automatic saving, calm feedback */
+.task-save-state{margin-right:auto;align-self:center;font-size:11px;color:var(--muted);transition:color .2s ease,opacity .2s ease;white-space:nowrap}
+.task-save-state[data-state="saved"]{color:var(--alt)}
+.task-save-state[data-state="warning"]{color:var(--accent)}
+.editor-status{transition:opacity .2s ease,color .2s ease}
+button,.task,.calendar-event,.note-row,.daybox{transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,opacity .18s ease}
+@media(max-width:510px){.dialog footer .task-save-state{width:100%;text-align:center;margin:0 0 2px}.dialog footer [data-close]{flex:1}}
+@media(prefers-reduced-motion:reduce){button,.task,.calendar-event,.note-row,.daybox,.editor-status{transition:none}}
+
+/* 5.5 — scrolling over month tiles always scrolls the page.
+   Overflow is shown through the expanded popover instead of nesting scrollbars. */
+.month-panel { overflow: visible; }
+.grid-month .daybox { overflow: hidden; overscroll-behavior: auto; }
+.grid-month .daybox .cal-events { overflow: hidden; overscroll-behavior: auto; flex: 1 1 auto; }
+.grid-month .daybox.expanded { overflow: visible; }
+.grid-month .daybox .day-details { overscroll-behavior: auto; }
+.grid-month .daybox .detail-events { overscroll-behavior: auto; }
+/* The day details may extend outside their tile; avoid clipped content. */
+.month-panel:has(.daybox.expanded) { isolation: isolate; }
+@media (prefers-reduced-motion: reduce) { .daybox, .calendar-event { scroll-behavior: auto; } }
+
+/* Orbitron em toda a interface, formulários, notas Markdown e áreas editáveis. */
+:root{font-family:"Orbitron",sans-serif}body,button,input,textarea,select,option,[contenteditable],.note-editor,.markdown-preview,.markdown-body,.ProseMirror{font-family:"Orbitron",sans-serif!important}input,textarea,[contenteditable]{letter-spacing:0;line-height:1.6} .task-title,.day-preview,.week-event,.tag,.note-row{overflow-wrap:anywhere} 
+
+/* 5.7 — criação contextual sem CTA global */
+.top-actions{min-width:0}.daybox,.week-col{position:relative;cursor:crosshair}.daybox .calendar-event,.week-col .calendar-event,.daybox button,.week-col button{cursor:pointer}.daybox{padding-right:26px}.square-add{position:absolute;right:5px;top:5px;width:23px;height:23px;padding:0;display:grid;place-items:center;border:1px solid transparent;background:transparent;color:var(--muted);border-radius:5px;font-size:18px;line-height:1;z-index:2;opacity:.55;transition:opacity .16s ease,color .16s ease,background .16s ease,transform .16s ease}.square-add:hover,.square-add:focus-visible{color:var(--accent);background:var(--soft);border-color:var(--stroke);opacity:1;transform:scale(1.07)}.daybox:hover>.square-add,.week-col:hover>.square-add{opacity:1}.daybox .day-head{padding-right:20px}.daybox .day-details{cursor:default}.week-head{display:flex;align-items:center;justify-content:space-between;padding-right:23px;min-height:25px}.week-col .square-add{top:7px;right:8px}.inline-create{background:transparent;border:1px dashed var(--stroke);color:var(--muted);font-size:11px;padding:7px 10px}.inline-create:hover{color:var(--accent);border-color:var(--accent);background:var(--soft)}@media(hover:none){.square-add{opacity:1;color:var(--accent)}}@media(max-width:600px){.square-add{right:2px;top:2px;width:19px;height:20px;font-size:15px;opacity:1}.daybox{padding-right:19px}.daybox .day-head{padding-right:14px}.week-col .square-add{right:5px;top:6px}}@media(prefers-reduced-motion:reduce){.square-add{transition:none}}
+
+/* Tags: ocultação confiável e entrada/saída suave sem bloquear cliques. */
+.tag-suggestions[hidden]{display:none!important}
+.tag-suggestions:not([hidden]){animation:tagMenuAppear 130ms ease-out;transform-origin:top center}
+@keyframes tagMenuAppear{from{opacity:0;transform:translateY(-4px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){.tag-suggestions:not([hidden]){animation:none}}
+
+/* Encerramento definitivo, sem remover histórico */
+.close-forever{border-color:var(--stroke);color:var(--text);transition:background .18s,border-color .18s,transform .18s}
+.close-forever:hover{border-color:var(--accent);background:var(--soft);transform:translateY(-1px)}
+.close-forever.is-closed{color:var(--alt)}
+@media(max-width:650px){.dialog footer{flex-wrap:wrap;justify-content:flex-start}.dialog footer .finish-task,.dialog footer .close-forever{flex:1 1 100%;margin-right:0}.dialog footer .task-save-state{order:3;flex:1 1 100%}}
+
+
+/* 6.2 — ALL TASKS VISIBLE: no hidden month/week lists, no inner scrolling. */
+.month-panel{min-width:0;max-width:100%;overflow:visible!important;padding:10px}
+.month-scroll{width:100%;overflow-x:auto;overflow-y:visible;scrollbar-width:thin;overscroll-behavior-x:contain}
+.grid-month{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));min-width:1050px;grid-auto-flow:row;align-items:stretch;gap:6px;width:100%;isolation:auto}
+.grid-month .weekday{position:static;min-width:0}
+.grid-month .daybox{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:7px;min-width:0;min-height:122px;height:auto!important;max-height:none!important;overflow:visible!important;padding:9px 7px 10px 7px;cursor:default;transition:border-color .18s ease,background-color .18s ease;transform:none!important}
+.grid-month .daybox .cal-events{display:grid;align-content:start;gap:5px;flex:none!important;min-height:auto;max-height:none!important;height:auto!important;overflow:visible!important}
+.grid-month .daybox .calendar-event{min-width:0;max-width:100%;overflow:visible!important}
+.grid-month .daybox .event-meta{display:flex!important;flex-wrap:wrap!important}
+.grid-month .daybox .event-meta time{display:block!important}
+.grid-month .daybox .event-title{display:block;white-space:normal;overflow-wrap:anywhere}
+.grid-month .daybox .event-open{min-width:0;text-align:left;white-space:normal}
+.grid-month .daybox .day-head{flex:none;min-height:26px;display:flex;align-items:center;justify-content:space-between;margin-right:23px}
+.grid-month .daybox .square-add{top:7px;right:7px;opacity:.7}
+.grid-month .daybox:hover .square-add,.grid-month .daybox .square-add:focus-visible{opacity:1}
+.week-wrap{overflow-x:auto;overflow-y:visible;max-width:100%;scrollbar-width:thin;overscroll-behavior-x:contain}
+.week-grid{min-width:1050px;grid-template-columns:repeat(7,minmax(0,1fr));align-items:stretch;gap:7px}
+.week-col{min-width:0;min-height:260px;height:auto;max-height:none!important;overflow:visible!important;padding:10px 8px;cursor:default}
+.week-col .cal-events{overflow:visible!important;max-height:none!important;display:grid;align-content:start;gap:6px}
+.week-col .calendar-event{margin:0}
+.day-list,.day-list .items,.day-list .task{max-height:none!important;overflow:visible!important}
+.day-list{max-width:100%;overflow:visible!important}
+@media(min-width:1300px){.grid-month,.week-grid{min-width:0}}
+@media(max-width:850px){.grid-month,.week-grid{min-width:1050px}.grid-month .daybox{min-height:122px;max-height:none!important;padding:9px 7px}.grid-month .daybox .event-meta{display:flex!important}.grid-month .daybox .event-meta time{display:block!important}}
+@media(max-width:600px){.grid-month,.week-grid{min-width:1050px}.month-panel{padding:6px}.grid-month .daybox{min-height:122px;max-height:none!important;padding:8px 6px;gap:6px}.grid-month .daybox .calendar-event{padding:6px}.grid-month .daybox .event-title{font-size:11px}.grid-month .daybox .event-meta{display:flex!important}.grid-month .daybox .event-meta time{font-size:10px!important}.grid-month .daybox .tag{font-size:9px!important}.grid-month .daybox .event-open{font-size:11px}.week-col{max-height:none!important}}
+@media(prefers-reduced-motion:reduce){.grid-month .daybox{transition:none!important}}
+
+/* Agora — tarefas reais, compactas, sem contadores substituindo conteúdo */
+.now-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:4px 0 12px}
+.now-heading h1{font-size:clamp(18px,2vw,23px);margin:0 0 7px;color:var(--text)}
+.now-heading p{margin:0;color:var(--muted);font-size:11px;text-transform:capitalize}
+.now-summary{padding:10px 12px;border:1px solid var(--stroke);border-left:3px solid var(--accent);background:var(--surface);font-size:11px;border-radius:7px;margin-bottom:12px}
+.now-sections{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;align-items:start;width:100%}
+.now-group{min-width:0;background:var(--surface);border:1px solid var(--stroke);border-radius:8px;padding:13px;transition:border-color .2s ease,transform .2s ease}
+.now-group:hover{border-color:var(--accent)}
+.now-group-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.now-group-head h2{font-size:12px;margin:0}.now-group-head span{font-size:10px;color:var(--alt)}
+.now-group .items{display:grid;gap:5px}.now-group .task{min-width:0}
+.now-description{font-size:10px}.now-empty{grid-column:1/-1;display:grid;justify-items:center;gap:9px;padding:50px 15px;border:1px dashed var(--stroke);border-radius:10px;color:var(--muted)}
+.now-empty span{color:var(--accent);font-size:30px}.now-empty strong{color:var(--text);font-size:14px}.now-empty p{margin:0;font-size:11px}
+@media(max-width:620px){.now-sections{grid-template-columns:minmax(0,1fr)}.now-group{padding:10px}}
+
+/* Agora: apenas tarefas em curso e próximo horário */
+.now-next-row{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--stroke)}
+.now-next-task{display:flex;flex-wrap:wrap;gap:7px;align-items:center;min-width:0;flex:1;text-align:left;background:transparent;border:0;color:var(--text);font:inherit;cursor:pointer;padding:3px}
+.now-next-task strong{width:100%;overflow-wrap:anywhere;font-size:12px}
+.now-next-task>span:not(.tag){font-size:10px;color:var(--muted)}
+.now-countdown{color:var(--accent);font-size:11px;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
+.now-quiet{font-size:11px;color:var(--muted);padding:18px 2px}
+.now-current .task{animation:now-in .25s ease-out}
+@keyframes now-in{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.now-current .task{animation:none}}
+
+/* 6.6: Habit controls and compact calendar context */
+.habits-panel{max-width:920px;margin-inline:auto;padding:16px}.habit-progress{display:grid;gap:10px;color:var(--muted);font-size:12px;margin-bottom:14px}.habit-bar{height:5px;background:var(--stroke);border-radius:8px;overflow:hidden}.habit-bar span{display:block;height:100%;background:var(--accent);transition:width .24s ease}.habit-row .task-body{min-width:0}.habit-form{display:grid;gap:14px}.habit-form label{display:grid;gap:7px}.habit-form footer{display:flex;gap:8px;justify-content:flex-end}.context-line{display:flex;flex-wrap:wrap;align-items:center;gap:4px;min-width:0;margin:4px 0 7px}.context-chip{display:inline-block;max-width:100%;font-size:9px;line-height:1.35;overflow-wrap:anywhere;color:var(--muted);border:1px solid var(--stroke);padding:3px 5px;border-radius:5px}.holiday-chip{color:var(--accent)}.day-list>.context-line{margin-bottom:12px}.daybox .context-line{margin:0}.daybox .context-chip{font-size:8px;padding:2px 3px}.week-col .context-line{padding:2px 7px}@media(max-width:650px){.daybox .context-chip{font-size:7px}.context-chip{font-size:9px}}
+
+/* 6.7 · Ações contextuais integradas aos estados vazios. */
+.empty-action{appearance:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;width:100%;min-height:135px;background:transparent;border:1px dashed var(--stroke);border-radius:10px;color:var(--muted);text-align:center;cursor:pointer;padding:18px;transition:background .22s ease,border-color .22s ease,color .22s ease,transform .22s ease}
+.empty-action:hover,.empty-action:focus-visible{background:var(--soft);border-color:var(--accent);color:var(--text)}
+.empty-action:active{transform:scale(.995)}.empty-action span,.empty-action .empty-subtitle{font-size:11px;color:var(--accent)}.empty-action .empty-title{font-size:12px;color:var(--text)}.empty-action .empty-title+.empty-subtitle{color:var(--muted)}
+.inline-create-row{appearance:none;display:block;width:100%;padding:11px 12px;text-align:left;color:var(--muted);background:transparent;border:1px dashed transparent;border-radius:7px;font-size:11px;cursor:pointer;transition:color .18s,border-color .18s,background .18s}
+.inline-create-row:hover,.inline-create-row:focus-visible{color:var(--accent);background:var(--soft);border-color:var(--stroke)}.note-create{width:auto;padding:7px 10px}.empty-calendar{display:block;width:100%;min-height:27px;text-align:left;color:var(--muted);background:transparent;border:0;border-radius:5px;padding:5px;font-size:10px;opacity:.75;cursor:pointer;transition:color .18s,background .18s,opacity .18s}.empty-calendar:hover,.empty-calendar:focus-visible{background:var(--soft);color:var(--accent);opacity:1}
+@media(max-width:600px){.empty-calendar{font-size:0;min-height:24px;text-align:center}.empty-calendar:after{content:'Criar';font-size:9px}.empty-action{min-height:112px}}
+@media(prefers-reduced-motion:reduce){.empty-action,.inline-create-row,.empty-calendar{transition:none}}
+
+/* 6.8: calm, content-first habit cards. Full theme inheritance. */
+.habits-panel{width:100%;max-width:990px;margin-inline:auto;padding:clamp(12px,2vw,22px)}
+.habits-heading{max-width:990px;margin-inline:auto;display:flex;align-items:center;gap:12px}
+.habit-count{color:var(--muted);font-size:11px;margin-left:auto}
+.habit-progress{margin:0 0 18px;gap:9px}
+.habit-progress-head{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;text-transform:capitalize}
+.habit-progress-head strong{font-size:13px;color:var(--accent);font-variant-numeric:tabular-nums}
+.habit-bar{height:6px;border-radius:99px}.habit-bar span{border-radius:99px;transition:width .34s cubic-bezier(.22,1,.36,1)}
+.habit-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px;align-items:start}
+.habit-card{min-width:0;border:1px solid var(--stroke);border-radius:12px;background:var(--panel);padding:15px;display:flex;flex-direction:column;gap:16px;transition:border-color .22s ease,background-color .22s ease,transform .22s ease,box-shadow .22s ease;animation:habit-appear .25s ease-out both}
+.habit-card:hover,.habit-card:focus-within{border-color:var(--accent);box-shadow:0 8px 28px #0002;transform:translateY(-1px)}
+.habit-card-main{display:flex;align-items:center;gap:12px;min-width:0}
+.habit-card-main>input{appearance:none;flex:0 0 23px;width:23px;height:23px;border:1.5px solid var(--accent);border-radius:7px;background:transparent;cursor:pointer;display:grid;place-items:center;margin:0;transition:background-color .2s ease,transform .2s ease}
+.habit-card-main>input:checked{background:var(--accent)}.habit-card-main>input:checked::after{content:'✓';font-size:14px;color:#111;font-weight:900}
+.habit-card-main>input:active{transform:scale(.9)}.habit-card-main>input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.habit-open{font:inherit;min-width:0;flex:1;text-align:left;display:grid;gap:7px;border:0;background:transparent;color:var(--text);padding:0;cursor:pointer}
+.habit-open strong{font-size:clamp(12px,1.2vw,15px);line-height:1.45;overflow-wrap:anywhere;font-weight:700}
+.habit-open:hover strong{color:var(--accent)}.habit-card.is-done .habit-open strong{opacity:.6;text-decoration:line-through;text-decoration-thickness:1px}
+.habit-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-height:15px;font-size:10px;color:var(--muted)}.habit-meta time{font-variant-numeric:tabular-nums;white-space:nowrap}
+.habit-streak{color:var(--accent);white-space:nowrap;font-size:11px;font-weight:700;align-self:flex-start}
+.habit-week{border-top:1px solid var(--stroke);padding-top:12px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.habit-day{min-width:0;display:grid;place-items:center;gap:7px;font-size:9px;color:var(--muted)}
+.habit-day-mark{width:24px;height:24px;border:1px solid var(--stroke);display:grid;place-items:center;border-radius:7px;font-size:13px;line-height:1}
+.habit-day.checked .habit-day-mark{color:#101114;background:var(--accent);border-color:var(--accent);font-weight:800}
+.habit-day.today .habit-day-mark{outline:1px solid var(--accent);outline-offset:2px}
+.habit-cards>.inline-create-row{min-height:80px;height:100%;border:1px dashed var(--stroke);border-radius:12px;text-align:center;display:grid;place-items:center;align-self:stretch;font-size:11px}
+.habit-cards>.empty-action{grid-column:1/-1;min-height:160px}
+.habit-time-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.habit-time-fields label,.habit-time-fields input{min-width:0;width:100%}
+@keyframes habit-appear{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:520px){.habit-cards{grid-template-columns:minmax(0,1fr)}.habit-card{padding:13px}.habit-time-fields{gap:8px}}
+@media(prefers-reduced-motion:reduce){.habit-card{animation:none;transition:none}.habit-bar span,.habit-card-main>input{transition:none}}
+
+/* Habit descriptions: legible without increasing the calendar density. */
+.habit-description{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;line-clamp:3;overflow:hidden;overflow-wrap:anywhere;white-space:pre-line;font-size:11px;line-height:1.6;color:var(--muted);font-weight:400}
+.habit-form textarea{display:block;width:100%;min-height:84px;resize:vertical;background:var(--input, var(--panel));color:var(--text);border:1px solid var(--stroke);border-radius:8px;padding:11px;font:inherit;line-height:1.55}
+.habit-form textarea:focus-visible{outline:1px solid var(--accent);border-color:var(--accent)}
+
+/* 7.0 — Vertical habits and a Monday–Sunday schedule. */
+.habits-panel{max-width:1000px}
+.habit-cards{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+.habit-card{width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(245px,300px);align-items:center;gap:20px;padding:14px 16px}
+.habit-card-main{align-items:flex-start}
+.habit-week{border-top:0;border-left:1px solid var(--stroke);padding:0 0 0 16px;gap:4px}
+.habit-day{font-size:9px;gap:6px}
+.habit-day-mark{width:25px;height:25px}
+.habit-day.off-day{opacity:.36}
+.habit-card.habit-off{opacity:.68}
+.habit-card.habit-off:hover,.habit-card.habit-off:focus-within{opacity:1}
+.habit-card-main>input:disabled{opacity:.25;cursor:not-allowed}
+.habit-schedule{font-size:10px;color:var(--muted);line-height:1.5}
+.habit-cards>.inline-create-row{min-height:44px;height:44px;align-self:stretch;border-radius:10px}
+.habit-weekday-field{min-width:0;border:0;padding:0;margin:0;display:grid;gap:8px}
+.habit-weekday-field legend{padding:0 0 9px;font-size:12px;font-weight:700;color:var(--text)}
+.habit-weekday-field small{font-size:10px;line-height:1.5;color:var(--muted)}
+.habit-weekday-list{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.habit-weekday{display:block!important;cursor:pointer;position:relative;min-width:0}
+.habit-weekday input{position:absolute;opacity:0;inset:0;width:100%;height:100%;cursor:pointer}
+.habit-weekday span{display:grid;place-items:center;min-height:36px;border:1px solid var(--stroke);border-radius:7px;font-size:10px;color:var(--muted);transition:background-color .16s,border-color .16s,color .16s}
+.habit-weekday input:checked+span{background:var(--accent);color:#101114;border-color:var(--accent);font-weight:800}
+.habit-weekday input:focus-visible+span{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:790px){.habit-card{grid-template-columns:minmax(0,1fr);gap:12px}.habit-week{border-left:0;border-top:1px solid var(--stroke);padding:12px 0 0}}
+@media(max-width:420px){.habit-weekday-list{gap:3px}.habit-weekday span{font-size:9px;min-height:33px}.habit-card{padding:12px}}
+@media(prefers-reduced-motion:reduce){.habit-weekday span{transition:none}}
+
+/* v7.2: weekday controls on top, forecast in the day square headers */
+.habit-form>.habit-weekday-field{order:-2;background:var(--soft);border:1px solid var(--stroke);border-radius:9px;padding:12px}
+.habit-card{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+.habit-card .habit-week{order:-1;border:0;border-bottom:1px solid var(--stroke);padding:0 0 11px;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.habit-card .habit-card-main{order:1;min-width:0}
+.habit-card .habit-day{min-width:0}
+.weather-inline{font-size:10px;line-height:1.35;color:var(--alt);display:inline-flex;align-items:center;gap:3px;white-space:nowrap;font-variant-numeric:tabular-nums;margin-left:auto;min-width:0}
+.daybox .day-head,.week-col .week-head{display:flex;align-items:center;gap:5px;min-width:0}
+.daybox .day-head{padding:2px 1px 8px}
+.daybox .weather-inline{font-size:9px}
+.week-col .weather-inline{font-size:9px}
+.weather-setup{background:transparent;border:1px dashed var(--stroke);font-size:10px;color:var(--muted);padding:6px 9px;margin-bottom:10px;width:auto}
+.weather-setup:hover{border-color:var(--accent);color:var(--accent)}
+@media(max-width:640px){.daybox .weather-inline{font-size:8px;letter-spacing:-.06em}.daybox .day-head{flex-wrap:wrap}.habit-card .habit-week{gap:2px}}
+
+.geo-action{width:100%;text-align:left;border:1px solid var(--stroke);border-radius:8px;padding:12px;color:var(--accent);background:var(--panel);cursor:pointer}.geo-action:hover{border-color:var(--accent)}.weather-current{font-size:12px;line-height:1.65;color:var(--alt)}
+
+/* Feriados: orientação compacta e acessível em todos os calendários */
+.holiday-impact{display:block;width:100%;text-align:left;min-width:0;border:1px solid color-mix(in srgb,var(--accent) 35%,var(--stroke));border-radius:5px;padding:5px 7px;background:var(--soft);color:var(--text);font-size:10px;line-height:1.45;white-space:normal;cursor:pointer;transition:border-color .16s,background .16s}
+.holiday-impact:hover,.holiday-impact:focus-visible{border-color:var(--accent);background:var(--panel);outline-offset:2px}
+.daybox .holiday-impact{font-size:8px;padding:3px 4px}
+.week-col .holiday-impact{font-size:9px;margin:3px 0}
+.holiday-details{display:grid;gap:9px;max-width:620px}
+.holiday-label{color:var(--accent);line-height:1.6}
+.holiday-impact-row{display:grid;grid-template-columns:minmax(105px,0.7fr) minmax(0,2fr);gap:12px;padding:11px 0;border-bottom:1px solid var(--stroke);font-size:12px;line-height:1.6}
+.holiday-impact-row strong{color:var(--text)}.holiday-impact-row span,.holiday-disclaimer{color:var(--muted)}
+.holiday-disclaimer{font-size:10px;line-height:1.6;margin:5px 0 0}
+@media(max-width:640px){.daybox .holiday-impact{font-size:7px;letter-spacing:-.04em}.holiday-impact-row{grid-template-columns:1fr;gap:3px}}
+@media(prefers-reduced-motion:reduce){.holiday-impact{transition:none}}
+
+/* 7.5 — Data e previsão têm espaços próprios: nunca se sobrepõem ao +. */
+.grid-month .daybox{padding:12px 10px;gap:9px;min-height:158px}
+.grid-month .daybox .day-head{
+  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;
+  align-items:start;justify-items:start;gap:9px;
+  width:100%;min-width:0;min-height:0;margin:0;padding:0 30px 10px 0;
+  border-bottom:1px solid var(--stroke);text-align:left;
+}
+.grid-month .daybox .daynum{
+  display:block;font-family:Orbitron,sans-serif;font-size:22px;font-weight:750;
+  line-height:1.2;letter-spacing:.015em;color:var(--text);
+}
+.grid-month .daybox.today .daynum{color:var(--accent)}
+.grid-month .daybox .weather-inline{
+  display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;
+  gap:6px;margin:0;min-width:0;max-width:100%;white-space:normal;
+  color:var(--alt);font-size:12px;line-height:1.45;letter-spacing:0;
+}
+.grid-month .daybox .weather-inline span{min-width:0;overflow-wrap:anywhere;font-weight:650}
+.grid-month .daybox .weather-inline svg{flex:0 0 auto;width:19px;height:19px}
+.grid-month .daybox .square-add{position:absolute;right:8px;top:10px;width:27px;height:27px;font-size:20px;z-index:2}
+.week-grid .week-col .week-head{
+  display:grid;grid-template-columns:minmax(0,1fr) 28px;
+  grid-template-rows:auto auto;align-items:start;gap:7px 5px;
+  width:100%;min-width:0;min-height:0;padding:2px 0 12px;margin:0 0 8px;
+  border-bottom:1px solid var(--stroke);text-align:left;
+}
+.week-grid .week-col .week-head>span:first-child{font-size:13px;line-height:1.5;font-weight:700;grid-column:1;grid-row:1;overflow-wrap:anywhere}
+.week-grid .week-col .week-head .weather-inline{
+  grid-column:1/-1;grid-row:2;display:flex;flex-wrap:wrap;
+  margin:0;gap:5px;min-width:0;max-width:100%;white-space:normal;
+  font-size:12px;line-height:1.4;letter-spacing:0;
+}
+.week-grid .week-col .week-head .weather-inline svg{width:19px;height:19px;flex:none}
+.week-grid .week-col .square-add{right:8px;top:8px;width:26px;height:26px}
+@media(max-width:850px){
+ .grid-month .daybox{padding:11px 9px;min-height:150px}
+ .grid-month .daybox .daynum{font-size:21px}
+ .grid-month .daybox .weather-inline{font-size:12px;letter-spacing:0}
+ .week-grid .week-col .week-head .weather-inline{font-size:12px}
+}
+@media(max-width:600px){
+ .grid-month .daybox{padding:10px 8px;min-height:145px}
+ .grid-month .daybox .day-head{padding-right:32px;gap:7px}
+ .grid-month .daybox .daynum{font-size:20px}
+ .grid-month .daybox .weather-inline{font-size:12px;letter-spacing:0}
+ .grid-month .daybox .square-add{right:7px;top:8px;width:27px;height:27px}
+}
+
+/* 7.6: Ícones meteorológicos grandes e acessíveis sem sobrepor data ou criação. */
+.weather-symbol{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;font-size:28px;line-height:1.15;min-width:1.2em;vertical-align:middle;filter:drop-shadow(0 1px 2px rgba(0,0,0,.2))}
+.grid-month .daybox .weather-inline{align-items:center;gap:7px}
+.grid-month .daybox .weather-inline .weather-symbol{font-size:30px}
+.week-grid .week-col .week-head .weather-inline .weather-symbol{font-size:30px}
+.context-chip .weather-symbol{font-size:26px}
+.weather-current .weather-symbol{font-size:34px}
+@media(max-width:650px){.grid-month .daybox .weather-inline .weather-symbol,.week-grid .week-col .week-head .weather-inline .weather-symbol{font-size:27px}}
+
+/* 7.7 — O clima integra o título da data; temperatura fica em linha própria. */
+.grid-month .daybox .day-head{display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding-right:31px}
+.grid-month .day-title-line{display:inline-flex;align-items:center;gap:8px;min-height:28px;min-width:0;max-width:100%}
+.heading-weather-symbol{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;font-family:'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;line-height:1;font-size:1em;vertical-align:middle;filter:drop-shadow(0 1px 2px rgba(0,0,0,.16))}
+.grid-month .day-title-line .heading-weather-symbol{font-size:22px}
+.grid-month .daybox .weather-inline .weather-symbol,.week-grid .week-col .week-head .weather-inline .weather-symbol{display:none}
+.grid-month .daybox .weather-inline{font-size:12px;margin:0;gap:0;max-width:100%;line-height:1.4}
+.week-grid .week-col .week-head .week-title{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.week-grid .week-col .week-head .heading-weather-symbol{font-size:13px}
+.week-grid .week-col .week-head .weather-inline{margin:0}
+.day-list>h2 .heading-weather-symbol{font-size:1em;margin-inline:5px}
+@media(max-width:850px){.grid-month .day-title-line .heading-weather-symbol{font-size:21px}}
+@media(max-width:600px){.grid-month .day-title-line .heading-weather-symbol{font-size:20px}}
+
+/* Task Markdown composer — compact toolbar, readable preview, touch-friendly checklist */
+.task-md-tools{display:flex;flex-wrap:wrap;gap:5px;margin:3px 0 8px}
+.task-md-tools button{min-width:36px;min-height:32px;padding:5px 9px;border:1px solid var(--stroke);border-radius:6px;background:var(--surface);color:var(--text);font-size:12px;cursor:pointer;transition:border-color .15s,background .15s,transform .15s}
+.task-md-tools button:hover{border-color:var(--accent);background:var(--soft)}
+.task-md-tools button:active{transform:scale(.95)}
+#taskNotes{width:100%;min-height:132px;line-height:1.7;resize:vertical;font-size:12px}
+.task-md-preview{margin-top:10px;min-height:70px;padding:12px;border:1px solid var(--stroke);border-radius:8px;background:var(--surface);font-size:12px;line-height:1.65;overflow-wrap:anywhere}
+.task-md-preview h1{font-size:1.6em;margin:.4em 0}.task-md-preview h2{font-size:1.3em;margin:.4em 0}.task-md-preview h3{font-size:1.15em}.task-md-preview p{margin:.35em 0}.task-md-preview ul,.task-md-preview ol{padding-left:20px;margin:.45em 0}.task-md-preview li{margin:.28em 0}.task-md-preview blockquote{border-left:3px solid var(--accent);padding-left:12px;color:var(--muted)}.task-md-preview code{background:var(--soft);border-radius:3px;padding:1px 4px}.task-md-checkbox{width:17px;height:17px;accent-color:var(--accent);vertical-align:middle;cursor:pointer}.task-md-placeholder{color:var(--muted)}
+@media(max-width:600px){.task-md-tools button{min-width:35px}.task-md-preview{padding:9px}}
+
+/* v7.9 - Accessible, theme-aware interactive links */
+.task-md-preview a,.markdown-content a{color:var(--alt);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;overflow-wrap:anywhere;cursor:pointer}
+.task-md-preview a:hover,.markdown-content a:hover{color:var(--accent);text-decoration-thickness:2px}
+.task-md-preview a:focus-visible,.markdown-content a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* V8.1 · shared Markdown editor for habit and task descriptions */
+.habit-md-field{display:grid;gap:9px;min-width:0}
+.habit-md-field>label{font-weight:600}
+.habit-md-field textarea{width:100%;min-height:128px;resize:vertical;line-height:1.7}
+.habit-md-field .task-md-tools{min-width:0}
+.habit-md-field .task-md-preview{min-height:64px;max-height:320px;overflow:auto;overflow-wrap:anywhere}
+.habit-description.markdown-content{display:block;overflow:hidden;max-height:7.8em;font-size:11px;line-height:1.6;white-space:normal;overflow-wrap:anywhere}
+.habit-description.markdown-content h1,.habit-description.markdown-content h2,.habit-description.markdown-content h3{font-size:inherit;line-height:1.45;margin:3px 0;font-weight:700}
+.habit-description.markdown-content p,.habit-description.markdown-content li{margin:2px 0}
+.habit-description.markdown-content ul,.habit-description.markdown-content ol{margin:3px 0;padding-left:17px}
+.habit-description.markdown-content a{color:var(--alt);text-decoration:underline;pointer-events:auto}
+.habit-description.markdown-content input{pointer-events:none}
+@media(max-width:600px){.habit-md-field .task-md-tools button{padding:6px 7px}}
+
+/* 8.2: Markdown interativo diretamente nos cartões, fora dos botões de edição. */
+.task-detail,.calendar-event-detail{display:grid;gap:6px;min-width:0;flex:1;width:100%}
+.task-detail .task-open,.calendar-event-detail .event-open{width:100%}
+.rendered-description{font-size:11px;line-height:1.7;overflow-wrap:anywhere;white-space:normal;min-width:0;color:var(--text);cursor:text}
+.rendered-description p{margin:.28em 0;min-height:0}
+.rendered-description h1{font-size:1.42em;line-height:1.4;margin:.4em 0}
+.rendered-description h2{font-size:1.27em;line-height:1.4;margin:.4em 0}
+.rendered-description h3{font-size:1.15em;margin:.3em 0}
+.rendered-description ul,.rendered-description ol{padding-left:20px;margin:.35em 0}
+.rendered-description li{margin:.18em 0}
+.rendered-description blockquote{border-left:2px solid var(--accent);padding-left:10px;margin:.5em 0;color:var(--muted)}
+.rendered-description a{display:inline;color:var(--alt);text-decoration:underline;text-underline-offset:3px;cursor:pointer;pointer-events:auto;position:relative;z-index:1}
+.rendered-description a:hover{color:var(--accent)}
+.rendered-description input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;pointer-events:auto}
+.habit-description-wrap{grid-column:1/-1;min-width:0;margin-top:3px;padding:9px 10px;background:var(--surface);border:1px solid var(--stroke);border-radius:7px}
+.habit-description-wrap .rendered-description{max-height:none;overflow:visible}
+.habit-card-main{flex-wrap:wrap}
+.habit-card-main>.habit-open{flex:1 1 60%}
+.calendar-event .rendered-description{font-size:10px;line-height:1.5}
+.calendar-event .rendered-description h1{font-size:1.2em}
+.daybox .rendered-description{font-size:9px}
+.daybox .rendered-description a{overflow-wrap:anywhere}
+.task .rendered-description{padding-top:5px;border-top:1px solid var(--stroke)}
+@media(prefers-reduced-motion:reduce){.rendered-description *{scroll-behavior:auto!important}}
+
+/* v8.3 — edição visual única para tarefas e hábitos */
+.rich-description{min-height:142px;max-height:52dvh;overflow:auto;outline:none;border:1px solid var(--stroke);border-radius:9px;padding:14px;background:var(--surface);line-height:1.75;overflow-wrap:anywhere;cursor:text;transition:border-color .2s,box-shadow .2s;font-size:13px}
+.rich-description:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--soft)}
+.rich-description:empty:before{content:attr(data-placeholder);color:var(--muted);pointer-events:none}
+.rich-description p{margin:5px 0}.rich-description h1{font-size:1.75em;line-height:1.25}.rich-description h2{font-size:1.45em}.rich-description h3{font-size:1.2em}
+.rich-description ul,.rich-description ol{padding-left:24px}.rich-description li{margin:4px 0}.rich-description blockquote{border-left:3px solid var(--accent);padding-left:12px;color:var(--muted)}
+.rich-description a{cursor:pointer;position:relative;color:var(--alt);text-decoration:underline;text-underline-offset:3px}
+.rich-description a:hover{color:var(--accent)}.rich-description input[type=checkbox]{width:18px;height:18px;accent-color:var(--accent);cursor:pointer}
+@media(max-width:600px){.rich-description{min-height:170px;max-height:45dvh;padding:10px}}
+
+/* 8.4: links sempre acionáveis em cartões e editores */
+.rendered-description a[href],.rich-description a[href],#noteRich a[href]{cursor:pointer!important;pointer-events:auto!important;position:relative;z-index:3;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;touch-action:manipulation}
+.rendered-description a[href]:hover,.rich-description a[href]:hover,#noteRich a[href]:hover{color:var(--accent)}

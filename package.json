@@ -1,0 +1,33 @@
+{
+  "name": "cyberpunk-diary",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cyberpunk Diary 1.0 — offline-first planner",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "desktop": "electron .",
+    "build:windows": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3",
+    "electron": "^38.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "br.com.otaviodiasleite.cyberpunkdiary",
+    "productName": "Cyberpunk Diary",
+    "directories": { "output": "dist/windows" },
+    "files": ["desktop/**/*", "web/**/*", "server/**/*", "package.json"],
+    "win": { "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.0.0.${ext}" },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}
