@@ -6,7 +6,8 @@
   "main": "desktop/main.cjs",
   "scripts": {
     "desktop": "electron .",
-    "build:windows": "electron-builder --win nsis --publish never"
+    "build:windows": "electron-builder --win nsis --publish never",
+    "icons": "node tools/generate-icons.cjs"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.3",
@@ -15,14 +16,29 @@
   "devDependencies": {
     "@capacitor/cli": "^7.4.3",
     "electron": "^38.2.0",
-    "electron-builder": "^26.0.12"
+    "electron-builder": "^26.0.12",
+    "sharp": "^0.34.4",
+    "png-to-ico": "^2.1.8"
   },
   "build": {
     "appId": "br.com.otaviodiasleite.cyberpunkdiary",
     "productName": "Cyberpunk Diary",
-    "directories": { "output": "dist/windows" },
-    "files": ["desktop/**/*", "web/**/*", "server/**/*", "package.json"],
-    "win": { "target": ["nsis"], "artifactName": "CyberpunkDiary-Setup-1.0.0.${ext}" },
+    "directories": {
+      "output": "dist/windows"
+    },
+    "files": [
+      "desktop/**/*",
+      "web/**/*",
+      "server/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "CyberpunkDiary-Setup-1.0.0.${ext}",
+      "icon": "web/assets/icon.ico"
+    },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
